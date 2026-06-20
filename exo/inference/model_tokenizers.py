@@ -361,13 +361,14 @@ async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike]):
         trust_remote_code=True,
         local_files_only=True  # 强制只使用本地文件
       )
-      # 确保processor对象具有必要的属性
-      if not hasattr(processor, 'eos_token_id'):
-        processor.eos_token_id = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).eos_token_id
-      if not hasattr(processor, 'encode'):
-        processor.encode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).encode
-      if not hasattr(processor, 'decode'):
-        processor.decode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).decode
+      # 确保processor对象具有必要的属性（安全访问，避免 AttributeError）
+      _tok = getattr(processor, 'tokenizer', None) or getattr(processor, '_tokenizer', None) or processor
+      if not hasattr(processor, 'eos_token_id') and hasattr(_tok, 'eos_token_id'):
+        processor.eos_token_id = _tok.eos_token_id
+      if not hasattr(processor, 'encode') and hasattr(_tok, 'encode'):
+        processor.encode = _tok.encode
+      if not hasattr(processor, 'decode') and hasattr(_tok, 'decode'):
+        processor.decode = _tok.decode
       print(f"成功从本地路径加载AutoProcessor")
       return processor
     except Exception as e:
@@ -512,13 +513,14 @@ async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike]):
       use_fast=not is_qwen if "Mistral-Large" not in repo_id_str else True,
       trust_remote_code=True
     )
-    # 确保processor对象具有必要的属性
-    if not hasattr(processor, 'eos_token_id'):
-      processor.eos_token_id = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).eos_token_id
-    if not hasattr(processor, 'encode'):
-      processor.encode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).encode
-    if not hasattr(processor, 'decode'):
-      processor.decode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).decode
+    # 确保processor对象具有必要的属性（安全访问，避免 AttributeError）
+    _tok = getattr(processor, 'tokenizer', None) or getattr(processor, '_tokenizer', None) or processor
+    if not hasattr(processor, 'eos_token_id') and hasattr(_tok, 'eos_token_id'):
+      processor.eos_token_id = _tok.eos_token_id
+    if not hasattr(processor, 'encode') and hasattr(_tok, 'encode'):
+      processor.encode = _tok.encode
+    if not hasattr(processor, 'decode') and hasattr(_tok, 'decode'):
+      processor.decode = _tok.decode
     print(f"成功在线加载AutoProcessor")
     return processor
   except Exception as e:

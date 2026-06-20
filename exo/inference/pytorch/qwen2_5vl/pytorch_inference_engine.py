@@ -75,7 +75,16 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
         self.shard = shard
         self.config = AutoConfig.from_pretrained(path, trust_remote_code=True)
         self.processor = AutoProcessor.from_pretrained(path, trust_remote_code=True)
-        self.tokenizer = self.processor.tokenizer
+        # 安全提取 tokenizer：不同模型的 processor 结构可能不同
+        self.tokenizer = getattr(self.processor, 'tokenizer', None) or getattr(self.processor, '_tokenizer', None)
+        if self.tokenizer is None:
+            print(f"[qwen2.5] ⚠️ processor 没有 tokenizer 属性，尝试从路径直接加载")
+            from transformers import AutoTokenizer
+            try:
+                self.tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
+            except Exception as tok_err:
+                print(f"[qwen2.5] ⚠️ Tokenizer 加载失败: {tok_err}，继续使用 processor 作为 tokenizer")
+                self.tokenizer = self.processor  # 最后回退
 
         # 步骤1: 使用 meta device 创建模型（不分配内存，不初始化参数）
         # 这比标准初始化快数百倍（0.几秒 vs 数分钟）

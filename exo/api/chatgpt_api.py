@@ -288,7 +288,8 @@ class ChatGPTAPI:
     if "__compiled__" not in globals():
       self.static_dir = Path(__file__).parent.parent/"tinychat"
       self.app.router.add_get("/", self.handle_root)
-      self.app.router.add_static("/", self.static_dir, name="static")
+      if self.static_dir.exists():
+        self.app.router.add_static("/", self.static_dir, name="static")
       
     # Always add images route, regardless of compilation status
     self.images_dir = get_exo_images_dir()
@@ -416,6 +417,22 @@ class ChatGPTAPI:
       model = self.default_model
     original_model = model
     base_model = model.split("::")[0] if "::" in model else model
+
+    # [FIX] 支持用 HF repo ID 格式请求模型
+    if base_model not in model_cards:
+      resolved = None
+      for key, info in model_cards.items():
+        for engine_repo in info.get("repo", {}).values():
+          if engine_repo == base_model:
+            resolved = key
+            break
+        if resolved:
+          break
+      if resolved:
+        if DEBUG >= 1: print(f"[ChatGPTAPI] 模型名解析: HF repo ID '{base_model}' → 短名 '{resolved}'")
+        base_model = resolved
+        model = resolved
+
     if not model or base_model not in model_cards:
       if DEBUG >= 1: print(f"Invalid model: {model}. Supported: {list(model_cards.keys())}. Defaulting to {self.default_model}")
       model = self.default_model
@@ -465,6 +482,22 @@ class ChatGPTAPI:
       chat_request.model = self.default_model
     base_model = chat_request.model.split("::")[0] if "::" in chat_request.model else chat_request.model
     original_model = chat_request.model
+
+    # [FIX] 支持用 HF repo ID 格式请求模型（如 "Qwen/Qwen3-4B"）
+    if base_model not in model_cards:
+      resolved = None
+      for key, info in model_cards.items():
+        for engine_repo in info.get("repo", {}).values():
+          if engine_repo == base_model:
+            resolved = key
+            break
+        if resolved:
+          break
+      if resolved:
+        if DEBUG >= 1: print(f"[ChatGPTAPI] 模型名解析: HF repo ID '{base_model}' → 短名 '{resolved}'")
+        base_model = resolved
+        chat_request.model = resolved
+
     if not chat_request.model or base_model not in model_cards:
       if DEBUG >= 1: print(f"[ChatGPTAPI] Invalid model: {chat_request.model}. Supported: {list(model_cards.keys())}. Defaulting to {self.default_model}")
       chat_request.model = self.default_model

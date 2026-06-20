@@ -50,43 +50,57 @@ class PyTorchInferenceEngine(InferenceEngine):
     def _get_engine_for_model(self, model_id: str):
         """根据 models.py 配置获取对应的引擎类型
 
-        动态导入引擎类，避免硬编码
+        支持两种查找方式：
+        1. 直接匹配：model_id 是模型短名（如 "llama-3.2-1b"）
+        2. 反向匹配：model_id 是 HF Repo ID（如 "unsloth/Llama-3.2-1B-Instruct"）
         """
+        import exo.models as models
         safe_model_id = model_id.split("::")[0] if "::" in model_id else model_id
-        # 从 models.py 获取该模型支持的引擎列表
+
+        # 方式1：直接在 model_cards 中查找
         model_info = models.model_cards.get(safe_model_id, {})
         repo_config = model_info.get("repo", {})
 
-        # 动态检测 PyTorch 引擎（以 'PyTorch' 开头，以 'InferenceEngine' 结尾）
+        # 动态检测 PyTorch 引擎
         pytorch_engines = [
             k for k in repo_config.keys()
             if k.startswith("PyTorch") and k.endswith("InferenceEngine")
         ]
 
+        if not pytorch_engines:
+            # 方式2：反向查找 - 通过 repo ID 匹配
+            # 有些调用方传入的是 HF Repo ID 而非短名
+            for card_key, card_val in models.model_cards.items():
+                card_repo = card_val.get("repo", {})
+                for engine_name, repo_id in card_repo.items():
+                    if repo_id == safe_model_id and engine_name.startswith("PyTorch") and engine_name.endswith("InferenceEngine"):
+                        pytorch_engines = [engine_name]
+                        print(f"[PyTorchInferenceEngine] 反向匹配成功: {safe_model_id} -> {card_key} ({engine_name})")
+                        break
+                if pytorch_engines:
+                    break
+
         if pytorch_engines:
-            # 使用第一个找到的 PyTorch 引擎
             engine_class_name = pytorch_engines[0]
-            # 将类名转换为模块路径
-            # 例如: PyTorchFaraInferenceEngine -> exo.inference.pytorch.fara.pytorch_inference_engine
-            # 或者: PyTorchQwen3VLInferenceEngine -> exo.inference.pytorch.qwen3vl.pytorch_inference_engine
             engine_type = engine_class_name.replace("PyTorch", "").replace("InferenceEngine", "").lower()
             module_path = f"exo.inference.pytorch.{engine_type}.pytorch_inference_engine"
 
             try:
-                # 动态导入模块
                 module = __import__(module_path, fromlist=[engine_class_name])
-                # 获取引擎类
                 engine_class = getattr(module, engine_class_name)
-                # 创建引擎实例
                 return engine_class(self.shard_downloader, model_path=self.model_path)
             except (ImportError, AttributeError) as e:
                 print(f"[PyTorchInferenceEngine] 动态导入引擎失败: {engine_class_name}, 错误: {e}")
-                # 回退到默认引擎
-                pass
 
-        # 默认使用 Qwen3VL 引擎作为兜底
-        from exo.inference.pytorch.qwen3vl.pytorch_inference_engine import PyTorchQwen3VLInferenceEngine
-        return PyTorchQwen3VLInferenceEngine(self.shard_downloader, model_path=self.model_path)
+        # 默认使用 Qwen3 引擎作为兜底（而非 Qwen3VL，因为大多数文本模型用 Qwen3 更合适）
+        try:
+            from exo.inference.pytorch.qwen3.pytorch_inference_engine import PyTorchQwen3InferenceEngine
+            print(f"[PyTorchInferenceEngine] ⚠️ 未找到 {safe_model_id} 的专用引擎，使用 Qwen3 兜底")
+            return PyTorchQwen3InferenceEngine(self.shard_downloader, model_path=self.model_path)
+        except Exception as fallback_err:
+            print(f"[PyTorchInferenceEngine] Qwen3 引擎加载也失败: {fallback_err}, 使用 Qwen3VL 最终兜底")
+            from exo.inference.pytorch.qwen3vl.pytorch_inference_engine import PyTorchQwen3VLInferenceEngine
+            return PyTorchQwen3VLInferenceEngine(self.shard_downloader, model_path=self.model_path)
 
     def _ensure_engine(self, shard: Shard):
         """确保引擎已初始化（支持多模型）
@@ -131,6 +145,11 @@ class PyTorchInferenceEngine(InferenceEngine):
                 print(f"  {line.strip()}")
 
             self._engines[model_id] = self._get_engine_for_model(model_id)
+
+            # ✅ 关键修复：为新引擎继承回调（否则 my_loaded_models 不会更新）
+            if self.on_model_loaded_callback and hasattr(self._engines[model_id], 'set_on_model_loaded_callback'):
+                self._engines[model_id].set_on_model_loaded_callback(self.on_model_loaded_callback)
+                print(f"[PyTorchInferenceEngine] [CB] 已为新引擎 {model_id} 设置模型加载回调")
 
         self._current_model_id = model_id
         self._default_engine = self._engines[model_id]

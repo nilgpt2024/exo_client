@@ -813,7 +813,60 @@ class GPUPoolManager:
             return True
         except Exception as e:
             logger.error(f"[GPUPool] 本节点加载分片失败 (实例: {instance_id}): {e}")
+            # OOM 等显存相关错误时，清理残留显存，避免阻塞后续模型加载
+            self._cleanup_after_load_failure(target_engine, shard)
             raise
+
+    def _cleanup_after_load_failure(self, engine, shard: Shard):
+        """模型加载失败后清理 GPU 显存和引擎状态"""
+        import gc
+        try:
+            # 尝试清理引擎内部状态（已加载的模型权重）
+            # 注意：model 可能是 @property 没有 deleter，不能直接 del
+            # 策略：尝试多种方式释放引用
+            _freed = False
+
+            # 方式1：尝试通过底层属性清理（_model, _model_wrapper 等）
+            for attr in ('_model', '_model_wrapper', '_engine_model', 'model_wrapper'):
+                if hasattr(engine, attr):
+                    try:
+                        delattr(engine, attr)
+                        _freed = True
+                    except (AttributeError, TypeError):
+                        pass
+
+            # 方式2：如果 model 有 setter，设为 None
+            if not _freed:
+                try:
+                    engine.model = None
+                    _freed = True
+                except (AttributeError, TypeError):
+                    pass
+
+            # 方式3：清理其他可清理的属性
+            for attr in ('tokenizer', 'processor', 'config', 'shard'):
+                if hasattr(engine, attr):
+                    try:
+                        setattr(engine, attr, None)
+                    except (AttributeError, TypeError):
+                        pass
+
+            # 清理 KV 缓存等状态
+            if hasattr(engine, 'model_state'):
+                engine.model_state = {}
+
+            logger.info("[GPUPool] 已清理引擎内部状态")
+        except Exception as cleanup_err:
+            logger.warning(f"[GPUPool] 清理引擎状态时出错: {cleanup_err}")
+
+        try:
+            import torch
+            gc.collect()
+            torch.cuda.empty_cache()
+            free_mem = torch.cuda.mem_get_info()[0] / 1024**3
+            logger.info(f"[GPUPool] GPU 显存已清理，当前可用: {free_mem:.1f} GB")
+        except Exception as cuda_err:
+            logger.warning(f"[GPUPool] CUDA 清理失败: {cuda_err}")
     
     async def _notify_peers_topology(self, plan: 'AllocationPlan'):
         """通知所有参与节点建立 P2P 连接"""
@@ -1041,24 +1094,22 @@ class GPUPoolManager:
             
             if hasattr(self.node, 'inference_engines') and instance_id in self.node.inference_engines:
                 engine = self.node.inference_engines[instance_id]
-                
-                if hasattr(engine, 'model') and engine.model is not None:
-                    logger.info(f"[GPUPool] 释放引擎实例 {instance_id} 的模型对象")
-                    del engine.model
-                    engine.model = None
-                
-                if hasattr(engine, 'tokenizer') and engine.tokenizer is not None:
-                    del engine.tokenizer
-                    engine.tokenizer = None
-                
-                if hasattr(engine, 'processor') and engine.processor is not None:
-                    del engine.processor
-                    engine.processor = None
-                
-                if hasattr(engine, 'shard') and engine.shard is not None:
-                    del engine.shard
-                    engine.shard = None
-                
+
+                # 释放引擎内部引用（model 可能是 @property，不能用 del）
+                for attr in ('_model', '_model_wrapper', '_engine_model', 'model_wrapper'):
+                    if hasattr(engine, attr):
+                        try:
+                            delattr(engine, attr)
+                        except (AttributeError, TypeError):
+                            pass
+                # 尝试设为 None（如果 property 有 setter）
+                for attr in ('model', 'tokenizer', 'processor', 'shard'):
+                    if hasattr(engine, attr):
+                        try:
+                            setattr(engine, attr, None)
+                        except (AttributeError, TypeError):
+                            pass
+
                 del self.node.inference_engines[instance_id]
                 logger.info(f"[GPUPool] [OK] 已删除引擎实例: {instance_id}")
             

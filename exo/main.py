@@ -1,5 +1,11 @@
 # 导入标准库模块，用于命令行参数解析
 import argparse
+import sys
+import os
+
+# 确保项目根目录在 Python 搜索路径中，以便能正确导入 exo 包
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # 导入异步编程相关模块
 import asyncio
 # 导入程序退出时执行清理操作的模块

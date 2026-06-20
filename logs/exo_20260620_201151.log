@@ -1,0 +1,408 @@
+2026-06-20 20:12:13,525 - root - INFO - [PeerCache] 无本地缓存文件，跳过加载
+2026-06-20 20:12:13,525 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:532>>
+2026-06-20 20:12:13,525 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:12:13,525 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:12:13,528 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:12:13,528 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:12:13,538 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...
+2026-06-20 20:12:13,583 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:12:13,584 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:12:13,584 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:12:13,585 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=[]
+2026-06-20 20:12:13,585 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:12:13,586 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-06-20 20:12:13,587 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-06-20 20:12:13,587 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-06-20 20:12:13,588 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-06-20 20:12:15,591 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  10.11.161.199:44498
+2026-06-20 20:12:25,789 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:25,789 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:25,789 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_38f5c62c -> ws://10.11.161.199:8080/ws/node/node_38f5c62c
+2026-06-20 20:12:25,793 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-06-20 20:12:25,796 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:12:25,859 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-06-20 20:12:25,949 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (102字节): {"type": "register_ack", "status": "success", "message": "Node node_38f5c62c registered successfully"}
+2026-06-20 20:12:25,966 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-06-20 20:12:30,791 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:30,791 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:35,797 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:35,797 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:40,800 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:40,800 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:42,683 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (252字节): {"type": "model_load", "task_id": "Qwen/Qwen3-4B::worker-1_0_35_1781957562", "model_id": "Qwen/Qwen3-4B::worker-1", "model_path": "Qwen/Qwen3-4B", "shard": {"start_layer": 0, "end_layer": 35, "n_layer
+2026-06-20 20:12:42,683 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-20 20:12:42,686 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: Qwen/Qwen3-4B::worker-1 (实例: worker-1)
+2026-06-20 20:12:42,686 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: Qwen/Qwen3-4B (实例: worker-1, 键: Qwen/Qwen3-4B::worker-1)
+2026-06-20 20:12:42,686 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 Qwen/Qwen3-4B 总层数: 36
+2026-06-20 20:12:42,687 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_38f5c62c']
+2026-06-20 20:12:42,687 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: Qwen/Qwen3-4B::worker-1...
+2026-06-20 20:12:42,689 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='Qwen/Qwen3-4B', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-20 20:12:42,709 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-20 20:12:42,816 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-20 20:12:42,816 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-4B 加载检查点
+2026-06-20 20:12:42,816 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-4B，通过 shard_downloader 解析本地路径...
+2026-06-20 20:12:42,816 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-20 20:12:43,379 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-20 20:12:43,379 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-20 20:12:43,379 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B\model.safetensors.index.json
+2026-06-20 20:12:43,379 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-06-20 20:12:43,379 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-06-20 20:12:43,387 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='Qwen/Qwen3-4B', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') 保留的权重键数量: 398
+2026-06-20 20:12:43,387 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-06-20 20:12:43,455 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-06-20 20:12:43,474 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-06-20 20:12:43,521 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-06-20 20:12:43,522 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+2026-06-20 20:12:43,526 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-06-20 20:12:43,526 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-20 20:12:43,584 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:12:43,585 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:12:43,586 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:12:43,586 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:12:43,593 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:12:43,593 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:12:43,595 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:12:43,595 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:12:43,595 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:12:43,595 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:12:45,790 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:45,790 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:50,791 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:50,791 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:51,761 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 398 个参数到设备: cuda
+2026-06-20 20:12:54,393 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载分片权重到设备: cuda
+2026-06-20 20:12:54,394 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-20 20:12:54,699 - root - INFO - 模型加载后 GPU 内存: 7.55GB
+2026-06-20 20:12:57,004 - root - INFO - 准备移动模型到设备: cuda
+2026-06-20 20:12:57,005 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-20 20:12:57,022 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-20 20:12:57,038 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-20 20:12:57,043 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-20 20:12:57,048 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_38f5c62c 上加载分片
+2026-06-20 20:12:57,049 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-20 20:12:57,050 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 Qwen/Qwen3-4B::worker-1 加载完成，状态: loaded
+2026-06-20 20:12:57,051 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:12:57,051 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:12:57,051 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: b381abf9-840
+2026-06-20 20:12:57,669 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (258字节): {"type": "model_load", "task_id": "Qwen/Qwen3-0.6B::worker-1_0_27_1781957577", "model_id": "Qwen/Qwen3-0.6B::worker-1", "model_path": "Qwen/Qwen3-0.6B", "shard": {"start_layer": 0, "end_layer": 27, "n
+2026-06-20 20:12:57,669 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-20 20:12:57,671 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: Qwen/Qwen3-0.6B::worker-1 (实例: worker-1)
+2026-06-20 20:12:57,671 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: Qwen/Qwen3-0.6B (实例: worker-1, 键: Qwen/Qwen3-0.6B::worker-1)
+2026-06-20 20:12:57,672 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 Qwen/Qwen3-0.6B 总层数: 28
+2026-06-20 20:12:57,672 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_38f5c62c']
+2026-06-20 20:12:57,673 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: Qwen/Qwen3-0.6B::worker-1...
+2026-06-20 20:12:57,673 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='Qwen/Qwen3-0.6B', start_layer=0, end_layer=27, n_layers=28, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-20 20:12:57,677 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-20 20:12:57,677 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-20 20:12:57,679 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-0.6B 加载检查点
+2026-06-20 20:12:57,679 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-0.6B，通过 shard_downloader 解析本地路径...
+2026-06-20 20:12:57,679 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-20 20:12:58,088 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-20 20:12:58,088 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-20 20:12:58,090 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B\model.safetensors
+2026-06-20 20:12:58,122 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 311
+2026-06-20 20:12:58,127 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 310
+2026-06-20 20:12:58,127 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-20 20:12:59,799 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 310 个参数到设备: cuda
+2026-06-20 20:13:00,592 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-20 20:13:00,919 - root - INFO - 模型加载后 GPU 内存: 8.66GB
+2026-06-20 20:13:03,181 - root - INFO - 准备移动模型到设备: cuda
+2026-06-20 20:13:03,182 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-20 20:13:03,187 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-20 20:13:03,198 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-20 20:13:03,199 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-20 20:13:03,204 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_38f5c62c 上加载分片
+2026-06-20 20:13:03,204 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-20 20:13:03,205 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 Qwen/Qwen3-0.6B::worker-1 加载完成，状态: loaded
+2026-06-20 20:13:03,206 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:03,206 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:08,192 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:08,192 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:13,197 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:13,197 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:13,595 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:13:13,595 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:13:13,595 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:13:13,595 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:13:13,602 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:13:13,602 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:13:13,603 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:13:13,603 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:13:13,603 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:13:13,604 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:13:18,199 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:18,199 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:23,205 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:23,205 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:28,194 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:28,216 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:33,217 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:33,217 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:37,043 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: e4b516fb-2fc
+2026-06-20 20:13:37,043 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 1b80ebe2-5f2
+2026-06-20 20:13:38,211 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:38,215 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:43,228 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:43,290 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:43,587 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:13:43,588 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:13:43,592 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:13:43,593 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:13:43,603 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:13:43,603 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:13:43,604 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:13:43,604 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:13:43,605 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:13:43,605 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:13:48,285 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:48,285 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:53,289 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:53,289 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:13:58,296 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:13:58,296 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:03,286 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:03,286 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:08,291 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:08,291 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:13,289 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:13,289 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:13,584 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:14:13,585 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:14:13,586 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:14:13,587 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:14:13,593 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:14:13,594 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:14:13,594 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:14:13,595 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:14:13,595 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:14:13,595 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:14:18,290 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:18,290 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:23,293 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:23,293 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:28,293 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:28,293 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:33,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:33,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:38,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:38,298 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:43,293 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:43,293 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:43,583 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:14:43,583 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:14:43,584 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:14:43,584 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:14:43,590 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:14:43,591 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:14:43,591 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:14:43,591 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:14:43,592 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:14:43,592 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:14:48,286 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:48,286 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:53,294 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:53,294 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:14:58,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:14:58,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:03,286 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:03,287 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:08,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:08,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:13,290 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:13,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:13,595 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:15:13,595 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:15:13,595 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:15:13,595 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:15:13,614 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:15:13,616 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:15:13,620 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:15:13,622 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:15:13,623 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:15:13,624 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:15:18,293 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:18,293 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:23,300 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:23,301 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:28,294 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:28,294 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:33,300 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:33,301 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:38,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:38,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:43,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:43,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:43,588 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:15:43,589 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:15:43,589 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:15:43,590 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:15:43,604 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:15:43,605 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:15:43,605 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:15:43,605 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:15:43,606 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:15:43,606 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:15:48,287 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:48,287 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:53,299 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:53,299 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:15:58,294 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:15:58,295 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:03,295 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:03,295 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:08,295 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:08,295 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:13,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:13,299 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:13,594 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:16:13,595 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:16:13,595 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:16:13,595 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:16:13,601 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:16:13,602 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:16:13,602 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:16:13,603 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:16:13,603 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:16:13,604 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:16:18,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:18,301 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:23,290 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:23,291 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:28,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:28,298 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:33,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:33,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:38,295 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:38,295 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:43,286 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:43,286 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:43,588 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:16:43,588 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:16:43,588 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:16:43,589 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:16:43,595 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:16:43,595 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:16:43,595 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:16:43,596 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:16:43,596 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:16:43,596 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:16:48,292 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:48,292 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:53,297 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:53,297 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:16:58,289 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:16:58,289 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:03,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:03,298 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:08,294 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:08,294 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:13,296 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:13,297 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:13,539 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 接收错误: received 1012 (service restart); then sent 1012 (service restart)
+2026-06-20 20:17:13,592 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:17:13,596 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:17:13,597 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:17:13,597 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:17:15,600 - root - WARNING - [update_peers] Failed to fetch peers from Manager: Cannot connect to host 10.11.161.199:8080 ssl:default [远程计算机拒绝网络连接。]
+2026-06-20 20:17:15,601 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:17:15,601 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:17:15,602 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:17:15,602 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:17:15,603 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:17:15,603 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:17:18,288 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:18,353 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:23,335 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:23,335 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:25,852 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 发送错误: received 1012 (service restart); then sent 1012 (service restart)
+2026-06-20 20:17:25,852 - exo.networking.websocket_optimized - WARNING - [WARN] [WSManager] 连接正常关闭或断开: received 1012 (service restart); then sent 1012 (service restart)
+2026-06-20 20:17:25,853 - exo.networking.websocket_optimized - WARNING - [WARN] [WSManager] 连接丢失，消息 e6f1f7e0-680 将被丢弃（共 0 次尝试）
+2026-06-20 20:17:25,854 - exo.networking.websocket_optimized - INFO - [RECONNECT] [WSManager] 异步触发重连...
+2026-06-20 20:17:26,336 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:17:28,333 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:28,333 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:28,341 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 连接失败: [WinError 1225] 远程计算机拒绝网络连接。
+2026-06-20 20:17:28,342 - exo.networking.websocket_optimized - INFO - ⏳ [WSManager] 2.0秒后重连...
+2026-06-20 20:17:30,341 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:17:32,346 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 连接失败: [WinError 1225] 远程计算机拒绝网络连接。
+2026-06-20 20:17:32,347 - exo.networking.websocket_optimized - INFO - ⏳ [WSManager] 3.0秒后重连...
+2026-06-20 20:17:33,340 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:33,340 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:35,342 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:17:37,348 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 连接失败: [WinError 1225] 远程计算机拒绝网络连接。
+2026-06-20 20:17:37,349 - exo.networking.websocket_optimized - INFO - ⏳ [WSManager] 4.5秒后重连...
+2026-06-20 20:17:38,335 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:38,335 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:41,845 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:17:43,339 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:43,339 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:43,591 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:17:43,591 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:17:43,592 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:17:43,592 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:17:44,038 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 连接失败: [WinError 1225] 远程计算机拒绝网络连接。
+2026-06-20 20:17:44,039 - exo.networking.websocket_optimized - INFO - ⏳ [WSManager] 6.8秒后重连...
+2026-06-20 20:17:45,602 - root - WARNING - [update_peers] Failed to fetch peers from Manager: Cannot connect to host 10.11.161.199:8080 ssl:default [远程计算机拒绝网络连接。]
+2026-06-20 20:17:45,603 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:17:45,604 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:17:45,604 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:17:45,604 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:17:45,604 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:17:45,604 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:17:48,336 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:48,337 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:50,800 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:17:52,807 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 连接失败: [WinError 1225] 远程计算机拒绝网络连接。
+2026-06-20 20:17:52,811 - exo.networking.websocket_optimized - INFO - ⏳ [WSManager] 10.1秒后重连...
+2026-06-20 20:17:53,335 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:53,336 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:17:58,338 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:17:58,338 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:02,915 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://10.11.161.199:8080/ws/node/node_38f5c62c ...
+2026-06-20 20:18:02,925 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第2次)
+2026-06-20 20:18:02,925 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 重连完成，发送循环已重启
+2026-06-20 20:18:03,345 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:03,345 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:08,337 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:08,337 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:13,338 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:13,338 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:13,589 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:18:13,589 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:18:13,590 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:18:13,590 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:18:13,597 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:18:13,598 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:18:13,598 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:18:13,599 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:18:13,599 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:18:13,599 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:18:18,341 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:18,341 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:23,339 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:23,339 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:28,344 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:28,344 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:33,343 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:33,343 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:37,132 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 5e659c2f-a46
+2026-06-20 20:18:38,348 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:38,348 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:43,336 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:43,364 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:43,598 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-20 20:18:43,598 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-20 20:18:43,598 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-20 20:18:43,598 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-20 20:18:43,606 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-20 20:18:43,606 - root - INFO - [update_peers] Updated peers list: []
+2026-06-20 20:18:43,606 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-20 20:18:43,606 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_38f5c62c'], current_topology.nodes=['node_38f5c62c']
+2026-06-20 20:18:43,607 - root - INFO - [collect_topology] Updated topology, nodes=['node_38f5c62c']
+2026-06-20 20:18:43,607 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-20 20:18:48,444 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:48,446 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-20 20:18:53,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-20 20:18:53,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...

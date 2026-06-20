@@ -51,12 +51,14 @@ async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike]):
   try:
     if DEBUG >= 4: print(f"Trying AutoProcessor for {repo_id_or_local_path}")
     processor = AutoProcessor.from_pretrained(repo_id_or_local_path, use_fast=True if "Mistral-Large" in f"{repo_id_or_local_path}" else False, trust_remote_code=True)
-    if not hasattr(processor, 'eos_token_id'):
-      processor.eos_token_id = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).eos_token_id
-    if not hasattr(processor, 'encode'):
-      processor.encode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).encode
-    if not hasattr(processor, 'decode'):
-      processor.decode = getattr(processor, 'tokenizer', getattr(processor, '_tokenizer', processor)).decode
+    # 安全访问 tokenizer 属性，避免 AttributeError
+    _tok = getattr(processor, 'tokenizer', None) or getattr(processor, '_tokenizer', None) or processor
+    if not hasattr(processor, 'eos_token_id') and hasattr(_tok, 'eos_token_id'):
+      processor.eos_token_id = _tok.eos_token_id
+    if not hasattr(processor, 'encode') and hasattr(_tok, 'encode'):
+      processor.encode = _tok.encode
+    if not hasattr(processor, 'decode') and hasattr(_tok, 'decode'):
+      processor.decode = _tok.decode
     return processor
   except Exception as e:
     if DEBUG >= 4: print(f"Failed to load processor for {repo_id_or_local_path}. Error: {e}")
