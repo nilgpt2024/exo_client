@@ -1,0 +1,1341 @@
+2026-06-22 14:47:25,982 - root - INFO - [PeerCache] 无本地缓存文件，跳过加载
+2026-06-22 14:47:25,983 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:532>>
+2026-06-22 14:47:25,984 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:47:25,984 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:47:25,985 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:47:25,985 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:47:26,003 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...
+2026-06-22 14:47:26,931 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:47:26,931 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:47:26,932 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:47:26,932 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=[]
+2026-06-22 14:47:26,933 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:47:26,934 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-06-22 14:47:26,934 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-06-22 14:47:26,935 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-06-22 14:47:26,935 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-06-22 14:47:28,937 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  ai.suipce.com:40300
+2026-06-22 14:47:39,419 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:47:39,419 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:47:39,420 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_9bd5774e -> ws://ai.suipce.com/ws/node/node_9bd5774e
+2026-06-22 14:47:39,420 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-06-22 14:47:39,424 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e ...
+2026-06-22 14:47:40,778 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-06-22 14:47:41,022 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (102字节): {"type": "register_ack", "status": "success", "message": "Node node_9bd5774e registered successfully"}
+2026-06-22 14:47:41,023 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-06-22 14:47:44,400 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:47:44,400 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:47:49,400 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:47:49,400 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:47:54,392 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:47:54,392 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:47:56,923 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:47:56,923 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:47:56,924 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:47:56,924 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:47:57,816 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:47:57,817 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:47:57,817 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:47:57,818 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:47:57,818 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:47:57,819 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:47:59,400 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:47:59,436 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:04,431 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:04,462 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:09,447 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:09,448 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:14,442 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:14,442 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:19,447 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:19,447 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:19,472 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: c8a400a7-63a
+2026-06-22 14:48:24,440 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:24,440 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:26,922 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:48:26,922 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:48:26,923 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:48:26,923 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:48:27,328 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:48:27,328 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:48:27,329 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:48:27,329 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:48:27,330 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:48:27,330 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:48:29,448 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:29,448 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:34,443 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:34,443 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:39,440 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:39,441 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:44,446 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:44,446 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:49,441 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:49,441 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:54,440 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:54,440 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:48:56,925 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:48:56,926 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:48:56,926 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:48:56,926 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:48:58,302 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:48:58,302 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:48:58,303 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:48:58,303 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:48:58,304 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:48:58,304 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:48:59,443 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:48:59,443 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:04,442 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:04,442 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:09,439 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:09,439 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:14,439 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:14,439 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:19,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:19,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:24,443 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:24,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:26,931 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:49:26,931 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:49:26,932 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:49:26,932 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:49:27,310 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:49:27,310 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:49:27,311 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:49:27,311 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:49:27,312 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:49:27,312 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:49:29,439 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:29,443 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:34,448 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:34,448 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:39,439 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:39,440 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:44,443 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:44,443 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:49,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:49,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:53,753 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (244字节): {"type": "model_load", "task_id": "qwen-3-4b::worker-1_0_35_1782110993", "model_id": "qwen-3-4b::worker-1", "model_path": "Qwen/Qwen3-4B", "shard": {"start_layer": 0, "end_layer": 35, "n_layers": 36},
+2026-06-22 14:49:53,754 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-22 14:49:53,756 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-4b::worker-1 (实例: worker-1)
+2026-06-22 14:49:53,757 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-4b (实例: worker-1, 键: qwen-3-4b::worker-1)
+2026-06-22 14:49:53,758 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 总层数: 36
+2026-06-22 14:49:53,758 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-22 14:49:53,758 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-4b::worker-1...
+2026-06-22 14:49:53,760 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-22 14:49:53,780 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-22 14:49:53,857 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-22 14:49:53,939 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-4B 加载检查点
+2026-06-22 14:49:53,939 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-4B，通过 shard_downloader 解析本地路径...
+2026-06-22 14:49:53,940 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-22 14:49:54,448 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:54,449 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:49:54,491 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-22 14:49:54,497 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-22 14:49:54,498 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B\model.safetensors.index.json
+2026-06-22 14:49:54,499 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-06-22 14:49:54,501 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-06-22 14:49:54,502 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') 保留的权重键数量: 398
+2026-06-22 14:49:54,503 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-06-22 14:49:54,523 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-06-22 14:49:54,526 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-06-22 14:49:54,546 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-06-22 14:49:54,546 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+2026-06-22 14:49:54,551 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-06-22 14:49:54,551 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-22 14:49:56,931 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:49:56,931 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:49:56,932 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:49:56,932 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:49:58,065 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:49:58,065 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:49:58,066 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:49:58,066 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:49:58,066 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:49:58,067 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:49:58,221 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (250字节): {"type": "model_load", "task_id": "qwen-3-0.6b::worker-1_0_27_1782110998", "model_id": "qwen-3-0.6b::worker-1", "model_path": "Qwen/Qwen3-0.6B", "shard": {"start_layer": 0, "end_layer": 27, "n_layers"
+2026-06-22 14:49:58,222 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-22 14:49:58,224 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-0.6b::worker-1 (实例: worker-1)
+2026-06-22 14:49:59,446 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:49:59,446 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:02,383 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 398 个参数到设备: cuda
+2026-06-22 14:50:03,101 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (225字节): {"type": "model_load", "task_id": "dummy::worker-1_0_7_1782111003", "model_id": "dummy::worker-1", "model_path": "dummy", "shard": {"start_layer": 0, "end_layer": 7, "n_layers": 8}, "peer_list": [], "
+2026-06-22 14:50:03,102 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-22 14:50:03,104 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: dummy::worker-1 (实例: worker-1)
+2026-06-22 14:50:04,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:04,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:05,286 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载分片权重到设备: cuda
+2026-06-22 14:50:05,286 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-22 14:50:05,584 - root - INFO - 模型加载后 GPU 内存: 7.55GB
+2026-06-22 14:50:07,936 - root - INFO - 准备移动模型到设备: cuda
+2026-06-22 14:50:07,937 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-22 14:50:07,955 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-22 14:50:07,971 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-22 14:50:07,972 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-22 14:50:07,978 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_9bd5774e 上加载分片
+2026-06-22 14:50:07,978 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-22 14:50:07,979 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b::worker-1 加载完成，状态: loaded
+2026-06-22 14:50:07,980 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-0.6b (实例: worker-1, 键: qwen-3-0.6b::worker-1)
+2026-06-22 14:50:07,981 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b 总层数: 28
+2026-06-22 14:50:07,982 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-22 14:50:07,982 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-0.6b::worker-1...
+2026-06-22 14:50:07,982 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-0.6b', start_layer=0, end_layer=27, n_layers=28, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-22 14:50:07,986 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-22 14:50:07,987 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-22 14:50:07,988 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-0.6B 加载检查点
+2026-06-22 14:50:07,989 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-0.6B，通过 shard_downloader 解析本地路径...
+2026-06-22 14:50:07,990 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-22 14:50:08,384 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-22 14:50:08,385 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-22 14:50:08,387 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B\model.safetensors
+2026-06-22 14:50:08,431 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 311
+2026-06-22 14:50:08,439 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 310
+2026-06-22 14:50:08,440 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-22 14:50:09,448 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:09,448 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:09,603 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 310 个参数到设备: cuda
+2026-06-22 14:50:10,534 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-22 14:50:10,891 - root - INFO - 模型加载后 GPU 内存: 8.66GB
+2026-06-22 14:50:13,290 - root - INFO - 准备移动模型到设备: cuda
+2026-06-22 14:50:13,290 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-22 14:50:13,297 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-22 14:50:13,308 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-22 14:50:13,309 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-22 14:50:13,315 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_9bd5774e 上加载分片
+2026-06-22 14:50:13,315 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-22 14:50:13,315 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b::worker-1 加载完成，状态: loaded
+2026-06-22 14:50:13,317 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: dummy (实例: worker-1, 键: dummy::worker-1)
+2026-06-22 14:50:13,318 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 dummy 总层数: 8
+2026-06-22 14:50:13,318 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-22 14:50:13,318 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: dummy::worker-1...
+2026-06-22 14:50:13,319 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='dummy', start_layer=0, end_layer=7, n_layers=8, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-22 14:50:13,323 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-22 14:50:13,324 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-22 14:50:13,325 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 dummy 加载检查点
+2026-06-22 14:50:14,441 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:14,441 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:19,442 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:19,442 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:24,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:24,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:26,930 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:50:26,930 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:50:26,931 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:50:26,931 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:50:28,565 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:50:28,566 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:50:28,567 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:50:28,567 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:50:28,568 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:50:28,568 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:50:29,441 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:29,441 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:34,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:34,445 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:39,442 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:39,442 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:39,475 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 86ab18ef-884
+2026-06-22 14:50:44,883 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:44,884 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:49,478 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: d7af4f9e-dfe
+2026-06-22 14:50:49,865 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:49,865 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:54,866 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:54,866 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:50:56,933 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:50:56,933 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:50:56,934 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:50:56,934 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:50:57,584 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:50:57,584 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:50:57,585 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:50:57,585 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:50:57,586 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:50:57,586 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:50:59,866 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:50:59,866 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:04,870 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:04,870 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:09,869 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:09,869 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:14,865 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:14,865 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:19,865 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:19,865 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:24,866 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:24,866 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:26,924 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:51:26,924 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:51:26,925 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:51:26,925 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:51:27,664 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:51:27,665 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:51:27,665 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:51:27,666 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:51:27,666 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:51:27,667 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:51:30,579 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:30,580 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:35,570 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:35,570 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:40,573 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:40,574 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:45,574 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:45,574 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:50,567 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:50,567 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:55,573 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:51:55,591 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:51:57,688 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:51:57,689 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:51:57,689 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:51:57,689 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:51:58,062 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:51:58,094 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:51:58,094 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:51:58,094 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:51:58,095 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:51:58,095 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:52:00,568 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:00,568 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:05,584 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:05,614 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:10,618 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:10,618 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:14,089 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 接收错误: received 1000 (OK); then sent 1000 (OK)
+2026-06-22 14:52:15,616 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:15,616 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:20,620 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:20,620 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:25,951 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:25,951 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:27,675 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:52:27,676 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:52:27,677 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:52:27,677 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:52:28,130 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:52:28,131 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:52:28,131 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:52:28,132 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:52:28,132 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:52:28,133 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:52:30,950 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:30,950 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:35,949 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:35,949 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:39,492 - exo.networking.websocket_optimized - ERROR - ❌ [WSManager] 发送错误: received 1000 (OK); then sent 1000 (OK)
+2026-06-22 14:52:39,493 - exo.networking.websocket_optimized - WARNING - [WARN] [WSManager] 连接正常关闭或断开: received 1000 (OK); then sent 1000 (OK)
+2026-06-22 14:52:39,493 - exo.networking.websocket_optimized - WARNING - [WARN] [WSManager] 连接丢失，消息 585d53a1-b0d 将被丢弃（共 0 次尝试）
+2026-06-22 14:52:39,494 - exo.networking.websocket_optimized - INFO - [RECONNECT] [WSManager] 异步触发重连...
+2026-06-22 14:52:39,991 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e ...
+2026-06-22 14:52:40,943 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:40,943 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:41,496 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第2次)
+2026-06-22 14:52:41,497 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 重连完成，发送循环已重启
+2026-06-22 14:52:45,944 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:45,945 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:50,944 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:50,944 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:55,943 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:52:55,943 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:52:57,681 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:52:57,681 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:52:57,682 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:52:57,682 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:52:58,437 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:52:58,437 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:52:58,438 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:52:58,438 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:52:58,438 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:52:58,439 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:53:00,947 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:00,947 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:05,948 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:05,949 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:10,944 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:10,944 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:15,943 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:15,944 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:19,480 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 761e22c5-4ab
+2026-06-22 14:53:20,950 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:20,950 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:25,943 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:25,943 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:27,677 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:53:27,677 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:53:27,678 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:53:27,678 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:53:28,087 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:53:28,113 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:53:28,113 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:53:28,113 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:53:28,113 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:53:28,113 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:53:30,948 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:30,948 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:35,949 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:35,949 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:40,949 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:40,949 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:45,942 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:45,942 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:50,949 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:50,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:55,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:53:55,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:53:57,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:53:57,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:53:57,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:53:57,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:53:58,310 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:53:58,375 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:53:58,376 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:53:58,376 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:53:58,377 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:53:58,377 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:54:00,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:00,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:04,592 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 本节点加载分片失败 (实例: worker-1): Model dummy not found on ModelScope
+2026-06-22 14:54:04,593 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 已清理引擎内部状态
+2026-06-22 14:54:04,886 - exo.topology.gpu_pool_manager - INFO - [GPUPool] GPU 显存已清理，当前可用: 6.9 GB
+2026-06-22 14:54:04,887 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 在 local 节点 node_9bd5774e 上加载分片失败: Model dummy not found on ModelScope
+2026-06-22 14:54:04,887 - exo.topology.gpu_pool_manager - WARNING - [GPUPool] 分配计划执行完成但有 1 个节点失败
+2026-06-22 14:54:04,888 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-22 14:54:04,888 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 dummy::worker-1 加载完成，状态: partial
+2026-06-22 14:54:05,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:05,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:10,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:10,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:15,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:15,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:20,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:20,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:25,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:25,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:27,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:54:27,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:54:27,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:54:27,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:54:27,966 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:54:27,967 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:54:27,967 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:54:27,968 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:54:27,968 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:54:27,968 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:54:30,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:30,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:35,982 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:35,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:39,480 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: f8896275-375
+2026-06-22 14:54:40,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:40,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:45,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:45,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:50,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:50,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:55,982 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:54:55,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:54:57,678 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:54:57,678 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:54:57,679 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:54:57,679 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:54:58,328 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:54:58,328 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:54:58,329 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:54:58,329 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:54:58,329 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:54:58,330 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:55:00,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:00,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:05,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:05,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:10,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:10,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:15,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:15,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:20,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:20,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:25,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:25,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:27,681 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:55:27,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:55:27,682 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:55:27,682 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:55:28,195 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:55:28,211 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:55:28,212 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:55:28,212 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:55:28,213 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:55:28,213 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:55:30,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:30,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:35,972 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:35,972 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:40,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:40,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:45,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:45,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:50,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:50,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:55,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:55:55,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:55:57,677 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:55:57,677 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:55:57,678 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:55:57,678 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:55:58,879 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:55:58,879 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:55:58,880 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:55:58,880 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:55:58,881 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:55:58,881 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:56:00,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:00,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:05,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:05,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:10,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:10,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:15,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:15,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:20,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:20,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:25,982 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:25,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:27,681 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:56:27,681 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:56:27,682 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:56:27,682 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:56:28,043 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:56:28,044 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:56:28,044 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:56:28,045 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:56:28,045 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:56:28,046 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:56:30,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:30,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:35,983 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:35,983 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:40,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:40,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:45,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:45,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:50,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:50,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:55,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:56:55,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:56:57,683 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:56:57,683 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:56:57,684 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:56:57,684 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:56:57,991 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:56:57,992 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:56:57,992 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:56:57,992 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:56:57,993 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:56:57,993 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:57:00,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:00,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:05,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:05,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:10,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:10,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:15,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:15,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:20,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:20,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:25,973 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:25,973 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:27,676 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:57:27,676 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:57:27,677 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:57:27,677 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:57:28,341 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:57:28,342 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:57:28,342 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:57:28,343 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:57:28,343 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:57:28,343 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:57:30,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:30,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:35,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:35,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:40,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:40,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:45,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:45,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:50,983 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:50,983 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:55,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:57:55,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:57:57,677 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:57:57,677 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:57:57,678 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:57:57,678 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:57:58,190 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:57:58,237 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:57:58,238 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:57:58,238 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:57:58,239 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:57:58,239 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:58:00,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:00,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:05,983 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:05,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:10,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:10,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:15,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:15,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:20,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:20,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:25,980 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:25,980 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:27,686 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:58:27,686 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:58:27,687 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:58:27,687 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:58:28,377 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:58:28,378 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:58:28,378 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:58:28,378 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:58:28,378 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:58:28,379 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:58:30,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:30,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:35,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:35,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:40,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:40,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:45,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:45,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:50,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:50,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:55,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:58:55,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:58:57,686 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:58:57,686 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:58:57,687 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:58:57,687 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:58:58,774 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:58:58,775 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:58:58,775 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:58:58,776 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:58:58,776 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:58:58,776 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:59:00,984 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:00,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:05,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:05,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:10,982 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:10,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:15,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:15,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:20,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:20,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:25,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:25,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:27,680 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:59:27,680 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:59:27,681 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:59:27,681 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:59:28,264 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:59:28,265 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:59:28,265 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:59:28,265 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:59:28,266 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:59:28,266 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 14:59:30,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:30,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:35,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:35,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:40,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:40,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:45,984 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:45,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:50,975 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:50,975 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:55,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 14:59:55,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 14:59:57,683 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 14:59:57,684 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 14:59:57,684 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 14:59:57,684 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 14:59:58,063 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 14:59:58,064 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 14:59:58,064 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 14:59:58,065 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 14:59:58,065 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 14:59:58,066 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:00:00,977 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:00,977 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:05,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:05,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:10,983 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:10,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:15,984 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:15,984 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:20,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:20,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:25,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:25,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:27,679 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:00:27,679 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:00:27,680 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:00:27,680 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:00:28,337 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:00:28,338 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:00:28,338 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:00:28,338 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:00:28,339 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:00:28,339 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:00:30,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:30,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:35,982 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:35,982 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:40,983 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:40,983 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:45,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:45,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:50,978 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:50,978 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:55,974 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:00:55,974 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:00:57,680 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:00:57,680 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:00:57,681 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:00:57,681 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:00:58,225 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:00:58,235 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:00:58,235 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:00:58,236 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:00:58,236 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:00:58,236 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:01:00,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:00,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:05,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:05,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:10,976 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:10,976 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:15,979 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:15,979 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:20,981 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:20,981 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:25,985 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:25,985 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:27,683 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:01:27,683 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:01:27,684 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:01:27,684 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:01:28,335 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:01:28,497 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:01:28,497 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:01:28,498 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:01:28,498 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:01:28,499 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:01:30,998 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:31,102 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:36,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:36,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:41,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:41,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:46,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:46,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:51,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:51,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:56,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:01:56,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:01:57,684 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:01:57,684 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:01:57,685 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:01:57,685 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:01:58,192 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:01:58,193 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:01:58,193 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:01:58,193 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:01:58,194 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:01:58,194 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:02:01,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:01,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:06,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:06,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:11,115 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:11,116 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:16,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:16,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:21,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:21,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:26,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:26,119 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:27,688 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:02:27,688 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:02:27,689 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:02:27,689 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:02:27,891 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:02:27,892 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:02:27,892 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:02:27,892 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:02:27,893 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:02:27,893 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:02:31,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:31,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:36,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:36,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:41,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:41,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:46,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:46,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:51,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:51,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:56,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:02:56,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:02:57,678 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:02:57,678 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:02:57,679 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:02:57,679 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:02:58,126 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:02:58,127 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:02:58,127 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:02:58,128 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:02:58,128 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:02:58,129 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:03:01,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:01,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:06,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:06,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:11,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:11,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:16,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:16,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:21,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:21,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:26,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:26,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:27,680 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:03:27,680 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:03:27,681 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:03:27,681 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:03:28,834 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:03:28,835 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:03:28,835 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:03:28,836 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:03:28,836 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:03:28,837 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:03:31,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:31,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:36,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:36,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:41,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:41,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:46,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:46,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:51,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:51,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:56,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:03:56,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:03:57,687 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:03:57,687 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:03:57,688 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:03:57,688 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:03:58,198 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:03:58,199 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:03:58,199 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:03:58,200 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:03:58,200 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:03:58,201 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:04:01,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:01,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:06,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:06,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:11,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:11,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:16,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:16,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:21,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:21,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:26,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:26,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:27,680 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:04:27,680 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:04:27,681 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:04:27,681 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:04:31,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:31,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:33,118 - root - WARNING - [update_peers] Failed to fetch peers from Manager: 
+2026-06-22 15:04:33,119 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:04:33,119 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:04:33,120 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:04:33,120 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:04:33,120 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:04:33,121 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:04:36,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:36,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:41,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:41,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:46,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:46,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:51,116 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:51,116 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:56,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:04:56,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:04:57,686 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:04:57,686 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:04:57,687 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:04:57,687 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:05:00,414 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:05:00,415 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:05:00,415 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:05:00,416 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:05:00,416 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:05:00,416 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:05:01,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:01,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:06,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:06,119 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:11,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:11,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:16,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:16,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:21,116 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:21,116 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:26,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:26,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:27,688 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:05:27,688 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:05:27,689 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:05:27,689 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:05:28,748 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:05:28,749 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:05:28,749 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:05:28,750 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:05:28,750 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:05:28,750 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:05:31,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:31,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:36,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:36,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:41,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:41,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:46,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:46,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:51,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:51,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:56,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:05:56,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:05:57,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:05:57,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:05:57,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:05:57,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:05:58,265 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:05:58,265 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:05:58,266 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:05:58,266 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:05:58,267 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:05:58,267 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:06:01,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:01,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:06,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:06,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:11,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:11,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:16,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:16,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:21,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:21,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:26,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:26,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:27,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:06:27,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:06:27,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:06:27,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:06:28,308 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:06:28,308 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:06:28,309 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:06:28,309 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:06:28,310 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:06:28,310 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:06:31,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:31,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:36,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:36,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:41,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:41,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:46,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:46,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:51,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:51,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:56,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:06:56,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:06:57,688 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:06:57,887 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:06:57,887 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:06:57,888 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:06:58,624 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:06:58,625 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:06:58,626 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:06:58,628 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:06:58,629 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:06:58,631 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:07:01,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:01,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:06,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:06,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:11,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:11,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:16,117 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:16,117 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:21,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:21,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:26,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:26,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:27,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:07:27,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:07:27,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:07:27,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:07:29,510 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:07:29,512 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:07:29,514 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:07:29,515 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:07:29,515 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:07:29,517 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:07:31,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:31,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:36,128 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:36,128 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:41,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:41,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:46,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:46,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:51,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:51,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:56,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:07:56,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:07:57,690 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:07:57,690 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:07:57,691 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:07:57,691 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:07:58,441 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:07:58,441 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:07:58,442 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:07:58,442 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:07:58,442 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:07:58,443 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:08:01,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:01,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:06,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:06,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:11,128 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:11,128 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:16,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:16,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:21,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:21,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:26,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:26,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:27,690 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:08:27,690 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:08:27,691 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:08:27,691 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:08:27,870 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:08:27,870 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:08:27,871 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:08:27,871 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:08:27,871 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:08:27,872 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:08:31,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:31,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:36,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:36,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:41,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:41,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:46,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:46,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:51,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:51,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:56,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:08:56,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:08:57,690 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:08:57,690 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:08:57,691 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:08:57,691 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:08:58,302 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:08:58,303 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:08:58,304 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:08:58,304 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:08:58,304 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:08:58,305 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:09:01,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:01,119 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:06,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:06,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:11,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:11,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:16,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:16,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:21,124 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:21,124 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:26,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:26,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:27,685 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:09:27,685 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:09:27,686 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:09:27,686 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:09:27,993 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:09:27,994 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:09:27,994 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:09:27,994 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:09:27,994 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:09:27,995 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:09:31,120 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:31,120 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:36,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:36,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:41,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:41,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:46,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:46,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:51,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:51,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:56,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:09:56,119 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:09:57,682 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:09:57,682 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:09:57,683 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:09:57,683 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:09:58,247 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:09:58,248 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:09:58,249 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:09:58,249 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:09:58,249 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:09:58,250 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:10:01,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:01,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:06,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:06,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:11,118 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:11,118 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:16,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:16,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:21,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:21,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:26,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:26,125 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:27,684 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:10:27,685 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:10:27,685 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:10:27,686 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:10:28,539 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:10:28,539 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:10:28,540 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:10:28,540 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:10:28,540 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:10:28,541 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:10:31,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:31,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:36,119 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:36,119 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:41,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:41,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:46,123 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:46,123 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:51,121 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:51,121 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:56,122 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:10:56,122 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:10:57,689 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:10:57,689 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:10:57,690 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:10:57,690 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:10:59,490 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:10:59,491 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:10:59,492 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:10:59,492 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:10:59,493 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:10:59,493 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:11:01,127 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:01,127 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:06,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:06,126 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:11,126 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:11,165 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:16,154 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:16,154 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:21,152 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:21,152 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:26,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:26,157 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:27,687 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:11:27,687 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:11:27,688 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:11:27,688 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:11:28,630 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:11:28,630 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:11:28,631 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:11:28,631 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:11:28,632 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:11:28,633 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:11:31,159 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:31,159 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:36,152 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:36,152 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:41,154 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:41,154 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:46,154 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:46,154 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:51,160 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:51,160 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:56,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:11:56,153 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:11:57,686 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:11:57,686 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:11:57,687 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:11:57,687 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:11:58,131 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:11:58,165 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:11:58,165 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:11:58,165 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:11:58,166 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:11:58,166 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:12:01,152 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:01,152 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:06,152 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:06,152 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:11,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:11,154 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:16,151 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:16,151 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:21,151 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:21,151 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:26,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:26,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:27,688 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:12:27,688 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:12:27,689 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:12:27,689 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:12:28,119 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:12:28,120 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:12:28,120 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:12:28,121 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:12:28,121 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:12:28,122 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:12:31,162 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:31,162 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:36,159 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:36,159 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:41,155 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:41,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:46,150 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:46,150 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:51,151 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:51,151 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:56,159 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:12:56,159 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:12:57,691 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:12:57,691 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:12:57,692 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:12:57,692 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:12:58,727 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:12:58,728 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:12:58,728 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:12:58,729 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:12:58,729 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:12:58,730 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:13:01,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:01,158 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:06,155 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:06,155 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:11,160 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:11,160 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:16,151 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:16,151 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:21,155 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:21,155 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:26,159 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:26,159 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:27,687 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:13:27,688 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:13:27,688 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:13:27,689 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:13:27,920 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:13:27,921 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:13:27,921 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:13:27,921 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:13:27,922 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:13:27,922 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:13:31,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:31,153 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:36,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:36,153 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:41,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:41,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:46,161 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:46,162 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:51,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:51,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:56,157 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:13:56,157 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:13:57,692 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:13:57,834 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:13:57,834 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:13:57,835 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:13:59,615 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:13:59,616 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:13:59,616 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:13:59,617 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:13:59,617 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:13:59,617 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:14:01,161 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:01,161 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:06,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:06,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:11,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:11,153 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:16,160 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:16,160 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:21,158 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:21,158 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:26,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:26,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:27,684 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:14:27,684 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:14:27,685 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:14:27,685 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:14:28,325 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:14:28,326 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:14:28,326 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:14:28,327 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:14:28,327 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:14:28,327 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:14:31,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:31,156 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:36,153 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:36,153 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:41,152 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:41,152 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:46,158 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:46,158 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:51,158 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:51,222 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:56,240 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:14:56,240 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:14:57,690 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:14:57,690 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:14:57,691 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:14:57,691 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:14:59,439 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:14:59,440 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:14:59,440 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:14:59,440 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-22 15:14:59,441 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:14:59,441 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-22 15:15:01,232 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:15:01,232 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:15:06,236 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:15:06,236 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:15:11,233 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:15:11,235 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:15:16,232 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:15:16,232 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:15:21,237 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:15:21,237 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...

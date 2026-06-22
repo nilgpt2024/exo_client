@@ -151,25 +151,35 @@ class FRPConfig:
         import hashlib
         secret_key = hashlib.sha256(token.encode('utf-8')).hexdigest()[:16]
 
+        # 生成机器唯一标识（避免多机同 node_id 导致代理名冲突）
+        import socket
+        try:
+            _hostname = socket.gethostname().split('.')[0].lower()
+            # 截取主机名前缀，保持代理名简短
+            _machine_id = ''.join(c for c in _hostname if c.isalnum())[:8] or 'node'
+        except Exception:
+            _machine_id = 'node'
+        _proxy_suffix = f"{node_id}_{_machine_id}"
+
         config = {
             "serverAddr": server_addr,
             "serverPort": server_port,
             "proxies": []
         }
-        
+
         # 优先添加 XTCP P2P 代理（高性能直连）
         if enable_p2p:
             config["proxies"].append({
-                "name": f"exo_p2p_{node_id}",
+                "name": f"exo_p2p_{_proxy_suffix}",
                 "type": "xtcp",
                 "secretKey": secret_key,
                 "localIP": "127.0.0.1",
                 "localPort": local_port,
             })
-        
+
         # 添加 TCP 代理作为备用方案（当 P2P 打洞失败时自动回退）
         config["proxies"].append({
-            "name": f"exo_fallback_{node_id}",
+            "name": f"exo_fallback_{_proxy_suffix}",
             "type": "tcp",
             "localIP": "127.0.0.1",
             "localPort": local_port,

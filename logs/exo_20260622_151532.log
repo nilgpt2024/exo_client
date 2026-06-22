@@ -1,0 +1,29 @@
+2026-06-22 15:15:57,495 - root - INFO - [PeerCache] 无本地缓存文件，跳过加载
+2026-06-22 15:15:57,497 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:532>>
+2026-06-22 15:15:57,498 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-22 15:15:57,498 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-22 15:15:57,499 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-22 15:15:57,499 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-22 15:15:57,570 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...
+2026-06-22 15:15:58,407 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-22 15:15:58,527 - root - INFO - [update_peers] Updated peers list: []
+2026-06-22 15:15:58,528 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-22 15:15:58,529 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=[]
+2026-06-22 15:15:58,529 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-22 15:15:58,530 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-06-22 15:15:58,530 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-06-22 15:15:58,531 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-06-22 15:15:58,531 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-06-22 15:16:00,534 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  ai.suipce.com:40300
+2026-06-22 15:16:01,326 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:16:01,326 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
+2026-06-22 15:16:01,531 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_9bd5774e -> ws://ai.suipce.com/ws/node/node_9bd5774e
+2026-06-22 15:16:01,532 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-06-22 15:16:01,536 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e ...
+2026-06-22 15:16:03,562 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-06-22 15:16:04,022 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (102字节): {"type": "register_ack", "status": "success", "message": "Node node_9bd5774e registered successfully"}
+2026-06-22 15:16:04,023 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-06-22 15:16:06,324 - root - INFO - [FRP _discovery_loop] known_node_infos count: 0, nodes: []
+2026-06-22 15:16:06,324 - root - INFO - [FRP _discovery_loop] No known nodes, waiting for discovery...
