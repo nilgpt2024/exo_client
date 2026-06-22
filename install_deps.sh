@@ -26,6 +26,16 @@ if [ ! -d "$VENV_DIR" ]; then
     $PYTHON_EXE -m venv "$VENV_DIR"
 fi
 
+# 修复 venv 中脚本的 shebang 路径（解决虚拟环境移动/复制后路径失效的问题）
+echo "Fixing virtual environment paths..."
+VENV_PYTHON="$VENV_DIR/bin/python"
+for script in "$VENV_DIR"/bin/*; do
+    if [ -f "$script" ] && [ -x "$script" ]; then
+        # 替换 shebang 行为当前正确的 python 路径
+        sed -i "1s|#!.*|#!$VENV_PYTHON|" "$script" 2>/dev/null || true
+    fi
+done
+
 VENV_PYTHON="$VENV_DIR/bin/python"
 VENV_PIP="$VENV_DIR/bin/pip"
 
