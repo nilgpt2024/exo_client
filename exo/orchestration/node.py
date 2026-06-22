@@ -732,6 +732,54 @@ class Node:
           else:
             print(f"[NodeWS-V2] [PEER] Manager 推送的节点列表为空")
 
+        elif msg_type == "grpc_relay":
+          # 管理平台通过 WebSocket 转发的 gRPC 请求（当直连 gRPC 不可达时）
+          method = message.payload.get("method", "")
+          source_node_id = message.payload.get("source_node_id", "")
+          payload = message.payload.get("payload", {})
+          print(f"[NodeWS-V2] [GRPC-RELAY] 收到转发请求: method={method}, from={source_node_id}")
+
+          try:
+            if method == "HealthCheck":
+              response = {
+                "type": "grpc_relay_response",
+                "method": "HealthCheck",
+                "source_node_id": source_node_id,
+                "success": True,
+                "payload": {"is_healthy": True, "node_id": self.id}
+              }
+              await self.ws_manager_v2.send(response, priority=MessagePriority.NORMAL)
+              print(f"[NodeWS-V2] [GRPC-RELAY] HealthCheck 已响应")
+
+            elif method == "CollectTopology":
+              topology_data = await self._build_topology_response(payload)
+              response = {
+                "type": "grpc_relay_response",
+                "method": "CollectTopology",
+                "source_node_id": source_node_id,
+                "success": True,
+                "payload": topology_data
+              }
+              await self.ws_manager_v2.send(response, priority=MessagePriority.NORMAL)
+              print(f"[NodeWS-V2] [GRPC-RELAY] CollectTopology 已响应")
+
+            else:
+              print(f"[NodeWS-V2] [WARN] 未知的 gRPC relay 方法: {method}")
+
+          except Exception as e:
+            print(f"[NodeWS-V2] [ERROR] grpc_relay 处理失败: {e}")
+            error_resp = {
+              "type": "grpc_relay_response",
+              "method": method,
+              "source_node_id": source_node_id,
+              "success": False,
+              "error": str(e)
+            }
+            try:
+              await self.ws_manager_v2.send(error_resp, priority=MessagePriority.NORMAL)
+            except:
+              pass
+
         else:
           print(f"[NodeWS-V2] [WARN] 未知消息类型: {msg_type}")
           
@@ -1975,6 +2023,80 @@ class Node:
         
     except Exception as e:
       print(f"[Node] [P2P] 注册 P2P 节点失败: {e}")
+
+  async def _build_topology_response(self, request_payload: dict) -> dict:
+    """构建 CollectTopology 的响应数据（供 WS grpc_relay 使用）"""
+    topology = self.current_topology
+    nodes = {}
+
+    # 获取实时 GPU 显存和利用率
+    realtime_memory = None
+    gpu_utilization = None
+    try:
+      import pynvml
+      pynvml.nvmlInit()
+      handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+      gpu_mem = pynvml.nvmlDeviceGetMemoryInfo(handle)
+      realtime_memory = {
+        "total": gpu_mem.total // 2**20,
+        "free": gpu_mem.free // 2**20,
+        "used": gpu_mem.used // 2**20
+      }
+      try:
+        util_rates = pynvml.nvmlDeviceGetUtilizationRates(handle)
+        gpu_utilization = {"gpu": util_rates.gpu, "memory": util_rates.memory}
+      except Exception:
+        pass
+    except Exception:
+      pass
+
+    for node_id, cap in topology.nodes.items():
+      flops_data = {}
+      if hasattr(cap.flops, 'fp32'):
+        flops_data = {"fp32": cap.flops.fp32, "fp16": cap.flops.fp16, "int8": cap.flops.int8}
+      elif isinstance(cap.flops, dict):
+        flops_data = cap.flops
+
+      mem_detail = None
+      if realtime_memory and node_id == self.id:
+        mem_detail = realtime_memory
+      elif hasattr(cap, 'memory_detail') and cap.memory_detail:
+        if hasattr(cap.memory_detail, 'total'):
+          mem_detail = {"total": cap.memory_detail.total, "free": cap.memory_detail.free, "used": cap.memory_detail.used}
+        elif isinstance(cap.memory_detail, dict):
+          mem_detail = cap.memory_detail
+
+      # 已加载模型列表
+      loaded_models = []
+      if hasattr(self, 'my_loaded_models') and self.my_loaded_models:
+        for model_id, load_state in self.my_loaded_models.items():
+          shard_obj = load_state.shard if hasattr(load_state, 'shard') else None
+          loaded_models.append({
+            "model_id": model_id,
+            "start_layer": shard_obj.start_layer if shard_obj else 0,
+            "end_layer": shard_obj.end_layer if shard_obj else 0,
+            "n_layers": shard_obj.n_layers if shard_obj else 0
+          })
+
+      nodes[node_id] = {
+        "model": cap.model,
+        "chip": cap.chip,
+        "memory": cap.memory,
+        "flops": flops_data,
+        "memory_detail": mem_detail,
+        "loaded_models": loaded_models,
+      }
+
+    peer_graph = {}
+    for node_id, connections in topology.peer_graph.items():
+      peer_graph[node_id] = [
+        {"to_id": conn.to_id, "description": conn.description} for conn in connections
+      ]
+
+    return {
+      "nodes": nodes,
+      "peer_graph": peer_graph,
+    }
 
   async def _download_and_load_shard(self, shard: Shard):
     """

@@ -692,8 +692,13 @@ class EnhancedWebSocketManager:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"❌ [WSManager] 接收错误: {e}")
-                self.stats.record_error("recv_error", str(e))
+                # 正常关闭（1000/1001）不视为错误
+                err_str = str(e)
+                if "1000" in err_str or "1001" in err_str:
+                    logger.info(f"[WSManager] 连接正常关闭: {e}")
+                else:
+                    logger.error(f"❌ [WSManager] 接收错误: {e}")
+                    self.stats.record_error("recv_error", str(e))
                 
                 # 检查是否是连接关闭
                 if self.websocket and self.websocket.closed:

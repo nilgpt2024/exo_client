@@ -14,7 +14,7 @@ websockets
 # ML dependencies - 版本兼容性配置
 # transformers 4.56+ 需要 torch 2.7+ 的 AuxRequest
 # 使用兼容的版本组合
-torch>=2.0.0
+torch>=2.0.0,<2.7.0
 transformers==5.3.0
 tokenizers
 safetensors
