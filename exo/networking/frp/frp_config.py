@@ -94,6 +94,8 @@ class FRPConfig:
         node_id: str,
         local_port: int,
         remote_port: Optional[int] = None,
+        chatgpt_local_port: int = 52415,
+        chatgpt_remote_port: Optional[int] = None,
         token: Optional[str] = None,
         enable_p2p: bool = True,  # 默认启用 P2P (XTCP)
         **kwargs
@@ -112,6 +114,8 @@ class FRPConfig:
             node_id: 节点唯一标识（用于生成 secretKey）
             local_port: 本地 gRPC 服务端口
             remote_port: TCP 中转的远程端口（可选）
+            chatgpt_local_port: 本地 ChatGPT API HTTP 端口
+            chatgpt_remote_port: ChatGPT API 远程端口（可选）
             token: 认证令牌
             enable_p2p: 是否启用 XTCP P2P 模式（默认 True）
         """
@@ -121,6 +125,12 @@ class FRPConfig:
             import hashlib
             hash_val = int(hashlib.md5(node_id.encode()).hexdigest()[:8], 16)
             remote_port = 30000 + (hash_val % 20000)
+
+        # ChatGPT API 远程端口：未指定时按与 manager 相同的规则生成
+        if chatgpt_remote_port is None:
+            import hashlib
+            hash_val = int(hashlib.md5(f"{node_id}:chatgpt".encode()).hexdigest()[:8], 16)
+            chatgpt_remote_port = 30000 + (hash_val % 20000)
 
         # 🔐 生成 secret key（用于 XTCP P2P 认证）
         # 重要：必须使用与 frps 服务端一致的密钥，否则无法建立 P2P 连接
@@ -184,6 +194,15 @@ class FRPConfig:
             "localIP": "127.0.0.1",
             "localPort": local_port,
             "remotePort": remote_port,
+        })
+
+        # 添加 ChatGPT API HTTP 代理（manager 代理 chat 请求用）
+        config["proxies"].append({
+            "name": f"exo_chatgpt_{_proxy_suffix}",
+            "type": "tcp",
+            "localIP": "127.0.0.1",
+            "localPort": chatgpt_local_port,
+            "remotePort": chatgpt_remote_port,
         })
 
         # 🔐 Token 认证配置（token 已在前面验证并设置默认值）

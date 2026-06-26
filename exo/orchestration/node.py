@@ -67,6 +67,8 @@ class Node:
     self.shard_downloader = shard_downloader
     self.manager_url = manager_url
     self.chatgpt_api_port = chatgpt_api_port
+    # 向 Manager 上报的 ChatGPT API 端口：FRP 模式下会被覆盖为映射后的远程端口
+    self.chatgpt_api_public_port = chatgpt_api_port
     self.auto_connect = auto_connect
 
     if manager_url:
@@ -304,6 +306,20 @@ class Node:
               f"   FRP P2P:  {my_address}:{my_port}"
             )
 
+        # 🔑 关键优化：如果使用 FRP，向 Manager 上报 ChatGPT API 的 FRP 映射端口
+        # 这样 Manager 代理 chat 请求时不会错误地连到节点本地端口
+        chatgpt_public_port = self.chatgpt_api_port
+        if hasattr(self.discovery, 'get_my_chatgpt_address_info'):
+          frp_chatgpt_info = self.discovery.get_my_chatgpt_address_info()
+          if frp_chatgpt_info:
+            chatgpt_public_port = frp_chatgpt_info["port"]
+            self.chatgpt_api_public_port = chatgpt_public_port
+            logging.info(
+              f"[Node] [Manager] ChatGPT API port override for FRP:\n"
+              f"   Original: {self.chatgpt_api_port}\n"
+              f"   FRP:      {chatgpt_public_port}"
+            )
+
         # 如果绑定的是 0.0.0.0，尝试获取本机 IP
         if my_address == "0.0.0.0":
           try:
@@ -320,13 +336,13 @@ class Node:
           "node_id": self.id,
           "address": my_address,
           "port": my_port,
-          "chatgpt_api_port": self.chatgpt_api_port,
+          "chatgpt_api_port": chatgpt_public_port,
           "device_info": self.device_capabilities.to_dict() if hasattr(self.device_capabilities, 'to_dict') else {}
         }
         
         print(f"[Node] [Manager] 正在注册到 Manager ({attempt}/{max_retries})...")
         print(f"[Node] [Manager]   URL: {manager_api}")
-        print(f"[Node] [Manager]   Node: {self.id} @ {my_address}:{my_port} (HTTP:{self.chatgpt_api_port})")
+        print(f"[Node] [Manager]   Node: {self.id} @ {my_address}:{my_port} (HTTP:{chatgpt_public_port})")
         
         response = http_requests.post(manager_api, json=payload, timeout=30)
         
@@ -378,7 +394,7 @@ class Node:
           "node_id": self.id,
           "address": my_address,
           "port": my_port,
-          "chatgpt_api_port": self.chatgpt_api_port,
+          "chatgpt_api_port": self.chatgpt_api_public_port,
         }
         
         # 添加已加载模型信息
@@ -501,7 +517,7 @@ class Node:
           register_msg = {
             "type": "register",
             "node_id": self.id,
-            "chatgpt_api_port": self.chatgpt_api_port
+            "chatgpt_api_port": self.chatgpt_api_public_port
           }
           await websocket.send(json.dumps(register_msg))
           print(f"[NodeWS] [SEND] 已发送注册消息")

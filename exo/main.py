@@ -358,6 +358,7 @@ elif args.discovery_module == "frp":
     create_peer_handle=lambda peer_id, address, description, device_capabilities: GRPCPeerHandle(peer_id, address, description, device_capabilities),
     frp_token=args.frp_token,
     frp_remote_port=args.frp_remote_port,
+    chatgpt_local_port=args.chatgpt_api_port,
     seed_peers=args.seed_peers,
     discovery_timeout=args.discovery_timeout,
     device_capabilities=UNKNOWN_DEVICE_CAPABILITIES,

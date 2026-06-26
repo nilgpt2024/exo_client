@@ -97,6 +97,7 @@ class FRPDiscovery(Discovery):
         create_peer_handle: Callable[[str, str, str, DeviceCapabilities], PeerHandle],
         frp_token: Optional[str] = None,
         frp_remote_port: Optional[int] = None,
+        chatgpt_local_port: int = 52415,
         seed_peers: Optional[str] = None,
         discovery_timeout: int = 30,
         device_capabilities: Optional[DeviceCapabilities] = None,
@@ -113,6 +114,7 @@ class FRPDiscovery(Discovery):
             create_peer_handle: 创建 PeerHandle 的回调函数
             frp_token: frp 认证 token（**必需**，与服务端保持一致）
             frp_remote_port: frp 远程端口（可选，不指定则自动生成）
+            chatgpt_local_port: 本节点本地 ChatGPT API HTTP 端口
             seed_peers: 种子节点列表（可选）
             discovery_timeout: 发现超时时间（秒）
             device_capabilities: 本节点的设备能力信息
@@ -122,6 +124,7 @@ class FRPDiscovery(Discovery):
         self.frp_server_port = frp_server_port
         self.node_id = node_id
         self.local_port = local_port
+        self.chatgpt_local_port = chatgpt_local_port
         self.create_peer_handle = create_peer_handle
         self.frp_token = frp_token or "exo-frp-default-token"  # 🔐 默认 token
         self.frp_remote_port = frp_remote_port
@@ -132,12 +135,19 @@ class FRPDiscovery(Discovery):
         self.listen_task = None
         self.known_peers: Dict[str, PeerHandle] = {}
         self.known_node_infos: Dict[str, NodeInfo] = {}
-        
+
+        # 失败重试退避状态：{node_id: {"fail_count": int, "next_retry_at": float}}
+        self.node_retry_state: Dict[str, Dict] = {}
+        self.retry_base_delay = 5.0      # 基础退避（秒）
+        self.retry_max_delay = 300.0     # 最大退避 5 分钟
+        self.retry_backoff_factor = 2.0  # 指数退避乘数
+
         self.frp_config = FRPConfig()
         self.frp_process_manager: Optional[FRPProcessManager] = None
         self.my_remote_port: Optional[int] = None
+        self.my_chatgpt_remote_port: Optional[int] = None
         self.my_address: Optional[str] = None
-        
+
         # 解析种子节点
         self.seed_node_infos: List[NodeInfo] = self._parse_seed_peers(seed_peers)
 
@@ -211,6 +221,7 @@ class FRPDiscovery(Discovery):
             node_id=self.node_id,
             local_port=self.local_port,
             remote_port=self.frp_remote_port,
+            chatgpt_local_port=self.chatgpt_local_port,
             token=self.frp_token,  # ✅ 确保传递 token
             enable_p2p=self.enable_p2p
         )
@@ -219,11 +230,14 @@ class FRPDiscovery(Discovery):
         if frpc_config and "proxies" in frpc_config:
             self.my_address = self.frp_server_addr
 
-            # 遍历所有代理，找到有 remotePort 的（通常是 TCP fallback）
+            # 遍历所有代理，找到 gRPC 和 ChatGPT 的 remotePort
             for proxy in frpc_config["proxies"]:
                 if proxy.get("remotePort"):
-                    self.my_remote_port = proxy.get("remotePort")
-                    break
+                    name = proxy.get("name", "")
+                    if "chatgpt" in name:
+                        self.my_chatgpt_remote_port = proxy.get("remotePort")
+                    else:
+                        self.my_remote_port = proxy.get("remotePort")
 
             # 如果都没找到（纯 P2P 模式），使用自动生成的端口
             if not self.my_remote_port:
@@ -231,7 +245,9 @@ class FRPDiscovery(Discovery):
                 hash_val = int(hashlib.md5(self.node_id.encode()).hexdigest()[:8], 16)
                 self.my_remote_port = 30000 + (hash_val % 20000)
 
-            print(f"[FRP] 本节点访问地址: {self.my_address}:{self.my_remote_port}")
+            print(f"[FRP] 本节点 gRPC 访问地址: {self.my_address}:{self.my_remote_port}")
+            if self.my_chatgpt_remote_port:
+                print(f"[FRP] 本节点 ChatGPT API 访问地址: {self.my_address}:{self.my_chatgpt_remote_port}")
         
         config_path = self.frp_config.get_frpc_config_path(self.node_id)
         self.frp_config.save_frpc_config(frpc_config, self.node_id)
@@ -366,6 +382,15 @@ class FRPDiscovery(Discovery):
             return {
                 "address": self.my_address,
                 "port": self.my_remote_port
+            }
+        return None
+
+    def get_my_chatgpt_address_info(self) -> Optional[Dict[str, any]]:
+        """获取本节点 ChatGPT API 的 FRP 地址信息"""
+        if self.my_address and self.my_chatgpt_remote_port:
+            return {
+                "address": self.my_address,
+                "port": self.my_chatgpt_remote_port
             }
         return None
 
@@ -529,6 +554,35 @@ class FRPDiscovery(Discovery):
             logging.error(f"❌ [PeerCache] 加载缓存失败: {e}")
             return 0
 
+    def _should_retry_node(self, node_id: str, now: Optional[float] = None) -> bool:
+        """判断节点是否已过退避期，可以进行下一次重试"""
+        now = now or time.time()
+        state = self.node_retry_state.get(node_id)
+        if not state:
+            return True
+        return now >= state.get("next_retry_at", 0)
+
+    def _record_node_failure(self, node_id: str):
+        """记录节点连接失败，并计算下一次重试时间（指数退避）"""
+        now = time.time()
+        state = self.node_retry_state.setdefault(node_id, {"fail_count": 0, "next_retry_at": now})
+        state["fail_count"] += 1
+        delay = min(
+            self.retry_base_delay * (self.retry_backoff_factor ** (state["fail_count"] - 1)),
+            self.retry_max_delay
+        )
+        state["next_retry_at"] = now + delay
+        logging.debug(
+            f"[FRP] 节点 {node_id} 连接失败 #{state['fail_count']}，"
+            f"{delay:.0f}s 后重试"
+        )
+
+    def _record_node_success(self, node_id: str):
+        """节点连接成功，重置失败退避状态"""
+        if node_id in self.node_retry_state:
+            self.node_retry_state[node_id]["fail_count"] = 0
+            self.node_retry_state[node_id]["next_retry_at"] = 0
+
     async def _discovery_loop(self):
         """发现循环"""
         logging.info("[FRP _discovery_loop] Starting automatic node discovery...")
@@ -542,13 +596,22 @@ class FRPDiscovery(Discovery):
             try:
                 logging.info(f"[FRP _discovery_loop] known_node_infos count: {len(self.known_node_infos)}, nodes: {list(self.known_node_infos.keys())}")
                 if self.known_node_infos:
+                    now = time.time()
+                    nodes_to_check = [
+                        node_info
+                        for node_info in self.known_node_infos.values()
+                        if node_info.node_id != self.node_id and self._should_retry_node(node_info.node_id, now)
+                    ]
+                    skipped_count = len(self.known_node_infos) - len(nodes_to_check)
+                    if skipped_count > 0:
+                        logging.debug(f"[FRP _discovery_loop] {skipped_count} 个节点处于退避期，跳过")
+
                     if DEBUG_DISCOVERY:
-                        print(f"[FRP] 正在检查 {len(self.known_node_infos)} 个已知节点...")
-                    
+                        print(f"[FRP] 正在检查 {len(nodes_to_check)} 个已知节点（跳过 {skipped_count} 个）...")
+
                     health_check_tasks = [
                         self._check_and_update_node(node_info)
-                        for node_info in self.known_node_infos.values()
-                        if node_info.node_id != self.node_id
+                        for node_info in nodes_to_check
                     ]
                     
                     if health_check_tasks:
@@ -648,17 +711,21 @@ class FRPDiscovery(Discovery):
                         
                 except Exception as e:
                     print(f"[FRP] 从 {node_info.node_id} 获取拓扑信息失败: {e}")
-                
+
+                self._record_node_success(node_info.node_id)
                 return peer
             else:
                 print(f"[FRP] 节点不健康: {node_info.node_id}")
+                self._record_node_failure(node_info.node_id)
                 return None
                 
         except asyncio.TimeoutError:
             print(f"[FRP] 连接超时: {node_info.node_id} @ {node_info.address}:{node_info.port}")
             logging.warning(f"[FRP _check_and_update_node] Timeout checking {node_info.node_id}")
+            self._record_node_failure(node_info.node_id)
             return None
         except Exception as e:
             print(f"[FRP] 连接失败: {node_info.node_id}, 错误: {e}")
             logging.error(f"[FRP _check_and_update_node] Failed to check {node_info.node_id}: {e}")
+            self._record_node_failure(node_info.node_id)
             return None
