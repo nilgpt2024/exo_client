@@ -1,0 +1,324 @@
+2026-06-28 11:12:16,878 - root - INFO - 📂 [PeerCache] 从本地缓存恢复了 1 个 P2P 对端 (缓存年龄: 47.6 小时)
+2026-06-28 11:12:16,879 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:586>>
+2026-06-28 11:12:16,880 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:12:16,881 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:12:16,881 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:12:16,925 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...
+2026-06-28 11:12:19,939 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:12:19,940 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-06-28 11:12:22,345 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:12:22,345 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:12:22,345 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:12:22,345 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:12:23,142 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:12:23,142 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:12:23,142 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:12:23,144 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=[]
+2026-06-28 11:12:23,144 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:12:23,144 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-06-28 11:12:23,144 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-06-28 11:12:23,144 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-06-28 11:12:23,144 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-06-28 11:12:25,134 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  ai.suipce.com:40300
+2026-06-28 11:12:25,134 - root - INFO - [Node] [Manager] ChatGPT API port override for FRP:
+   Original: 52415
+   FRP:      40073
+2026-06-28 11:12:35,768 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_9bd5774e -> ws://ai.suipce.com/ws/node/node_9bd5774e
+2026-06-28 11:12:35,768 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-06-28 11:12:35,774 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e ...
+2026-06-28 11:12:36,348 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-06-28 11:12:36,588 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (102字节): {"type": "register_ack", "status": "success", "message": "Node node_9bd5774e registered successfully"}
+2026-06-28 11:12:36,588 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-06-28 11:12:36,925 - exo.topology.gpu_pool_api - INFO - [API] [Manager] 加载单分片: qwen-3-4b::worker-1 (基础ID: qwen-3-4b) L0-L35
+2026-06-28 11:12:36,926 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-4b (实例: default, 键: qwen-3-4b)
+2026-06-28 11:12:36,926 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 总层数: 36
+2026-06-28 11:12:36,926 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-28 11:12:36,926 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-4b...
+2026-06-28 11:12:36,927 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-28 11:12:37,000 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-28 11:12:37,135 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-28 11:12:37,136 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-4B 加载检查点
+2026-06-28 11:12:37,137 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-4B，通过 shard_downloader 解析本地路径...
+2026-06-28 11:12:37,138 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:12:37,778 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (244字节): {"type": "model_load", "task_id": "qwen-3-4b::worker-2_0_35_1782616357", "model_id": "qwen-3-4b::worker-2", "model_path": "Qwen/Qwen3-4B", "shard": {"start_layer": 0, "end_layer": 35, "n_layers": 36},
+2026-06-28 11:12:37,778 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-28 11:12:37,784 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-4b::worker-2 (实例: worker-2)
+2026-06-28 11:12:37,892 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-28 11:12:37,893 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-28 11:12:37,895 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B\model.safetensors.index.json
+2026-06-28 11:12:37,895 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-06-28 11:12:37,913 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-06-28 11:12:37,966 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') 保留的权重键数量: 398
+2026-06-28 11:12:37,967 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-06-28 11:12:37,999 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-06-28 11:12:38,871 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-06-28 11:12:39,718 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-06-28 11:12:39,718 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+2026-06-28 11:12:39,722 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-06-28 11:12:39,722 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-28 11:12:41,244 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (250字节): {"type": "model_load", "task_id": "qwen-3-0.6b::worker-1_0_27_1782616361", "model_id": "qwen-3-0.6b::worker-1", "model_path": "Qwen/Qwen3-0.6B", "shard": {"start_layer": 0, "end_layer": 27, "n_layers"
+2026-06-28 11:12:41,244 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-06-28 11:12:41,247 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-0.6b::worker-1 (实例: worker-1)
+2026-06-28 11:12:49,918 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-06-28 11:12:49,919 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-06-28 11:12:53,115 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:12:53,115 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:12:53,116 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:12:54,924 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:12:54,925 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-06-28 11:12:58,093 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:12:58,102 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:12:58,201 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:12:58,319 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:12:58,931 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:12:59,948 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:12:59,948 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:12:59,949 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:12:59,950 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:12:59,950 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:13:15,871 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 947cdbf4-c9f
+2026-06-28 11:13:23,125 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:13:23,126 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:13:23,126 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:13:24,952 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-06-28 11:13:24,953 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-06-28 11:13:28,077 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:13:28,078 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:13:28,078 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:13:28,078 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:13:28,484 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:13:28,498 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:13:28,498 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:13:28,498 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:13:28,498 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:13:28,498 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:13:30,001 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:13:34,992 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:13:34,993 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-06-28 11:13:53,133 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:13:53,139 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:13:53,208 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:13:58,278 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:13:58,295 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:13:58,296 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:13:58,296 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:13:59,148 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:13:59,527 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:13:59,625 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:13:59,626 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:13:59,626 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:13:59,626 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:14:05,000 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-06-28 11:14:05,001 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-06-28 11:14:09,992 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:14:14,998 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:14:19,999 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:14:23,116 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:14:23,117 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:14:23,117 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:14:24,999 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:14:27,902 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:14:27,902 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:14:27,903 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:14:27,903 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:14:28,306 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:14:28,306 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:14:28,307 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:14:28,307 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:14:28,308 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:14:28,308 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:14:29,435 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 398 个参数到设备: cuda
+2026-06-28 11:14:29,997 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:14:29,998 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-06-28 11:14:32,067 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载分片权重到设备: cuda
+2026-06-28 11:14:32,067 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-28 11:14:32,366 - root - INFO - 模型加载后 GPU 内存: 7.55GB
+2026-06-28 11:14:34,718 - root - INFO - 准备移动模型到设备: cuda
+2026-06-28 11:14:34,718 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-28 11:14:34,798 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-28 11:14:34,815 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:14:34,816 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:14:34,881 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_9bd5774e 上加载分片
+2026-06-28 11:14:34,882 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-28 11:14:34,882 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 加载完成，状态: loaded
+2026-06-28 11:14:34,890 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-4b (实例: worker-2, 键: qwen-3-4b::worker-2)
+2026-06-28 11:14:34,890 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 总层数: 36
+2026-06-28 11:14:34,891 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-28 11:14:34,891 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-4b::worker-2...
+2026-06-28 11:14:34,902 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2') (引擎实例: worker-2)
+2026-06-28 11:14:34,993 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-28 11:14:34,995 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-28 11:14:34,995 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-4B 加载检查点
+2026-06-28 11:14:34,996 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-4B，通过 shard_downloader 解析本地路径...
+2026-06-28 11:14:34,997 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:14:35,527 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-28 11:14:35,550 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-28 11:14:35,552 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B\model.safetensors.index.json
+2026-06-28 11:14:35,552 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-06-28 11:14:35,554 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-06-28 11:14:35,555 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2') 保留的权重键数量: 398
+2026-06-28 11:14:35,555 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-06-28 11:14:35,559 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-06-28 11:14:35,578 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-06-28 11:14:35,602 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-06-28 11:14:35,643 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+2026-06-28 11:14:35,716 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-06-28 11:14:35,717 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-28 11:14:46,713 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 398 个参数到设备: cuda
+2026-06-28 11:14:49,465 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载分片权重到设备: cuda
+2026-06-28 11:14:49,466 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-06-28 11:14:49,759 - root - INFO - 模型加载后 GPU 内存: 15.09GB
+2026-06-28 11:14:52,383 - root - INFO - 准备移动模型到设备: cuda
+2026-06-28 11:14:52,384 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-06-28 11:14:52,392 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-06-28 11:14:52,405 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:14:52,473 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-4B
+2026-06-28 11:14:52,495 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_9bd5774e 上加载分片
+2026-06-28 11:14:52,496 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-28 11:14:52,496 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b::worker-2 加载完成，状态: loaded
+2026-06-28 11:14:52,498 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-0.6b (实例: worker-1, 键: qwen-3-0.6b::worker-1)
+2026-06-28 11:14:52,500 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b 总层数: 28
+2026-06-28 11:14:52,500 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-06-28 11:14:52,500 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-0.6b::worker-1...
+2026-06-28 11:14:52,501 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-0.6b', start_layer=0, end_layer=27, n_layers=28, repo_id='', tie_word_embeddings=True, instance_id='worker-1') (引擎实例: worker-1)
+2026-06-28 11:14:52,504 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla P100-PCIE-16GB (15.9GB)
+2026-06-28 11:14:52,505 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+2026-06-28 11:14:52,505 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-0.6B 加载检查点
+2026-06-28 11:14:52,506 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-0.6B，通过 shard_downloader 解析本地路径...
+2026-06-28 11:14:52,507 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B
+2026-06-28 11:14:53,078 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-06-28 11:14:53,080 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-06-28 11:14:53,081 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: C:\Users\nil\.cache\exo\downloads\Qwen--Qwen3-0.6B\model.safetensors
+2026-06-28 11:14:53,129 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:14:53,193 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:14:53,197 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:14:54,673 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 311
+2026-06-28 11:14:54,678 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 310
+2026-06-28 11:14:54,679 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-06-28 11:14:58,134 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:14:58,134 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:14:58,135 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:14:58,135 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:14:58,808 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:14:58,809 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:14:58,809 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:14:58,809 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:14:58,810 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:14:58,810 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:15:00,015 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-06-28 11:15:00,081 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-06-28 11:15:03,299 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 本节点加载分片失败 (实例: worker-1): CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 19.31 MiB is free. Of the allocated memory 15.59 GiB is allocated by PyTorch, and 4.43 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-06-28 11:15:03,301 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 已清理引擎内部状态
+2026-06-28 11:15:03,570 - exo.topology.gpu_pool_manager - INFO - [GPUPool] GPU 显存已清理，当前可用: 0.0 GB
+2026-06-28 11:15:03,575 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 在 local 节点 node_9bd5774e 上加载分片失败: CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 19.31 MiB is free. Of the allocated memory 15.59 GiB is allocated by PyTorch, and 4.43 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-06-28 11:15:03,575 - exo.topology.gpu_pool_manager - WARNING - [GPUPool] 分配计划执行完成但有 1 个节点失败
+2026-06-28 11:15:03,576 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-06-28 11:15:03,576 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b::worker-1 加载完成，状态: partial
+2026-06-28 11:15:05,108 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:10,101 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:15,108 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:20,147 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:23,119 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:15:23,119 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:15:23,133 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:15:25,156 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:25,872 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 5b9eba3e-be1
+2026-06-28 11:15:28,191 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:15:28,191 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:15:28,191 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:15:28,191 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:15:29,192 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:15:29,193 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:15:29,193 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:15:29,194 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:15:29,194 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:15:29,194 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:15:30,150 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:35,253 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:35,907 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 2fbfc91d-92c
+2026-06-28 11:15:40,246 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:15:40,247 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-06-28 11:15:53,121 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:15:53,122 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:15:53,122 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:15:58,061 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:15:58,062 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:15:58,062 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:15:58,063 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:15:58,457 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:15:58,457 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:15:58,457 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:15:58,459 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:15:58,460 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:15:58,460 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:16:10,263 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-06-28 11:16:10,302 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-06-28 11:16:15,295 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:20,291 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:23,130 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:16:23,130 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:16:23,130 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:16:25,301 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:27,945 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:16:27,947 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:16:27,947 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:16:27,947 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:16:28,505 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:16:28,509 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:16:28,509 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:16:28,509 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:16:28,509 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:16:28,509 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:16:30,288 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:35,295 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:40,294 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:42,982 - exo.topology.gpu_pool_api - INFO - [API] 卸载模型: qwen-3-4b (卸载所有实例=True)
+2026-06-28 11:16:42,983 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 卸载模型 qwen-3-4b 的所有实例: ['qwen-3-4b', 'qwen-3-4b::worker-2']
+2026-06-28 11:16:42,984 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点卸载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1')
+2026-06-28 11:16:42,984 - exo.topology.gpu_pool_manager - INFO - [GPUPool] [OK] 已删除引擎实例: worker-1
+2026-06-28 11:16:43,291 - exo.topology.gpu_pool_manager - INFO - [GPUPool] GPU内存清理完成 - 已分配: 15.09GB, 已保留: 15.09GB
+2026-06-28 11:16:43,365 - exo.topology.gpu_pool_manager - INFO - [GPUPool] [OK] 模型 qwen-3-4b::worker-1 已真正卸载并释放资源
+2026-06-28 11:16:43,612 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 已完全卸载并从池中移除
+2026-06-28 11:16:43,655 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点卸载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2')
+2026-06-28 11:16:44,032 - exo.topology.gpu_pool_manager - INFO - [GPUPool] GPU内存清理完成 - 已分配: 7.55GB, 已保留: 7.55GB
+2026-06-28 11:16:44,032 - exo.topology.gpu_pool_manager - INFO - [GPUPool] [OK] 模型 qwen-3-4b::worker-2::worker-2 已真正卸载并释放资源
+2026-06-28 11:16:44,035 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b::worker-2 已完全卸载并从池中移除
+2026-06-28 11:16:45,297 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:50,290 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:53,140 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:16:53,142 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:16:53,143 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:16:55,298 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:16:58,129 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:16:58,129 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:16:58,129 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:16:58,129 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:16:59,591 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:16:59,591 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:16:59,591 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:16:59,591 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:16:59,592 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:16:59,592 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:17:00,296 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:05,297 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:10,299 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:15,328 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:20,423 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:23,126 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-06-28 11:17:23,127 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-06-28 11:17:23,128 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-06-28 11:17:25,445 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:28,307 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-06-28 11:17:28,366 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-06-28 11:17:28,374 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-06-28 11:17:28,395 - root - INFO - [update_peers] discover_peers returned: []
+2026-06-28 11:17:28,945 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-06-28 11:17:28,948 - root - INFO - [update_peers] Updated peers list: []
+2026-06-28 11:17:28,954 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-06-28 11:17:28,958 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-06-28 11:17:28,973 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-06-28 11:17:28,973 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-06-28 11:17:30,504 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-06-28 11:17:30,511 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1

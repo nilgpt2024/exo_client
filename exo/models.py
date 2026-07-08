@@ -233,31 +233,7 @@ def _load_remote_models():
             pretty_name.update(manager_names)
         print(f"[Models] 从 Manager 加载成功，总模型数: {len(model_cards)}")
         return
-    
-    # 策略2: 回退到远程 URL
-    try:
-        print(f"[Models] 正在从远程加载模型配置: {REMOTE_MODELS_URL}")
-        response = requests.get(REMOTE_MODELS_URL, timeout=10)
-        if response.status_code == 200:
-            remote_data = response.json()
-            
-            # 合并远程模型配置
-            if "model_cards" in remote_data:
-                model_cards.update(remote_data["model_cards"])
-                print(f"[Models] 已加载 {len(remote_data['model_cards'])} 个远程模型")
-            
-            # 合并远程 pretty_name
-            if "pretty_name" in remote_data:
-                pretty_name.update(remote_data["pretty_name"])
-                print(f"[Models] 已加载 {len(remote_data['pretty_name'])} 个模型别名")
-            
-            print(f"[Models] 远程配置加载成功，总模型数: {len(model_cards)}")
-        else:
-            print(f"[Models] 远程配置加载失败，状态码: {response.status_code}")
-    except Exception as e:
-        print(f"[Models] 远程配置加载失败: {e}")
-        print(f"[Models] 使用本地默认配置，模型数: {len(model_cards)}")
-
+     
 def init_models(manager_url: Optional[str] = None):
     """初始化模型配置（可在运行时调用以重新加载）"""
     if manager_url:
