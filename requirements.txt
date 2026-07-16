@@ -24,6 +24,24 @@ accelerate
 # Image processing
 pillow
 opencv-python-headless
+matplotlib
+
+# Audio processing
+soundfile
+librosa
+sox
+onnxruntime
+
+# Qwen3-ASR official package
+qwen-asr>=0.0.5
+
+# Optional: faster attention for Qwen3-TTS
+# flash-attn
+
+# Qwen3-TTS utilities
+einops
+
+easydict
 
 # Config and utils
 pydantic

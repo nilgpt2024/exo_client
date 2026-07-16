@@ -823,10 +823,20 @@ class PyTorchQwen3InferenceEngine(InferenceEngine):
                 try:
                     from pathlib import Path as PathLib
                     cache_base = PathLib.home() / ".cache" / "exo" / "downloads"
-                    local_dir_name = path.replace("/", "--")
-                    resolved_path = cache_base / local_dir_name
                     
-                    if resolved_path.exists() and resolved_path.is_dir():
+                    # 兼容两种本地目录格式：microsoft--Fara-7B（exo 内部命名）和 microsoft/Fara-7B（ModelScope SDK 原始结构）
+                    candidate_paths = [
+                        cache_base / path.replace("/", "--"),
+                        cache_base / path,
+                    ]
+                    
+                    resolved_path = None
+                    for candidate in candidate_paths:
+                        if candidate.exists() and candidate.is_dir():
+                            resolved_path = candidate
+                            break
+                    
+                    if resolved_path is not None:
                         actual_path = str(resolved_path)
                         logger.info(f"找到本地缓存路径: {actual_path}")
                     else:

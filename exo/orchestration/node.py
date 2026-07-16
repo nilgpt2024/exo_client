@@ -564,10 +564,15 @@ class Node:
               elif msg_type == "model_unload":
                 # [STAR] 收到模型卸载请求
                 unload_model_id = data.get("model_id", "")
-                print(f"[NodeWS] [DELETE] 收到模型卸载请求: {unload_model_id}")
-                
+                unload_all = data.get("unload_all_instances", False)
+                print(f"[NodeWS] [DELETE] 收到模型卸载请求: {unload_model_id} (all={unload_all})")
+
                 asyncio.create_task(
-                  self._handle_ws_model_unload(websocket, unload_model_id)
+                  self._handle_ws_model_unload(
+                    unload_model_id,
+                    websocket=websocket,
+                    unload_all_instances=unload_all
+                  )
                 )
                 
               elif msg_type == "heartbeat":
@@ -704,10 +709,14 @@ class Node:
         elif msg_type == "model_unload":
           # 模型卸载请求
           unload_model_id = message.payload.get("model_id", "")
-          print(f"[NodeWS-V2] [DELETE] 收到模型卸载请求: {unload_model_id}")
-          
+          unload_all = message.payload.get("unload_all_instances", False)
+          print(f"[NodeWS-V2] [DELETE] 收到模型卸载请求: {unload_model_id} (all={unload_all})")
+
           asyncio.create_task(
-            self._handle_ws_model_unload(unload_model_id)
+            self._handle_ws_model_unload(
+              unload_model_id,
+              unload_all_instances=unload_all
+            )
           )
           
         elif msg_type == "heartbeat":
@@ -1432,57 +1441,115 @@ class Node:
         except asyncio.CancelledError:
           pass
 
-  async def _handle_ws_model_unload(self, websocket, model_id: str):
+  async def _handle_ws_model_unload(self, model_id: str, websocket=None, unload_all_instances: bool = False):
     """
     处理通过 WebSocket 收到的模型卸载请求
+
+    现在支持：
+    - 优先走 GPU Pool（原生支持多实例 / unload_all_instances）
+    - GPU Pool 未命中时回退到 inference_engine.unload_model
+    - websocket 为 None 时跳过回送消息（兼容 V2 调用方）
     """
-    print(f"[NodeWS] [DELETE] 开始卸载模型: {model_id}")
-    
+    print(f"[NodeWS] [DELETE] 开始卸载模型: {model_id} (all={unload_all_instances})")
+
+    async def _send_ws(msg: dict):
+      if websocket is not None:
+        try:
+          await websocket.send(json.dumps(msg))
+        except Exception:
+          pass
+
     try:
-      # 调用推理引擎卸载模型
-      if hasattr(self.inference_engine, 'unload_model'):
-        success = await self.inference_engine.unload_model(model_id)
-        
-        if success:
-          # 更新本地状态
-          if model_id in self.my_loaded_models:
-            del self.my_loaded_models[model_id]
-          
-          if model_id in self.node_shards:
-            del self.node_shards[model_id]
-          
-          complete_msg = {
-            "type": "model_unload_complete",
-            "node_id": self.id,
-            "model_id": model_id,
-            "success": True,
-            "message": f"Model {model_id} unloaded successfully"
-          }
-          await websocket.send(json.dumps(complete_msg))
-          
-          print(f"[NodeWS] [OK] 模型卸载完成: {model_id}")
-          
-          # 上报状态更新
-          status_msg = {
-            "type": "model_status_update",
-            "node_id": self.id,
-            "loaded_models": [
-              {
-                "model_id": mid,
-                "shard": ls.shard.to_dict() if hasattr(ls, 'shard') and hasattr(ls.shard, 'to_dict') else {}
-              }
-              for mid, ls in self.my_loaded_models.items()
-            ]
-          }
-          await websocket.send(json.dumps(status_msg))
-        else:
-          raise Exception("unload_model returned False")
+      base_id = model_id.split("::")[0] if "::" in model_id else model_id
+      if unload_all_instances:
+        targets_to_unload = [
+          mid for mid in list(self.my_loaded_models.keys())
+          if mid == base_id or mid.startswith(f"{base_id}::")
+        ]
       else:
-        raise Exception("Inference engine does not support unload_model")
-        
+        if model_id in self.my_loaded_models:
+          targets_to_unload = [model_id]
+        elif base_id in self.my_loaded_models:
+          targets_to_unload = [base_id]
+        else:
+          targets_to_unload = [model_id]
+
+      success = False
+
+      # 1️⃣ 优先：GPU Pool（多实例卸载也走这里）
+      if self.gpu_pool:
+        try:
+          pool_result = await self.gpu_pool.unload_model(
+            model_id=model_id,
+            unload_all_instances=unload_all_instances
+          )
+          if pool_result:
+            success = True
+            print(f"[NodeWS] [OK] GPU Pool 卸载成功: {model_id} (all={unload_all_instances})")
+        except Exception as e:
+          print(f"[NodeWS] [WARN] GPU Pool 卸载失败，尝试引擎回退: {e}")
+
+      # 2️⃣ 回退：推理引擎
+      if not success:
+        if not hasattr(self.inference_engine, 'unload_model'):
+          raise Exception("Inference engine does not support unload_model")
+
+        engine_success = True
+        for tid in targets_to_unload:
+          ok = await self.inference_engine.unload_model(tid)
+          if ok:
+            if tid in self.my_loaded_models:
+              del self.my_loaded_models[tid]
+            if tid in self.node_shards:
+              del self.node_shards[tid]
+          else:
+            engine_success = False
+            print(f"[NodeWS] [WARN] 引擎卸载失败: {tid}")
+
+        success = engine_success and len(targets_to_unload) > 0
+
+      if not success:
+        raise Exception("所有卸载路径均未成功")
+
+      # 清理 node_shards_multi 中已卸载的条目
+      for nid in list(self.node_shards_multi.keys()):
+        self.node_shards_multi[nid] = [
+          s for s in self.node_shards_multi[nid]
+          if s.model_id not in targets_to_unload
+        ]
+
+      await self._broadcast_shard_config()
+      await self._broadcast_loaded_models()
+
+      complete_msg = {
+        "type": "model_unload_complete",
+        "node_id": self.id,
+        "model_id": model_id,
+        "success": True,
+        "unloaded_model_ids": targets_to_unload,
+        "message": f"Model {model_id} unloaded successfully"
+      }
+      await _send_ws(complete_msg)
+
+      print(f"[NodeWS] [OK] 模型卸载完成: {model_id} (all={unload_all_instances})")
+
+      # 上报状态更新
+      status_msg = {
+        "type": "model_status_update",
+        "node_id": self.id,
+        "loaded_models": [
+          {
+            "model_id": mid,
+            "shard": ls.shard.to_dict() if hasattr(ls, 'shard') and hasattr(ls.shard, 'to_dict') else {}
+          }
+          for mid, ls in self.my_loaded_models.items()
+        ]
+      }
+      await _send_ws(status_msg)
+
     except Exception as e:
       print(f"[NodeWS] [FAIL] 模型卸载失败 ({model_id}): {e}")
-      
+
       error_msg = {
         "type": "model_unload_complete",
         "node_id": self.id,
@@ -1490,10 +1557,7 @@ class Node:
         "success": False,
         "error": str(e)
       }
-      try:
-        await websocket.send(json.dumps(error_msg))
-      except:
-        pass
+      await _send_ws(error_msg)
 
   async def _request_loaded_models_after_delay(self, delay: float = 4.0):
     """延迟后请求其他节点的已加载模型信息"""

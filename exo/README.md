@@ -17,6 +17,7 @@ Exo 是一个分布式 AI 推理框架，通过将大型模型按层分片到多
 - Qwen3 (qwen3)
 - Qwen3-VL (qwen3vl)
 - Qwen3-TTS (qwen3tts)
+- Qwen3-ASR (qwen3asr)
 
 ## 项目结构
 
@@ -31,7 +32,8 @@ exo/
 │   │   ├── qwen2_5vl/    # Qwen2.5-VL 模型
 │   │   ├── qwen3/        # Qwen3 模型
 │   │   ├── qwen3vl/      # Qwen3-VL 模型
-│   │   └── qwen3tts/     # Qwen3-TTS 模型
+│   │   ├── qwen3tts/     # Qwen3-TTS 模型
+│   │   └── qwen3asr/     # Qwen3-ASR 模型
 │   └── shard.py          # 分片定义
 ├── networking/           # 网络通信层
 │   ├── grpc/             # gRPC 通信实现

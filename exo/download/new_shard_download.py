@@ -584,7 +584,7 @@ async def download_shard_with_modelscope_sdk(shard: Shard, inference_engine_clas
         await aios.makedirs(target_dir, exist_ok=True)
 
         # 获取允许的文件模式
-        allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname)
+        allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname, source=source, revision=revision)
 
         # 使用更新后的下载函数，传递local_dir参数指向目标目录
         model_dir = await download_with_modelscope_sdk(
@@ -809,20 +809,69 @@ async def calculate_repo_progress(shard: Shard, repo_id: str, repo_revision: str
     return RepoProgressEvent(shard, repo_id, repo_revision, len([p for p in file_progress.values() if p.downloaded == p.total]), len(file_progress), all_downloaded_bytes, all_downloaded_bytes_this_session, all_total_bytes, all_speed, all_eta, file_progress, status)
 
 # 获取模型的权重映射文件内容
-async def get_weight_map(repo_id: str, revision: str = "main") -> Dict[str, str]:
-    target_dir = (await ensure_exo_tmp())/repo_id.replace("/", "--")
-    index_file = await download_file_with_retry(repo_id, revision, "model.safetensors.index.json", target_dir)
-    async with aiofiles.open(index_file, 'r') as f: index_data = json.loads(await f.read())
-    return index_data.get("weight_map")
+# 优先读取本地缓存中的 index 文件；本地不存在时，再按指定 source/revision 下载。
+async def get_weight_map(repo_id: str, revision: str = "master", source: str = "modelscope") -> Dict[str, str]:
+    local_dir_name = repo_id.replace("/", "--")
+    cache_dir = await ensure_downloads_dir() / local_dir_name
+    tmp_dir = (await ensure_exo_tmp()) / local_dir_name
+
+    # 1) 优先检查本地 downloads 目录中的 index 文件
+    index_candidates = ["model.safetensors.index.json", "pytorch_model.bin.index.json"]
+    for index_name in index_candidates:
+        local_index = cache_dir / index_name
+        if await aios.path.exists(local_index):
+            try:
+                async with aiofiles.open(local_index, 'r') as f:
+                    index_data = json.loads(await f.read())
+                weight_map = index_data.get("weight_map")
+                if weight_map:
+                    if DEBUG >= 2:
+                        print(f"[get_weight_map] 从本地缓存读取 weight_map: {local_index} ({len(weight_map)} 个张量)")
+                    return weight_map
+            except Exception as e:
+                if DEBUG >= 1:
+                    print(f"[get_weight_map] 读取本地 index 失败 {local_index}: {e}")
+
+    # 2) 本地没有，尝试下载 index 文件
+    last_error = None
+    for index_name in index_candidates:
+        try:
+            index_file = await download_file_with_retry(repo_id, revision, index_name, tmp_dir, source=source)
+            async with aiofiles.open(index_file, 'r') as f:
+                index_data = json.loads(await f.read())
+            weight_map = index_data.get("weight_map")
+            if weight_map:
+                if DEBUG >= 2:
+                    print(f"[get_weight_map] 从 {source} 下载 {index_name} 成功 ({len(weight_map)} 个张量)")
+                return weight_map
+        except Exception as e:
+            last_error = e
+            if DEBUG >= 2:
+                print(f"[get_weight_map] 下载 {index_name} 失败: {e}")
+
+    raise Exception(f"无法获取 {repo_id} 的 weight_map (revision={revision}, source={source}): {last_error}")
 
 # 解析允许下载的文件模式
-async def resolve_allow_patterns(shard: Shard, inference_engine_classname: str) -> List[str]:
+async def resolve_allow_patterns(shard: Shard, inference_engine_classname: str, source: str = "modelscope", revision: str = "master") -> List[str]:
     try:
-        weight_map = await get_weight_map(get_repo(shard.model_id, inference_engine_classname))
-        return get_allow_patterns(weight_map, shard)
-    except:
-        if DEBUG >= 1: print(f"Error getting weight map for {shard.model_id=} and inference engine {inference_engine_classname}")
-        if DEBUG >= 1: traceback.print_exc()
+        repo_id = get_repo(shard.model_id, inference_engine_classname)
+        if repo_id is None:
+            # 兼容：从 model_cards 中查找 repo 配置
+            from exo.models import model_cards
+            fallback_info = model_cards.get(shard.model_id, {}).get("repo", {})
+            repo_id = next(iter(fallback_info.values()), shard.model_id)
+
+        weight_map = await get_weight_map(repo_id, revision=revision, source=source)
+        allow_patterns = get_allow_patterns(weight_map, shard)
+        if DEBUG >= 2:
+            print(f"[resolve_allow_patterns] {shard.model_id=} {shard.start_layer=}-{shard.end_layer=} -> {allow_patterns=}")
+        return allow_patterns
+    except Exception as e:
+        if DEBUG >= 1:
+            print(f"[resolve_allow_patterns] 获取 weight_map 失败 {shard.model_id=} {inference_engine_classname=}: {e}")
+        if DEBUG >= 1:
+            traceback.print_exc()
+        print(f"⚠️ 无法解析分片权重映射，将下载全部文件: {shard.model_id=} ({e})")
         return ["*"]
 
 # 获取已下载文件的大小，优先检查完整文件，若不存在则检查部分下载文件
@@ -942,7 +991,7 @@ async def download_shard(shard: Shard, inference_engine_classname: str,
         if not skip_download:
             try:
                 # 获取允许的文件模式
-                allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname)
+                allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname, source=source, revision=revision)
 
                 print(f"使用ModelScope SDK下载模型: {repo_id}")
                 model_dir = await download_with_modelscope_sdk(
@@ -1055,7 +1104,7 @@ async def download_shard(shard: Shard, inference_engine_classname: str,
     if repo_id is None:
         raise ValueError(f"No repo found for {shard.model_id=} and inference engine {inference_engine_classname}")
 
-    allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname)
+    allow_patterns = await resolve_allow_patterns(shard, inference_engine_classname, source=source, revision=revision)
     if DEBUG >= 2:
         print(f"Downloading {shard.model_id=} with {allow_patterns=}")
 

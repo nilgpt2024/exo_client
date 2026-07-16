@@ -442,7 +442,7 @@ if __name__ == "__main__":
         # 如果测试成功，运行示例
         #if success:
             #await example_modelscope_download()
-        await test_specific_model_download("Qwen/Qwen2.5-VL-3B-Instruct")
+        await test_specific_model_download("Qwen/Qwen3-ASR-0.6B")
 
     asyncio.run(main())
 

@@ -3,6 +3,7 @@ import time
 import asyncio
 import json
 import os
+import re
 import uuid
 from pathlib import Path
 from transformers import AutoTokenizer
@@ -73,6 +74,7 @@ def generate_completion(
   stream: bool,
   finish_reason: Union[Literal["length", "stop"], None],
   object_type: Literal["chat.completion", "text_completion"],
+  delta_content: Optional[str] = None,
 ) -> dict:
   # 确保tokens是适合解码的格式
   try:
@@ -140,7 +142,8 @@ def generate_completion(
   choice = completion["choices"][0]
   if object_type.startswith("chat.completion"):
     key_name = "delta" if stream else "message"
-    choice[key_name] = {"role": "assistant", "content": decoded_content}
+    content = delta_content if (stream and delta_content is not None) else decoded_content
+    choice[key_name] = {"role": "assistant", "content": content}
   elif object_type == "text_completion":
     choice["text"] = decoded_content
   else:
@@ -251,6 +254,9 @@ class ChatGPTAPI:
     self.stream_tasks: Dict[str, asyncio.Task] = {}
     self.default_model = default_model or "llama-3.2-1b"
     self.token_queues = defaultdict(asyncio.Queue)
+    # 流式输出累积 buffer：解决 byte-level tokenizer 单 token 解码产生 U+FFFD 乱码的问题
+    self.stream_token_buffers: Dict[str, List[int]] = {}
+    self.stream_text_buffers: Dict[str, str] = {}
 
     # Get the callback system and register our handler
     self.token_callback = node.on_token.register("chatgpt-api-token-handler")
@@ -273,6 +279,7 @@ class ChatGPTAPI:
     cors.add(self.app.router.add_post("/v1/chat/completions", self.handle_post_chat_completions), {"*": cors_options})
     cors.add(self.app.router.add_post("/v1/image/generations", self.handle_post_image_generations), {"*": cors_options})
     cors.add(self.app.router.add_post("/v1/audio/generations", self.handle_post_audio_generations), {"*": cors_options})
+    cors.add(self.app.router.add_post("/v1/audio/clone_prompt", self.handle_post_audio_clone_prompt), {"*": cors_options})
     cors.add(self.app.router.add_get("/v1/download/progress", self.handle_get_download_progress), {"*": cors_options})
     cors.add(self.app.router.add_get("/modelpool", self.handle_model_support), {"*": cors_options})
     cors.add(self.app.router.add_get("/healthcheck", self.handle_healthcheck), {"*": cors_options})
@@ -624,15 +631,46 @@ class ChatGPTAPI:
                     finish_reason = "length"
             print(f"{eos_token_id=} {tokens[-1] if tokens else None} {finish_reason=}")
 
+            # 累积流式 token，避免 byte-level tokenizer 在 token 边界处产生 U+FFFD 乱码
+            if request_id not in self.stream_token_buffers:
+                self.stream_token_buffers[request_id] = []
+                self.stream_text_buffers[request_id] = ""
+            self.stream_token_buffers[request_id].extend(tokens)
+            accumulated_tokens = self.stream_token_buffers[request_id]
+
+            full_text = tokenizer.decode(accumulated_tokens, skip_special_tokens=True)
+            special_token_patterns = [
+                r'<\|im_end\|>',
+                r'<\|im_start\|>',
+                r'<\|endoftext\|>',
+                r'<\|end\|>',
+            ]
+            for pattern in special_token_patterns:
+                full_text = re.sub(pattern, '', full_text)
+            full_text = full_text.rstrip()
+
+            prev_text = self.stream_text_buffers[request_id]
+            # 延迟发送策略：如果新增文本里包含 U+FFFD（不完整的 UTF-8 字节序列），
+            # 则只发送 U+FFFD 之前的部分，剩余部分等后续 token 补齐后再一起发送。
+            # 请求结束时（finish_reason 不为 None）强制发送剩余内容。
+            new_part = full_text[len(prev_text):]
+            if "\ufffd" in new_part and finish_reason is None:
+                ufffd_pos = new_part.find("\ufffd")
+                delta_text = new_part[:ufffd_pos]
+            else:
+                delta_text = new_part
+            self.stream_text_buffers[request_id] = prev_text + delta_text
+
             completion = generate_completion(
               chat_request,
               tokenizer,
               prompt,
               request_id,
-              tokens,
+              accumulated_tokens,
               stream,
               finish_reason,
               "chat.completion",
+              delta_content=delta_text,
             )
 
             # 安全写入，处理连接已关闭的情况
@@ -677,6 +715,11 @@ class ChatGPTAPI:
           if request_id in self.token_queues:
             print(f"[ChatGPTAPI] Cleaning up token queue: {request_id=}")
             del self.token_queues[request_id]
+          # 清理流式累积 buffer
+          if request_id in self.stream_token_buffers:
+            del self.stream_token_buffers[request_id]
+          if request_id in self.stream_text_buffers:
+            del self.stream_text_buffers[request_id]
           # 等待后台任务完成（如果还在运行）
           if 'process_task' in dir() and not process_task.done():
             try:
@@ -818,14 +861,47 @@ class ChatGPTAPI:
 
     model = data.get("model", "")
     text = data.get("text", data.get("prompt", ""))
-    tts_mode = data.get("mode", "voice_design")
+
+    # 默认 mode 根据模型 ID 推断
+    tts_mode = data.get("mode")
+    if not tts_mode:
+      if model.endswith("-custom"):
+        tts_mode = "custom_voice"
+      elif model.endswith("-base"):
+        tts_mode = "voice_clone"
+      else:
+        tts_mode = "voice_design"
+
     language = data.get("language", "Chinese")
-    instruct = data.get("instruct", "")
+    instruct = data.get("instruct", None)
     speaker = data.get("speaker", None)
+    ref_audio = data.get("ref_audio", None)
+    ref_text = data.get("ref_text", None)
+    x_vector_only_mode = data.get("x_vector_only_mode", False)
+    voice_clone_prompt = data.get("voice_clone_prompt", None)
+
+    # 生成参数
+    max_new_tokens = data.get("max_new_tokens", None)
+    do_sample = data.get("do_sample", None)
+    top_k = data.get("top_k", None)
+    top_p = data.get("top_p", None)
+    temperature = data.get("temperature", None)
+    repetition_penalty = data.get("repetition_penalty", None)
+    subtalker_dosample = data.get("subtalker_dosample", None)
+    subtalker_top_k = data.get("subtalker_top_k", None)
+    subtalker_top_p = data.get("subtalker_top_p", None)
+    subtalker_temperature = data.get("subtalker_temperature", None)
+    non_streaming_mode = data.get("non_streaming_mode", None)
 
     shard = build_base_shard(model, self.inference_engine_classname)
     if not shard:
       return web.json_response({"detail": f"Unsupported model: {model}"}, status=400)
+
+    # 参数校验
+    if tts_mode == "custom_voice" and speaker is None:
+      return web.json_response({"detail": "custom_voice mode requires 'speaker'"}, status=400)
+    if tts_mode == "voice_clone" and ref_audio is None and voice_clone_prompt is None:
+      return web.json_response({"detail": "voice_clone mode requires 'ref_audio' or 'voice_clone_prompt'"}, status=400)
 
     request_id = str(uuid.uuid4())
     callback_id = f"chatgpt-api-wait-response-{request_id}"
@@ -834,24 +910,49 @@ class ChatGPTAPI:
     inference_state = {
       "tts_mode": tts_mode,
       "language": language,
-      "instruct": instruct,
     }
-    if speaker:
+    if instruct is not None:
+      inference_state["instruct"] = instruct
+    if speaker is not None:
       inference_state["speaker"] = speaker
+    if ref_audio is not None:
+      inference_state["ref_audio"] = ref_audio
+    if ref_text is not None:
+      inference_state["ref_text"] = ref_text
+    if x_vector_only_mode is not None:
+      inference_state["x_vector_only_mode"] = x_vector_only_mode
+    if voice_clone_prompt is not None:
+      inference_state["voice_clone_prompt"] = voice_clone_prompt
+
+    for key in ["max_new_tokens", "do_sample", "top_k", "top_p", "temperature", "repetition_penalty",
+                "subtalker_dosample", "subtalker_top_k", "subtalker_top_p", "subtalker_temperature",
+                "non_streaming_mode"]:
+      value = data.get(key)
+      if value is not None:
+        inference_state[key] = value
+
+    # 支持批量文本：传入 list 时通过 texts 字段保留原始列表
+    is_batch = isinstance(text, list)
+    if is_batch:
+      inference_state["texts"] = text
+      prompt = json.dumps(text)
+    else:
+      prompt = text
 
     try:
       await asyncio.wait_for(
         asyncio.shield(asyncio.create_task(
-          self.node.process_prompt(shard, text, request_id=request_id, inference_state=inference_state)
+          self.node.process_prompt(shard, prompt, request_id=request_id, inference_state=inference_state)
         )),
         timeout=self.response_timeout
       )
 
       audio_result = None
       sample_rate = 24000
+      is_batch_result = False
 
       def on_result(_request_id: str, result, is_finished: bool):
-        nonlocal audio_result, sample_rate
+        nonlocal audio_result, sample_rate, is_batch_result
         if _request_id == request_id:
           if isinstance(result, np.ndarray):
             audio_result = result
@@ -860,32 +961,89 @@ class ChatGPTAPI:
               audio_result = result["audio"]
             if "sample_rate" in result:
               sample_rate = result["sample_rate"]
+            if result.get("is_batch"):
+              is_batch_result = True
           return is_finished
         return False
 
       await callback.wait(on_result, timeout=self.response_timeout * 10)
 
-      if audio_result is not None:
-        import io
-        import soundfile as sf
-        buffer = io.BytesIO()
-        sf.write(buffer, audio_result, sample_rate, format='WAV')
-        buffer.seek(0)
-
-        return web.Response(
-          body=buffer.read(),
-          content_type='audio/wav',
-          headers={
-            "Content-Disposition": f"attachment; filename=tts_{request_id}.wav",
-            "Cache-Control": "no-cache",
-          }
-        )
-      else:
+      if audio_result is None:
         return web.json_response({"detail": "No audio generated"}, status=500)
+
+      import io
+      import soundfile as sf
+
+      # 批量返回 JSON（base64 wav 列表）
+      if is_batch_result and isinstance(audio_result, list):
+        encoded_audios = []
+        for wav in audio_result:
+          buffer = io.BytesIO()
+          sf.write(buffer, wav, sample_rate, format='WAV')
+          buffer.seek(0)
+          encoded_audios.append(base64.b64encode(buffer.read()).decode('utf-8'))
+
+        return web.json_response({
+          "sample_rate": sample_rate,
+          "audio": encoded_audios,
+          "count": len(encoded_audios),
+        })
+
+      # 单条返回 audio/wav
+      buffer = io.BytesIO()
+      sf.write(buffer, audio_result, sample_rate, format='WAV')
+      buffer.seek(0)
+
+      return web.Response(
+        body=buffer.read(),
+        content_type='audio/wav',
+        headers={
+          "Content-Disposition": f"attachment; filename=tts_{request_id}.wav",
+          "Cache-Control": "no-cache",
+        }
+      )
 
     except Exception as e:
       if DEBUG >= 2: traceback.print_exc()
       return web.json_response({"detail": f"Error processing TTS: {str(e)}"}, status=500)
+
+  async def handle_post_audio_clone_prompt(self, request):
+    """
+    两阶段 VoiceClone 第一阶段：根据参考音频创建 voice_clone_prompt
+    """
+    data = await request.json()
+    if DEBUG >= 2: print(f"Handling audio clone prompt request from {request.remote}: {data}")
+
+    model = data.get("model", "")
+    ref_audio = data.get("ref_audio", None)
+    ref_text = data.get("ref_text", None)
+    x_vector_only_mode = data.get("x_vector_only_mode", False)
+
+    if ref_audio is None:
+      return web.json_response({"detail": "ref_audio is required"}, status=400)
+
+    shard = build_base_shard(model, self.inference_engine_classname)
+    if not shard:
+      return web.json_response({"detail": f"Unsupported model: {model}"}, status=400)
+
+    try:
+      # 确保引擎已加载
+      await self.node.inference_engine.ensure_shard(shard)
+
+      # 检查引擎是否支持 create_voice_clone_prompt
+      engine = self.node.inference_engine
+      if hasattr(engine, 'create_voice_clone_prompt'):
+        prompt_data = await engine.create_voice_clone_prompt(shard, ref_audio, ref_text, x_vector_only_mode)
+      elif hasattr(engine, 'inference_engine') and hasattr(engine.inference_engine, 'create_voice_clone_prompt'):
+        prompt_data = await engine.inference_engine.create_voice_clone_prompt(shard, ref_audio, ref_text, x_vector_only_mode)
+      else:
+        return web.json_response({"detail": "Current inference engine does not support voice clone prompt"}, status=400)
+
+      return web.json_response(prompt_data)
+
+    except Exception as e:
+      if DEBUG >= 2: traceback.print_exc()
+      return web.json_response({"detail": f"Error creating voice clone prompt: {str(e)}"}, status=500)
 
   async def handle_get_initial_models(self, request):
     model_data = {}

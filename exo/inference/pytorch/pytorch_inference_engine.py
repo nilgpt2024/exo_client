@@ -83,7 +83,13 @@ class PyTorchInferenceEngine(InferenceEngine):
         if pytorch_engines:
             engine_class_name = pytorch_engines[0]
             engine_type = engine_class_name.replace("PyTorch", "").replace("InferenceEngine", "").lower()
-            module_path = f"exo.inference.pytorch.{engine_type}.pytorch_inference_engine"
+
+            # 引擎类名到模块目录的显式映射（处理 camelCase / 下划线不一致的情况）
+            ENGINE_MODULE_MAP = {
+                "unlimitedocr": "unlimited_ocr",
+            }
+            module_dir = ENGINE_MODULE_MAP.get(engine_type, engine_type)
+            module_path = f"exo.inference.pytorch.{module_dir}.pytorch_inference_engine"
 
             try:
                 module = __import__(module_path, fromlist=[engine_class_name])

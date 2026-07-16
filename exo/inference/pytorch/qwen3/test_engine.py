@@ -165,6 +165,14 @@ async def test_single_shard():
                 # 添加到生成序列
                 generated_tokens.append(next_token_value)
 
+                # 调试：观察单个 token 解码是否会产生 U+FFFD 乱码
+                single_decoded = tokenizer.decode([next_token_value], skip_special_tokens=True)
+                print(f"  单token解码: '{single_decoded}' (token_id={next_token_value})")
+
+                # 调试：观察累积到当前的所有 token 解码结果
+                accum_decoded = tokenizer.decode(generated_tokens, skip_special_tokens=True)
+                print(f"  累积解码:  '{accum_decoded}'")
+
                 # 检查是否生成了结束token
                 if next_token_value == tokenizer.eos_token_id:
                     print(f"生成结束token (eos_token_id={tokenizer.eos_token_id})")
@@ -197,6 +205,18 @@ async def test_single_shard():
         print("生成结果:")
         print(generated_text)
         print("="*50)
+
+        # 乱码检测：检查是否包含 U+FFFD 替换字符
+        if "\ufffd" in generated_text:
+            print("\n⚠️  检测到 U+FFFD 替换字符（�），说明模型生成了不完整的 UTF-8 字节序列")
+            print(f"生成的 token 总数: {len(generated_tokens)}")
+            print(f"生成的 token IDs: {generated_tokens}")
+            print("\n可能原因:")
+            print("  1. max_new_tokens 过小，导致中文字符的最后一个 byte token 被截断")
+            print("  2. 模型采样到了错误的 byte token，导致 UTF-8 序列不完整")
+            print("  3. 若上面'单token解码'列出现'�'但'累积解码'最终正确，则是流式解码策略问题")
+        else:
+            print("\n✅ 未检测到 U+FFFD 替换字符，最终一次性解码正常")
 
         # 性能指标
         print(f"\n性能指标:")

@@ -1,0 +1,357 @@
+[Node] GPU显存池管理器已初始化
+2026-07-11 07:30:45,800 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  ai.suipce.com:40300
+2026-07-11 07:30:45,800 - root - INFO - [Node] [Manager] ChatGPT API port override for FRP:
+   Original: 52415
+   FRP:      40073
+[Node] [Manager] 正在注册到 Manager (1/3)...
+[Node] [Manager]   URL: http://ai.suipce.com/api/nodes
+[Node] [Manager]   Node: node_9bd5774e @ ai.suipce.com:40300 (HTTP:40073)
+[Node] [Manager] [OK] 注册成功! 节点 node_9bd5774e 已注册（后台重试连接中）
+[NodeWS-V2] [FAST] 启动增强版 WebSocket 管理器...
+2026-07-11 07:30:56,034 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_9bd5774e -> ws://ai.suipce.com/ws/node/node_9bd5774e
+2026-07-11 07:30:56,034 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-07-11 07:30:56,035 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e ...
+2026-07-11 07:30:56,191 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+[NodeWS-V2] [LINK] 已连接到 Manager!
+[OK] [NodeWS-V2] 增强版 WebSocket 已启动!
+2026-07-11 07:30:56,319 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (102字节): {"type": "register_ack", "status": "success", "message": "Node node_9bd5774e registered successfully"}
+2026-07-11 07:30:56,319 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+🔍 [NodeWS-V2-DISPATCH] 收到消息: type=register_ack, msg_keys=['type', 'status', 'message']
+[NodeWS-V2] [OK] 收到注册确认: register_ack
+2026-07-11 07:30:58,033 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (244字节): {"type": "model_load", "task_id": "qwen-3-4b::worker-2_0_35_1783755057", "model_id": "qwen-3-4b::worker-2", "model_path": "Qwen/Qwen3-4B", "shard": {"start_layer": 0, "end_layer": 35, "n_layers": 36},
+2026-07-11 07:30:58,033 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+🔍 [NodeWS-V2-DISPATCH] 收到消息: type=model_load, msg_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+[NodeWS-V2] [LOAD] 收到模型加载任务: qwen-3-4b::worker-2_0_35_1783755057, model=qwen-3-4b::worker-2
+[NodeWS-V2] [LOAD-START] 开始模型加载 (V2): qwen-3-4b::worker-2_0_35_1783755057, model=qwen-3-4b::worker-2, path=Qwen/Qwen3-4B, instance=worker-2
+[NodeWS-V2] [SHARD] 使用 Manager 指定分片: 层 0-35
+2026-07-11 07:30:58,042 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-4b::worker-2 (实例: worker-2)
+2026-07-11 07:30:58,042 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-4b (实例: worker-2, 键: qwen-3-4b::worker-2)
+2026-07-11 07:30:58,042 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 总层数: 36
+2026-07-11 07:30:58,042 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e']
+2026-07-11 07:30:58,042 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-4b::worker-2...
+[Node] [STAR] Create new engine instance: worker-2 (pool: ['default'])
+[Node] [INIT] 创建引擎实例 [worker-2]，类型: PyTorchInferenceEngine
+[PyTorchInferenceEngine] [INIT] Instance created: id=140168888710432, time=07:30:58
+[Node] [OK] 引擎实例 [worker-2] 创建成功
+[Node] [OK] 引擎池当前实例数: 2
+2026-07-11 07:30:58,043 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2') (引擎实例: worker-2)
+[PyTorchInferenceEngine] [NEW-ENGINE] Create new engine: qwen-3-4b (instance=worker-2, call=#1, 存活=0.0s, 当前已缓存: [])
+[PyTorchInferenceEngine] [STACK] Call stack (instance=worker-2):
+  File "/workspace/exo_client/exo/main.py", line 660, in run
+    loop.run_until_complete(main())
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 636, in run_until_complete
+    self.run_forever()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 603, in run_forever
+    self._run_once()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 1909, in _run_once
+    handle._run()
+  File "/root/miniforge3/lib/python3.10/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "/workspace/exo_client/exo/topology/gpu_pool_manager.py", line 808, in _load_shard_local
+    await target_engine.load_checkpoint(shard, model_path)
+  File "/workspace/exo_client/exo/inference/pytorch/pytorch_inference_engine.py", line 224, in load_checkpoint
+    self._ensure_engine(shard)
+2026-07-11 07:30:58,046 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla T4 (14.6GB)
+2026-07-11 07:30:59,656 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+[PyTorchInferenceEngine] [CB] 已为新引擎 qwen-3-4b 设置模型加载回调
+2026-07-11 07:30:59,657 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从 Qwen/Qwen3-4B 加载检查点
+2026-07-11 07:30:59,657 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检测到 Repo ID: Qwen/Qwen3-4B，通过 shard_downloader 解析本地路径...
+2026-07-11 07:30:59,657 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 找到本地缓存路径: /root/.cache/exo/downloads/Qwen--Qwen3-4B
+[DEBUG] load_config: 从/root/.cache/exo/downloads/Qwen--Qwen3-4B/config.json加载配置
+[DEBUG] load_config: 原始model_type=qwen3
+已加载generation配置: temperature=0.6, top_p=0.95
+[DEBUG] load_model_shard: 即将调用_get_classes，config.model_type=qwen3
+[DEBUG] _get_classes:原始model_type=qwen3
+[DEBUG] _get_classes:处理后model_type=qwen3
+[DEBUG] _get_classes:配置中的关键字段=['architectures', 'attention_bias', 'attention_dropout', 'bos_token_id', 'eos_token_id', 'head_dim', 'hidden_act', 'hidden_size', 'initializer_range', 'intermediate_size', 'max_position_embeddings', 'max_window_layers', 'model_type', 'num_attention_heads', 'num_hidden_layers', 'num_key_value_heads', 'rms_norm_eps', 'rope_scaling', 'rope_theta', 'sliding_window', 'tie_word_embeddings', 'torch_dtype', 'transformers_version', 'use_cache', 'use_sliding_window', 'vocab_size', 'generation_config', 'shard']
+2026-07-11 07:30:59,922 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-07-11 07:30:59,923 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-07-11 07:30:59,923 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: /root/.cache/exo/downloads/Qwen--Qwen3-4B/model.safetensors.index.json
+2026-07-11 07:30:59,923 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-07-11 07:30:59,924 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-07-11 07:30:59,924 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2') 保留的权重键数量: 398
+2026-07-11 07:30:59,924 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-07-11 07:30:59,925 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-07-11 07:30:59,932 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-07-11 07:30:59,939 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-07-11 07:30:59,939 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+[DEBUG] sanitize: shard info start_layer=0, end_layer=35
+[DEBUG] sanitize: is_first_layer=True, is_last_layer=True
+[DEBUG] sanitize: tie_word_embeddings=True
+[KEEP] norm weight: model.norm.weight
+[KEEP] embed_tokens weight: model.embed_tokens.weight
+[STATS] Weight classification:
+  layer weights: 396
+  embed_tokens: 1
+  lm_head: 0
+  norm: 1
+  unmatched: 0
+  total kept: 398
+  total skipped: 0
+Sanitize: 保留了 398 个权重，跳过了 0 个权重
+2026-07-11 07:30:59,941 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-07-11 07:30:59,941 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-07-11 07:31:02,258 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载 398 个参数到设备: cuda
+2026-07-11 07:31:02,686 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 成功加载分片权重到设备: cuda
+2026-07-11 07:31:02,686 - root - INFO - 模型已成功加载到设备: cuda, 精度: torch.bfloat16
+2026-07-11 07:31:02,833 - root - INFO - 模型加载后 GPU 内存: 7.55GB
+2026-07-11 07:31:03,912 - root - INFO - 准备移动模型到设备: cuda
+2026-07-11 07:31:03,913 - root - INFO - 启用BF16优化，移动模型到设备 cuda 并转换精度...
+2026-07-11 07:31:03,917 - root - INFO - 模型已成功移动到设备并转换为BF16精度
+2026-07-11 07:31:03,923 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 从本地目录加载: /root/.cache/exo/downloads/Qwen--Qwen3-4B
+2026-07-11 07:31:03,923 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 检查点加载成功: /root/.cache/exo/downloads/Qwen--Qwen3-4B
+[PyTorchInferenceEngine] 模型 qwen-3-4b 加载完成，当前已加载模型: ['qwen-3-4b']
+[Node] Model loaded and broadcasted: qwen-3-4b::worker-2 (instance=worker-2)
+[Node] Broadcasting loaded models for node_9bd5774e: ['qwen-3-4b::worker-2']
+[Node] Received node_loaded_models from node_9bd5774e: ['qwen-3-4b::worker-2']
+[Node] Updated node_loaded_models for node_9bd5774e: ['qwen-3-4b::worker-2']
+[Node] on_node_status received node_shard_config: {'type': 'node_shard_config', 'node_id': 'node_9bd5774e', 'shard': {'model_id': 'qwen-3-4b', 'base_model_id': 'qwen-3-4b', 'full_model_id': 'qwen-3-4b::worker-2', 'start_layer': 0, 'end_layer': 35, 'n_layers': 36, 'tie_word_embeddings': True, 'instance_id': 'worker-2'}, 'shards': [{'model_id': 'qwen-3-4b', 'base_model_id': 'qwen-3-4b', 'full_model_id': 'qwen-3-4b::worker-2', 'start_layer': 0, 'end_layer': 35, 'n_layers': 36, 'tie_word_embeddings': True, 'instance_id': 'worker-2'}], 'gpu_memory': {}}
+[Node] Received node_shard_config, node_id_from_msg=node_9bd5774e, current node_id=node_9bd5774e
+[Node] Shard data: {'model_id': 'qwen-3-4b', 'base_model_id': 'qwen-3-4b', 'full_model_id': 'qwen-3-4b::worker-2', 'start_layer': 0, 'end_layer': 35, 'n_layers': 36, 'tie_word_embeddings': True, 'instance_id': 'worker-2'}, shards_data: [{'model_id': 'qwen-3-4b', 'base_model_id': 'qwen-3-4b', 'full_model_id': 'qwen-3-4b::worker-2', 'start_layer': 0, 'end_layer': 35, 'n_layers': 36, 'tie_word_embeddings': True, 'instance_id': 'worker-2'}]
+[Node] Received and stored shard config from node_9bd5774e: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2')
+[Node] Received and stored 1 shard config(s) from node_9bd5774e
+[Node] Current node_shards: {'node_9bd5774e': Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2')}
+[Node] Also broadcasted shard config: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-2')
+2026-07-11 07:31:03,924 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node_9bd5774e 上加载分片
+2026-07-11 07:31:03,924 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-07-11 07:31:03,924 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b::worker-2 加载完成，状态: loaded
+[NodeWS-V2] [OK] 模型加载完成: qwen-3-4b::worker-2_0_35_1783755057
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+[FRP] 连接超时: node_9bd5774e_a1 @ ai.suipce.com:46096
+2026-07-11 07:31:11,526 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-07-11 07:31:11,526 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-07-11 07:31:13,798 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-07-11 07:31:13,798 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-07-11 07:31:13,798 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:31:16,527 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+[FRP] 尝试连接节点: node_9bd5774e_a1 @ ai.suipce.com:46096
+2026-07-11 07:31:16,527 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+2026-07-11 07:31:18,953 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-07-11 07:31:18,953 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-07-11 07:31:18,953 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-07-11 07:31:18,953 - root - INFO - [update_peers] discover_peers returned: []
+2026-07-11 07:31:19,096 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-07-11 07:31:19,096 - root - INFO - [update_peers] Updated peers list: []
+2026-07-11 07:31:19,097 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-07-11 07:31:19,097 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-07-11 07:31:19,097 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-07-11 07:31:19,097 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:31:36,048 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: afecacfa-5d1
+2026-07-11 07:31:36,048 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 2b5e8494-6fc
+2026-07-11 07:31:43,798 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-07-11 07:31:43,799 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-07-11 07:31:43,799 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+[FRP] 连接超时: node_9bd5774e_a1 @ ai.suipce.com:46096
+2026-07-11 07:31:46,529 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-07-11 07:31:46,529 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-07-11 07:31:48,954 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-07-11 07:31:48,954 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-07-11 07:31:48,954 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-07-11 07:31:48,954 - root - INFO - [update_peers] discover_peers returned: []
+2026-07-11 07:31:49,109 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-07-11 07:31:49,109 - root - INFO - [update_peers] Updated peers list: []
+2026-07-11 07:31:49,109 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-07-11 07:31:49,109 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-07-11 07:31:49,109 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-07-11 07:31:49,109 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-07-11 07:31:51,530 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:31:56,531 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+[FRP] 尝试连接节点: node_9bd5774e_a1 @ ai.suipce.com:46096
+2026-07-11 07:31:56,531 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e_a1
+
+2026-07-11 07:33:16,537 - root - WARNING - [FRP _check_and_update_node] Timeout checking node_9bd5774e_a1
+2026-07-11 07:33:16,537 - root - INFO - [FRP _discovery_loop] Health check results: 0 healthy peers
+2026-07-11 07:33:18,959 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-07-11 07:33:18,959 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-07-11 07:33:18,959 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-07-11 07:33:18,959 - root - INFO - [update_peers] discover_peers returned: []
+2026-07-11 07:33:19,107 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-07-11 07:33:19,107 - root - INFO - [update_peers] Updated peers list: []
+2026-07-11 07:33:19,107 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-07-11 07:33:19,107 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e'], current_topology.nodes=['node_9bd5774e']
+2026-07-11 07:33:19,107 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e']
+2026-07-11 07:33:19,107 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-07-11 07:33:21,538 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:33:26,538 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-07-11 07:33:31,539 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:33:36,539 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+尝试在线加载AutoProcessor
+成功在线加载AutoProcessor
+[ChatGPTAPI] Starting process_prompt as background task for streaming
+[ChatGPTAPI] Waiting for token from queue: request_id='b4c1558b-1f62-4406-936d-1e418b0f2e52'
+2026-07-11 07:33:40,773 - root - INFO - [InferenceState] 进入推理模式 (active_requests=1)
+[[ROUTE-CHECK] ROUTE] _process_prompt 入口: shard=qwen-3-4b::worker-1, 引擎池=['default', 'worker-2'], default_id=140168888425040
+2026-07-11 07:33:40,773 - root - WARNING - [get_current_shard] [FAIL] 模型未加载: qwen-3-4b (instance=worker-1)
+2026-07-11 07:33:40,773 - root - INFO - [get_current_shard] 已加载模型列表: ['qwen-3-4b::worker-2']
+2026-07-11 07:33:40,773 - root - INFO - [get_partition_index] node_id=node_9bd5774e, partitions=['node_9bd5774e']
+2026-07-11 07:33:40,773 - root - INFO - [get_partition_index] current_partition_index=0, offset=0, result=0
+2026-07-11 07:33:40,773 - root - INFO - [get_current_shard] topology.nodes=['node_9bd5774e']
+2026-07-11 07:33:40,773 - root - INFO - [get_current_shard] partitions count=1
+2026-07-11 07:33:40,773 - root - INFO - [get_current_shard] partition[0]: node_id=node_9bd5774e, start=0, end=1.0
+2026-07-11 07:33:40,774 - root - INFO - [get_current_shard] node_id=node_9bd5774e, index=0, num_shards=1
+2026-07-11 07:33:40,774 - root - INFO - [get_current_shard] shard[0]: start=0, end=35
+2026-07-11 07:33:40,774 - root - INFO - [get_current_shard] returning shard[0]: start=0, end=35
+[Node] [STAR] Create new engine instance: worker-1 (pool: ['default', 'worker-2'])
+[Node] [INIT] 创建引擎实例 [worker-1]，类型: PyTorchInferenceEngine
+[PyTorchInferenceEngine] [INIT] Instance created: id=140165681283712, time=07:33:40
+[Node] [OK] 引擎实例 [worker-1] 创建成功
+[Node] [OK] 引擎池当前实例数: 3
+[[ROUTE-CHECK] ROUTE] infer_prompt: instance=worker-1, target_id=140165681283712, default_id=140168888425040, is_default=False, cached=[]
+[PyTorchInferenceEngine] [NEW-ENGINE] Create new engine: qwen-3-4b (instance=worker-1, call=#1, 存活=0.0s, 当前已缓存: [])
+[PyTorchInferenceEngine] [STACK] Call stack (instance=worker-1):
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 636, in run_until_complete
+    self.run_forever()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 603, in run_forever
+    self._run_once()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 1909, in _run_once
+    handle._run()
+  File "/root/miniforge3/lib/python3.10/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "/workspace/exo_client/exo/orchestration/node.py", line 2593, in process_prompt
+    resp = await self._process_prompt(base_shard, prompt, request_id, inference_state)
+  File "/workspace/exo_client/exo/orchestration/node.py", line 2719, in _process_prompt
+    result, inference_state = await target_engine.infer_prompt(request_id, shard, prompt, inference_state)
+  File "/workspace/exo_client/exo/inference/pytorch/pytorch_inference_engine.py", line 218, in infer_prompt
+    self._ensure_engine(shard)
+2026-07-11 07:33:40,775 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - 优先使用GPU: Tesla T4 (14.6GB)
+2026-07-11 07:33:40,776 - exo.inference.pytorch.qwen3.pytorch_inference_engine - INFO - [OK] BF16 detected, enabling BF16 optimized inference
+[PyTorchInferenceEngine] [CB] 已为新引擎 qwen-3-4b 设置模型加载回调
+[PyTorchInferenceEngine] [CHECK] ensure_shard entry (instance=worker-1, model=qwen-3-4b, instance_id=worker-1, current_cache=['qwen-3-4b'], suspicious=False, task=Task-67)
+[PyTorchInferenceEngine] [STACK] ensure_shard full stack (instance=worker-1, task=Task-67):
+  File "/root/miniforge3/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/root/miniforge3/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/exo_client/exo/main.py", line 679, in <module>
+    run()
+  File "/workspace/exo_client/exo/main.py", line 660, in run
+    loop.run_until_complete(main())
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 636, in run_until_complete
+    self.run_forever()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 603, in run_forever
+    self._run_once()
+  File "/root/miniforge3/lib/python3.10/asyncio/base_events.py", line 1909, in _run_once
+    handle._run()
+  File "/root/miniforge3/lib/python3.10/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "/workspace/exo_client/exo/orchestration/node.py", line 2593, in process_prompt
+    resp = await self._process_prompt(base_shard, prompt, request_id, inference_state)
+  File "/workspace/exo_client/exo/orchestration/node.py", line 2719, in _process_prompt
+    result, inference_state = await target_engine.infer_prompt(request_id, shard, prompt, inference_state)
+  File "/workspace/exo_client/exo/inference/pytorch/pytorch_inference_engine.py", line 219, in infer_prompt
+    await self.ensure_shard(shard)
+[PyTorchInferenceEngine] [FRAME] Caller frame diagnosis (traverse up):
+  [[APP-LAYER]] Frame#1: /workspace/exo_client/exo/inference/pytorch/pytorch_inference_engine.py
+         Function: infer_prompt, Line: 219
+         self = PyTorchInferenceEngine(id=140165681283712)
+         shard = Shard(model_id=qwen-3-4b)
+         request_id = b4c1558b-1f62-4406-936d-1e418b0f2e52
+  [[APP-LAYER]] Frame#2: /workspace/exo_client/exo/orchestration/node.py
+         Function: _process_prompt, Line: 2719
+         self = Node(id=140168888426960)
+         shard = Shard(model_id=qwen-3-4b)
+         request_id = b4c1558b-1f62-4406-936d-1e418b0f2e52
+         instance_id = worker-1
+         target_engine = <exo.inference.pytorch.pytorch_inference_engine.PyTorchInferenceEngine object at
+  [[APP-LAYER]] Frame#3: /workspace/exo_client/exo/orchestration/node.py
+         Function: process_prompt, Line: 2593
+         self = Node(id=140168888426960)
+         request_id = b4c1558b-1f62-4406-936d-1e418b0f2e52
+  [[FRAMEWORK]] Frame#4: /root/miniforge3/lib/python3.10/asyncio/events.py
+         Function: _run, Line: 80
+  [[FRAMEWORK]] Frame#5: /root/miniforge3/lib/python3.10/asyncio/base_events.py
+         Function: _run_once, Line: 1909
+2026-07-11 07:33:40,777 - root - WARNING - [get_current_shard] [FAIL] 模型未加载: qwen-3-4b (instance=worker-1)
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] 已加载模型列表: ['qwen-3-4b::worker-2']
+2026-07-11 07:33:40,777 - root - INFO - [get_partition_index] node_id=node_9bd5774e, partitions=['node_9bd5774e']
+2026-07-11 07:33:40,777 - root - INFO - [get_partition_index] current_partition_index=0, offset=0, result=0
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] topology.nodes=['node_9bd5774e']
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] partitions count=1
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] partition[0]: node_id=node_9bd5774e, start=0, end=1.0
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] node_id=node_9bd5774e, index=0, num_shards=1
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] shard[0]: start=0, end=35
+2026-07-11 07:33:40,777 - root - INFO - [get_current_shard] returning shard[0]: start=0, end=35
+
+============================================================
+[BLOCKED] Default engine blocked non-default shard!
+  Engine: default (id=140168888425040)
+  Shard: model=qwen-3-4b, instance=worker-1
+  Cache: []
+  Task: Task-75
+============================================================
+
+[DEBUG] load_config: 从/root/.cache/exo/downloads/Qwen--Qwen3-4B/config.json加载配置
+[DEBUG] load_config: 原始model_type=qwen3
+已加载generation配置: temperature=0.6, top_p=0.95
+[DEBUG] load_model_shard: 即将调用_get_classes，config.model_type=qwen3
+[DEBUG] _get_classes:原始model_type=qwen3
+[DEBUG] _get_classes:处理后model_type=qwen3
+[DEBUG] _get_classes:配置中的关键字段=['architectures', 'attention_bias', 'attention_dropout', 'bos_token_id', 'eos_token_id', 'head_dim', 'hidden_act', 'hidden_size', 'initializer_range', 'intermediate_size', 'max_position_embeddings', 'max_window_layers', 'model_type', 'num_attention_heads', 'num_hidden_layers', 'num_key_value_heads', 'rms_norm_eps', 'rope_scaling', 'rope_theta', 'sliding_window', 'tie_word_embeddings', 'torch_dtype', 'transformers_version', 'use_cache', 'use_sliding_window', 'vocab_size', 'generation_config', 'shard']
+2026-07-11 07:33:41,005 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到 meta device 模型，使用高效加载方式...
+2026-07-11 07:33:41,005 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 开始加载模型权重到设备: cuda...
+2026-07-11 07:33:41,005 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 检测到.index.json文件，使用分片加载: /root/.cache/exo/downloads/Qwen--Qwen3-4B/model.safetensors.index.json
+2026-07-11 07:33:41,005 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用索引文件加载分片权重到设备: cuda (meta_device=True)
+2026-07-11 07:33:41,006 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 索引文件中总权重数量: 398
+2026-07-11 07:33:41,006 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 分片 Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='worker-1') 保留的权重键数量: 398
+2026-07-11 07:33:41,006 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00003-of-00003.safetensors
+2026-07-11 07:33:41,007 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00001-of-00003.safetensors
+2026-07-11 07:33:41,013 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 加载权重文件: model-00002-of-00003.safetensors
+2026-07-11 07:33:41,021 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 总共加载的权重数量: 398
+2026-07-11 07:33:41,021 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize前权重数量: 398
+[DEBUG] sanitize: shard info start_layer=0, end_layer=35
+[DEBUG] sanitize: is_first_layer=True, is_last_layer=True
+[DEBUG] sanitize: tie_word_embeddings=True
+[KEEP] norm weight: model.norm.weight
+[KEEP] embed_tokens weight: model.embed_tokens.weight
+[STATS] Weight classification:
+  layer weights: 396
+  embed_tokens: 1
+  lm_head: 0
+  norm: 1
+  unmatched: 0
+  total kept: 398
+  total skipped: 0
+Sanitize: 保留了 398 个权重，跳过了 0 个权重
+2026-07-11 07:33:41,023 - exo.inference.pytorch.qwen3.sharded_utils - INFO - sanitize后权重数量: 398
+2026-07-11 07:33:41,023 - exo.inference.pytorch.qwen3.sharded_utils - INFO - 使用 meta device 加载方式，逐个替换参数到设备: cuda
+2026-07-11 07:33:41,540 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-07-11 07:33:43,056 - root - INFO - [InferenceState] 退出推理模式 (active_requests=0)
+2026-07-11 07:33:43,801 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-07-11 07:33:43,801 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-07-11 07:33:43,801 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+[Server] 🩺 HealthCheck received from peer
+[Server] 📋 Request details: caller_node_id=, caller_address=
+[Server] ✅ Returning healthy=True
+2026-07-11 07:33:46,541 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e_a1']
+2026-07-11 07:33:48,965 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-07-11 07:33:48,965 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-07-11 07:33:48,965 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-07-11 07:33:48,965 - root - INFO - [update_peers] discover_peers returned: []
+2026-07-11 07:33:49,119 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-07-11 07:33:49,119 - root - INFO - [update_peers] Updated peers list: []
+2026-07-11 07:33:49,119 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
