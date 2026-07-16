@@ -823,11 +823,19 @@ class PyTorchQwen3InferenceEngine(InferenceEngine):
                 try:
                     from pathlib import Path as PathLib
                     cache_base = PathLib.home() / ".cache" / "exo" / "downloads"
+                    local_name = path.replace("/", "--")
                     
-                    # 兼容两种本地目录格式：microsoft--Fara-7B（exo 内部命名）和 microsoft/Fara-7B（ModelScope SDK 原始结构）
+                    # 兼容多种本地目录格式：
+                    # - exo 内部命名：microsoft--Fara-7B
+                    # - ModelScope SDK 原始结构：microsoft/Fara-7B
+                    # - ModelScope SDK HF 风格缓存：models/microsoft--Fara-7B/snapshots/master
                     candidate_paths = [
-                        cache_base / path.replace("/", "--"),
+                        cache_base / local_name,
                         cache_base / path,
+                        cache_base / "models" / local_name / "snapshots" / "master",
+                        cache_base / "models" / path / "snapshots" / "master",
+                        cache_base / "models" / local_name / "snapshots" / "main",
+                        cache_base / "models" / path / "snapshots" / "main",
                     ]
                     
                     resolved_path = None

@@ -210,34 +210,46 @@ async def download_with_modelscope_sdk(repo_id: str, revision: str = "master",
             
             # 检查是否创建了嵌套目录结构
             downloaded_path = Path(downloaded_dir)
-            
-            # ModelScope SDK 可能创建嵌套目录结构，例如:
-            # 下载到 Qwen--Qwen3-4B/Qwen/Qwen3-4B 但我们需要的是 Qwen--Qwen3-4B
-            repo_parts = repo_id.split('/')
-            if len(repo_parts) >= 2:
-                # 检查是否存在嵌套结构: downloaded_path/组织名/模型名
-                nested_dir = downloaded_path / repo_parts[0] / repo_parts[1]
-                if nested_dir.exists():
-                    print(f"发现嵌套目录结构，正在移动文件从 {nested_dir} 到 {target_dir}")
-                    # 移动嵌套目录中的文件到目标位置
-                    await asyncio.to_thread(shutil.move, str(nested_dir), str(target_dir))
-                    
-                    # 清理剩余的嵌套目录结构
-                    remaining_org_dir = downloaded_path / repo_parts[0]
-                    if remaining_org_dir.exists() and not any(remaining_org_dir.iterdir()):
-                        await asyncio.to_thread(remaining_org_dir.rmdir)
-                    
-                    # 如果下载的目录现在为空，也删除它（避免留下空目录）
-                    if downloaded_path.exists() and downloaded_path != target_dir and not any(downloaded_path.iterdir()):
-                        await asyncio.to_thread(downloaded_path.rmdir)
-                else:
-                    # 如果没有嵌套结构，但路径不同，直接重命名
-                    if downloaded_path != target_dir:
-                        await asyncio.to_thread(shutil.move, str(downloaded_path), str(target_dir))
-            else:
-                # 单部分模型ID（没有/）
-                if downloaded_path != target_dir:
-                    await asyncio.to_thread(shutil.move, str(downloaded_path), str(target_dir))
+
+            def _has_model_files(path: Path) -> bool:
+                if not path.exists() or not path.is_dir():
+                    return False
+                return any(
+                    path.glob(pattern) for pattern in
+                    ["model.safetensors.index.json", "pytorch_model.bin.index.json", "*.safetensors", "*.bin"]
+                )
+
+            def _find_actual_model_dir(path: Path) -> Optional[Path]:
+                # 直接命中
+                if _has_model_files(path):
+                    return path
+                # HF 风格缓存：models/<repo_id--name>/snapshots/<revision>/
+                local_name = repo_id.replace("/", "--")
+                hf_cache = path / "models" / local_name / "snapshots" / revision
+                if _has_model_files(hf_cache):
+                    return hf_cache
+                # 原始 repo 结构：<org>/<model>/
+                repo_parts = repo_id.split('/')
+                if len(repo_parts) >= 2:
+                    nested = path / repo_parts[0] / repo_parts[1]
+                    if _has_model_files(nested):
+                        return nested
+                return None
+
+            actual_dir = _find_actual_model_dir(downloaded_path)
+            if actual_dir is None:
+                raise Exception(f"无法在 {downloaded_path} 中找到模型文件（repo_id={repo_id}, revision={revision}）")
+
+            if actual_dir != target_dir:
+                print(f"发现嵌套目录结构，正在移动文件从 {actual_dir} 到 {target_dir}")
+                await asyncio.to_thread(shutil.move, str(actual_dir), str(target_dir))
+
+            # 清理下载过程中可能留下的空目录
+            try:
+                if downloaded_path.exists() and downloaded_path != target_dir and not any(downloaded_path.iterdir()):
+                    await asyncio.to_thread(downloaded_path.rmdir)
+            except Exception:
+                pass
             
             # 验证下载是否成功
             if not target_dir.exists() or not any(target_dir.iterdir()):
@@ -808,31 +820,56 @@ async def calculate_repo_progress(shard: Shard, repo_id: str, repo_revision: str
     
     return RepoProgressEvent(shard, repo_id, repo_revision, len([p for p in file_progress.values() if p.downloaded == p.total]), len(file_progress), all_downloaded_bytes, all_downloaded_bytes_this_session, all_total_bytes, all_speed, all_eta, file_progress, status)
 
-# 获取模型的权重映射文件内容
-# 优先读取本地缓存中的 index 文件；本地不存在时，再按指定 source/revision 下载。
-async def get_weight_map(repo_id: str, revision: str = "master", source: str = "modelscope") -> Dict[str, str]:
+
+# 枚举 repo_id 可能存在的本地目录位置。
+# ModelScope SDK 使用 cache_dir 时可能创建 HuggingFace 风格的缓存结构：
+#   downloads/models/<repo_id--name>/snapshots/<revision>/
+# 同时兼容 exo 内部命名的平级目录：
+#   downloads/<repo_id--name>/
+#   downloads/<repo_id>/
+async def _candidate_local_model_dirs(repo_id: str, revision: Optional[str] = None) -> List[Path]:
+    downloads_dir = await ensure_downloads_dir()
     local_dir_name = repo_id.replace("/", "--")
-    cache_dir = await ensure_downloads_dir() / local_dir_name
-    tmp_dir = (await ensure_exo_tmp()) / local_dir_name
+    revisions = [revision] if revision else ["master", "main"]
 
-    # 1) 优先检查本地 downloads 目录中的 index 文件
+    candidates: List[Path] = [
+        downloads_dir / local_dir_name,
+        downloads_dir / repo_id,
+    ]
+    for rev in revisions:
+        candidates.extend([
+            downloads_dir / "models" / local_dir_name / "snapshots" / rev,
+            downloads_dir / "models" / repo_id / "snapshots" / rev,
+        ])
+    return candidates
+
+
+# 获取模型的权重映射文件内容
+# 优先读取本地缓存中的 index 文件；本地不存在时，按指定 source/revision 下载。
+# HTTP 下载失败时会回退到 ModelScope SDK 单文件下载。
+async def get_weight_map(repo_id: str, revision: str = "master", source: str = "modelscope") -> Dict[str, str]:
+    cache_dirs = await _candidate_local_model_dirs(repo_id, revision)
+    tmp_dir = (await ensure_exo_tmp()) / repo_id.replace("/", "--")
+
+    # 1) 优先检查本地 downloads 目录中的 index 文件（兼容多种目录格式）
     index_candidates = ["model.safetensors.index.json", "pytorch_model.bin.index.json"]
-    for index_name in index_candidates:
-        local_index = cache_dir / index_name
-        if await aios.path.exists(local_index):
-            try:
-                async with aiofiles.open(local_index, 'r') as f:
-                    index_data = json.loads(await f.read())
-                weight_map = index_data.get("weight_map")
-                if weight_map:
-                    if DEBUG >= 2:
-                        print(f"[get_weight_map] 从本地缓存读取 weight_map: {local_index} ({len(weight_map)} 个张量)")
-                    return weight_map
-            except Exception as e:
-                if DEBUG >= 1:
-                    print(f"[get_weight_map] 读取本地 index 失败 {local_index}: {e}")
+    for cache_dir in cache_dirs:
+        for index_name in index_candidates:
+            local_index = cache_dir / index_name
+            if await aios.path.exists(local_index):
+                try:
+                    async with aiofiles.open(local_index, 'r') as f:
+                        index_data = json.loads(await f.read())
+                    weight_map = index_data.get("weight_map")
+                    if weight_map:
+                        if DEBUG >= 2:
+                            print(f"[get_weight_map] 从本地缓存读取 weight_map: {local_index} ({len(weight_map)} 个张量)")
+                        return weight_map
+                except Exception as e:
+                    if DEBUG >= 1:
+                        print(f"[get_weight_map] 读取本地 index 失败 {local_index}: {e}")
 
-    # 2) 本地没有，尝试下载 index 文件
+    # 2) 本地没有，尝试用 HTTP API 下载 index 文件
     last_error = None
     for index_name in index_candidates:
         try:
@@ -847,7 +884,25 @@ async def get_weight_map(repo_id: str, revision: str = "master", source: str = "
         except Exception as e:
             last_error = e
             if DEBUG >= 2:
-                print(f"[get_weight_map] 下载 {index_name} 失败: {e}")
+                print(f"[get_weight_map] HTTP 下载 {index_name} 失败: {e}")
+
+    # 3) HTTP 失败时回退到 ModelScope SDK 单文件下载
+    if source == "modelscope":
+        for index_name in index_candidates:
+            try:
+                print(f"[get_weight_map] 尝试使用 ModelScope SDK 下载 {index_name}...")
+                index_file = await download_file_with_modelscope_sdk(repo_id, index_name, revision=revision, local_dir=str(tmp_dir))
+                async with aiofiles.open(index_file, 'r') as f:
+                    index_data = json.loads(await f.read())
+                weight_map = index_data.get("weight_map")
+                if weight_map:
+                    if DEBUG >= 2:
+                        print(f"[get_weight_map] 从 ModelScope SDK 下载 {index_name} 成功 ({len(weight_map)} 个张量)")
+                    return weight_map
+            except Exception as e:
+                last_error = e
+                if DEBUG >= 2:
+                    print(f"[get_weight_map] ModelScope SDK 下载 {index_name} 失败: {e}")
 
     raise Exception(f"无法获取 {repo_id} 的 weight_map (revision={revision}, source={source}): {last_error}")
 
