@@ -3,6 +3,7 @@
 Fara-7B (基于 Qwen2.5-VL) 分片模型实现
 支持分布式推理架构
 """
+import itertools
 import torch
 import torch.nn as nn
 from pathlib import Path
@@ -13,6 +14,54 @@ from transformers.modeling_outputs import BaseModelOutputWithPast
 import logging
 logger = logging.getLogger(__name__)
 logging.getLogger("exo.inference.pytorch.qwen2_5vl.qwen2_5vl").setLevel(logging.WARNING)
+
+
+class Int8Linear(nn.Module):
+    """
+    保持 INT8 存储的动态反量化 Linear 层。
+
+    权重以 torch.int8 形式保存在显存中，前向传播时按 SCB 反量化到
+    输入张量的 dtype，可显著降低显存占用。
+    """
+
+    def __init__(self, in_features: int, out_features: int, bias: bool = True, dtype: torch.dtype = torch.float16):
+        super().__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.dtype = dtype
+        self.register_parameter(
+            "weight",
+            nn.Parameter(torch.empty(out_features, in_features, dtype=torch.int8), requires_grad=False),
+        )
+        self.register_buffer("SCB", torch.empty(out_features, dtype=torch.float32))
+        if bias:
+            self.register_parameter(
+                "bias",
+                nn.Parameter(torch.empty(out_features, dtype=dtype), requires_grad=False),
+            )
+        else:
+            self.bias = None
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # 动态反量化到输入精度，计算完成后临时 fp16/bf16 权重即可释放。
+        # 注意：该格式对应 bitsandbytes/LLM.int8() 的 row-wise INT8 量化，
+        # SCB 是每输出通道的 scale，需要除以 127.0 才能还原原始权值。
+        #
+        # 关键修复：线性层在 FP32 下计算以避免 FP16 累加溢出。权重和输入先转到
+        # FP32，完成 matmul+bias 后再转回输入 dtype。这对大 bias（如 k_proj.bias
+        # 达 172）和大幅视觉特征的模型能显著抑制数值爆炸。
+        target_dtype = x.dtype
+        x_fp32 = x.float()
+        scale = self.SCB.unsqueeze(1) / 127.0
+        w = self.weight.float() * scale
+
+        # 数值稳定性补丁：反量化过程中如果出现 inf/nan（极少见），替换为 0。
+        if not torch.isfinite(w).all():
+            w = torch.nan_to_num(w, nan=0.0, posinf=0.0, neginf=0.0)
+
+        b = self.bias.float() if self.bias is not None else None
+        out = torch.nn.functional.linear(x_fp32, w, b)
+        return out.to(target_dtype)
 
 
 class ShardedQwen2_5VlTextModel(nn.Module):
@@ -393,6 +442,9 @@ class Qwen2_5VlModel(nn.Module):
         # lm_head
         self.lm_head = nn.Linear(text_config.hidden_size, self.tokenizer_vocab_size, bias=False)
 
+        # mRoPE 位置增量缓存，用于自回归生成时保持 3D position_ids 一致
+        self.rope_deltas = None
+
         # 视觉模型（如果配置中包含且是首分片）
         if hasattr(config, 'vision_config') and config.vision_config is not None and (shard is None or shard.is_first_layer()):
             from transformers.models.qwen2_5_vl.modeling_qwen2_5_vl import Qwen2_5_VisionTransformerPretrainedModel
@@ -727,8 +779,164 @@ class Qwen2_5VlModel(nn.Module):
     def set_decoder(self, decoder):
         self.model = decoder
 
+    def get_vision_position_ids(
+        self,
+        start_position: int,
+        grid_thw: torch.LongTensor,
+        temp_merge_size: int = 1,
+        spatial_merge_size: int = 1,
+        time_interval: int = 1,
+        device: Optional[torch.device] = None,
+    ) -> torch.LongTensor:
+        """计算视觉 token 的 3D 位置编码 (temporal, height, width)。"""
+        llm_grid_t, llm_grid_h, llm_grid_w = (
+            grid_thw[0].item() // temp_merge_size,
+            grid_thw[1].item() // spatial_merge_size,
+            grid_thw[2].item() // spatial_merge_size,
+        )
+        image_seq_length = llm_grid_h * llm_grid_w * llm_grid_t
+        position_width = torch.arange(start_position, start_position + llm_grid_w, device=device).repeat(
+            llm_grid_h * llm_grid_t
+        )
+        position_height = torch.arange(start_position, start_position + llm_grid_h, device=device).repeat_interleave(
+            llm_grid_w * llm_grid_t
+        )
+        position_temporal = torch.full((image_seq_length,), start_position, device=device, dtype=torch.long)
+        position_temporal = position_temporal * time_interval
+        vision_position_ids = torch.stack([position_temporal, position_height, position_width], dim=0)
+        return vision_position_ids
+
+    def get_rope_index(
+        self,
+        input_ids: torch.LongTensor,
+        mm_token_type_ids: torch.IntTensor,
+        image_grid_thw: Optional[torch.LongTensor] = None,
+        video_grid_thw: Optional[torch.LongTensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """计算 mRoPE 所需的 3D position_ids 和 rope_deltas。
+
+        复刻 transformers Qwen2_5_VLModel.get_rope_index 逻辑，仅保留 image 分支。
+        """
+        spatial_merge_size = self.config.vision_config.spatial_merge_size
+        tokens_per_second = self.config.vision_config.tokens_per_second
+
+        mrope_position_deltas = []
+        position_ids = torch.zeros(
+            3,
+            input_ids.shape[0],
+            input_ids.shape[1],
+            dtype=input_ids.dtype,
+            device=input_ids.device,
+        )
+        image_iter = iter(image_grid_thw) if image_grid_thw is not None else None
+        video_iter = iter(video_grid_thw) if video_grid_thw is not None else None
+
+        for batch_idx, current_input_ids in enumerate(input_ids):
+            input_token_type = mm_token_type_ids[batch_idx]
+            if attention_mask is not None:
+                current_input_ids = current_input_ids[attention_mask[batch_idx].bool()]
+                input_token_type = input_token_type[attention_mask[batch_idx].bool()]
+
+            input_type_group = []
+            for key, group in itertools.groupby(enumerate(input_token_type.tolist()), lambda x: x[1]):
+                group = list(group)
+                start_index = group[0][0]
+                end_index = group[-1][0] + 1
+                input_type_group.append((key, start_index, end_index))
+
+            current_pos = 0
+            llm_pos_ids_list = []
+            for modality_type, start_idx, end_idx in input_type_group:
+                if modality_type == 0:
+                    # text
+                    text_len = end_idx - start_idx
+                    llm_pos_ids_list.append(
+                        torch.arange(text_len, device=input_ids.device).view(1, -1).expand(3, -1) + current_pos
+                    )
+                    current_pos += text_len
+                elif modality_type == 1:
+                    # image
+                    grid_thw = next(image_iter)
+                    vision_position_ids = self.get_vision_position_ids(
+                        current_pos, grid_thw, 1, spatial_merge_size, tokens_per_second, device=input_ids.device
+                    )
+                    llm_pos_ids_list.append(vision_position_ids)
+                    # 视觉 token 数量 = grid_thw 各维度除以 merge_size 后的乘积
+                    current_pos += vision_position_ids.shape[1]
+                elif modality_type == 2:
+                    # video
+                    grid_thw = next(video_iter)
+                    vision_position_ids = self.get_vision_position_ids(
+                        current_pos, grid_thw, 1, spatial_merge_size, tokens_per_second, device=input_ids.device
+                    )
+                    llm_pos_ids_list.append(vision_position_ids)
+                    current_pos += vision_position_ids.shape[1]
+                else:
+                    raise ValueError(f"未知的 mm_token_type: {modality_type}")
+
+            llm_positions = torch.cat(llm_pos_ids_list, dim=1).reshape(3, -1)
+            if attention_mask is not None:
+                position_ids[:, batch_idx, attention_mask[batch_idx].bool()] = llm_positions.to(position_ids.device)
+            else:
+                position_ids[:, batch_idx] = llm_positions.to(position_ids.device)
+            mrope_position_deltas.append(llm_positions.max() + 1 - len(current_input_ids))
+
+        mrope_position_deltas = torch.tensor(mrope_position_deltas, device=input_ids.device).unsqueeze(1)
+        return position_ids, mrope_position_deltas
+
+    def compute_3d_position_ids(
+        self,
+        input_ids: Optional[torch.Tensor] = None,
+        image_grid_thw: Optional[torch.Tensor] = None,
+        video_grid_thw: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        past_key_values: Optional[Cache] = None,
+        mm_token_type_ids: Optional[torch.IntTensor] = None,
+    ) -> Optional[torch.Tensor]:
+        """根据输入构造 3D position_ids；若无法构造则返回 None，让下游自行回退。"""
+        past_key_values_length = 0 if past_key_values is None else past_key_values.get_seq_length()
+        can_compute_mrope = (
+            input_ids is not None
+            and mm_token_type_ids is not None
+            and (image_grid_thw is not None or video_grid_thw is not None)
+        )
+
+        if can_compute_mrope and (self.rope_deltas is None or past_key_values_length == 0):
+            position_ids, rope_deltas = self.get_rope_index(
+                input_ids,
+                image_grid_thw=image_grid_thw,
+                video_grid_thw=video_grid_thw,
+                attention_mask=attention_mask,
+                mm_token_type_ids=mm_token_type_ids,
+            )
+            self.rope_deltas = rope_deltas
+        elif self.rope_deltas is not None:
+            batch_size, seq_length, _ = inputs_embeds.shape
+            if attention_mask is not None:
+                position_ids = attention_mask.long().cumsum(-1) - 1
+                position_ids = position_ids.masked_fill(attention_mask == 0, 0)
+                position_ids = position_ids.view(1, batch_size, -1).repeat(3, 1, 1).to(inputs_embeds.device)
+            else:
+                position_ids = torch.arange(
+                    past_key_values_length, past_key_values_length + seq_length,
+                    device=inputs_embeds.device
+                )
+                position_ids = position_ids.view(1, 1, -1).expand(3, batch_size, -1)
+            delta = self.rope_deltas.repeat_interleave(batch_size // self.rope_deltas.shape[0], dim=0)
+            position_ids = position_ids + delta.to(device=position_ids.device)
+        else:
+            position_ids = None
+        return position_ids
+
     def get_image_features(self, pixel_values: torch.FloatTensor, image_grid_thw: torch.LongTensor):
-        """处理图像特征"""
+        """处理图像特征
+
+        与官方 Qwen2.5-VL 保持一致：使用 visual() 返回的 pooler_output
+        (merger 后的视觉 token)，而不是 last_hidden_state (merger 前的 patch 特征)。
+        pooler_output 的 token 数 = grid_thw.prod(-1) // spatial_merge_size^2。
+        """
         if self.visual is None:
             raise ValueError("视觉模型未初始化")
 
@@ -737,7 +945,15 @@ class Qwen2_5VlModel(nn.Module):
         pixel_values = pixel_values.to(visual_dtype)
 
         # 通过视觉模型处理
-        image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
+        visual_outputs = self.visual(pixel_values, grid_thw=image_grid_thw, return_dict=True)
+
+        # 使用 pooler_output (merger 后的视觉特征)
+        if hasattr(visual_outputs, 'pooler_output') and visual_outputs.pooler_output is not None:
+            image_embeds = visual_outputs.pooler_output
+        elif hasattr(visual_outputs, 'last_hidden_state'):
+            image_embeds = visual_outputs.last_hidden_state
+        else:
+            image_embeds = visual_outputs
 
         # 根据grid_thw分割图像嵌入
         split_sizes = (image_grid_thw.prod(-1) // self.visual.spatial_merge_size ** 2).tolist()
@@ -754,11 +970,17 @@ class Qwen2_5VlModel(nn.Module):
         inputs_embeds: Optional[torch.FloatTensor] = None,
         pixel_values: Optional[torch.FloatTensor] = None,
         image_grid_thw: Optional[torch.LongTensor] = None,
+        mm_token_type_ids: Optional[torch.IntTensor] = None,
         use_cache: Optional[bool] = None,
         return_dict: Optional[bool] = None,
         **kwargs,
     ):
-        """前向传播"""
+        """前向传播
+
+        关键修复：当传入 mm_token_type_ids 且未提供 position_ids 时，
+        使用官方 Qwen2.5-VL 的 get_rope_index 计算 mRoPE 所需的 3D position_ids，
+        避免视觉 token 位置编码错误导致生成乱码。
+        """
         if inputs_embeds is None and pixel_values is not None and self.visual is not None:
             # 处理图像输入
             image_embeds = self.get_image_features(pixel_values, image_grid_thw)
@@ -781,6 +1003,21 @@ class Qwen2_5VlModel(nn.Module):
                         for i, pos in enumerate(image_positions):
                             if i < batch_image_embeds.shape[0]:
                                 inputs_embeds[batch_idx, pos] = batch_image_embeds[i]
+
+        # 构造正确的 3D position_ids (mRoPE)
+        if position_ids is None and inputs_embeds is not None:
+            position_ids = self.compute_3d_position_ids(
+                input_ids=input_ids,
+                image_grid_thw=image_grid_thw,
+                video_grid_thw=None,
+                inputs_embeds=inputs_embeds,
+                attention_mask=attention_mask,
+                past_key_values=past_key_values,
+                mm_token_type_ids=mm_token_type_ids,
+            )
+            if position_ids is not None:
+                print(f"[mRoPE] position_ids shape: {position_ids.shape}, range: [{position_ids.min().item()}, {position_ids.max().item()}]")
+                print(f"[mRoPE] rope_deltas: {self.rope_deltas}")
 
         # 通过文本模型
         outputs = self.model(

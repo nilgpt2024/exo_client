@@ -5,6 +5,7 @@ qwen2.5-7B (基于 Qwen2.5-VL) 推理引擎 - 支持外部传入分片
 """
 
 import torch
+import torch.nn as nn
 import numpy as np
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
@@ -13,7 +14,7 @@ from exo.inference.inference_engine import InferenceEngine
 from exo.inference.shard import Shard
 from exo.download.shard_download import ShardDownloader
 from transformers import AutoConfig, AutoProcessor
-from exo.inference.pytorch.qwen2_5vl.qwen2_5vl import Qwen2_5VlModel
+from exo.inference.pytorch.qwen2_5vl.qwen2_5vl import Qwen2_5VlModel, Int8Linear
 
 
 class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
@@ -78,12 +79,12 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
         # 安全提取 tokenizer：不同模型的 processor 结构可能不同
         self.tokenizer = getattr(self.processor, 'tokenizer', None) or getattr(self.processor, '_tokenizer', None)
         if self.tokenizer is None:
-            print(f"[qwen2.5] ⚠️ processor 没有 tokenizer 属性，尝试从路径直接加载")
+            print(f"[qwen2.5] [warn] processor 没有 tokenizer 属性，尝试从路径直接加载")
             from transformers import AutoTokenizer
             try:
                 self.tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
             except Exception as tok_err:
-                print(f"[qwen2.5] ⚠️ Tokenizer 加载失败: {tok_err}，继续使用 processor 作为 tokenizer")
+                print(f"[qwen2.5] [warn] Tokenizer 加载失败: {tok_err}，继续使用 processor 作为 tokenizer")
                 self.tokenizer = self.processor  # 最后回退
 
         # 步骤1: 使用 meta device 创建模型（不分配内存，不初始化参数）
@@ -151,7 +152,48 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
             mapped_state_dict[new_key] = value
         
         state_dict = mapped_state_dict
-        
+
+        # 检测 INT8 量化层：存在 *.SCB 的 companion 表示该 Linear 权重被量化为 int8
+        int8_module_paths = set()
+        for key in state_dict.keys():
+            if key.endswith(".SCB"):
+                int8_module_paths.add(key[:-4])
+
+        # 在加载权重前，把对应的 nn.Linear 替换为保持 INT8 存储的 Int8Linear
+        if int8_module_paths:
+            print(f"[qwen2.5] 检测到 {len(int8_module_paths)} 个 INT8 量化层，将替换为 Int8Linear...")
+            skipped_paths = []
+            replaced_count = 0
+            for module_path in sorted(int8_module_paths):
+                parts = module_path.split(".")
+                parent = self.model
+                try:
+                    for part in parts[:-1]:
+                        parent = getattr(parent, part, None)
+                        if parent is None:
+                            break
+                    if parent is None:
+                        skipped_paths.append(module_path)
+                        continue
+                    old_linear = getattr(parent, parts[-1], None)
+                    if old_linear is None or not isinstance(old_linear, torch.nn.Linear):
+                        skipped_paths.append(module_path)
+                        continue
+                    with torch.device("meta"):
+                        new_linear = Int8Linear(
+                            old_linear.in_features,
+                            old_linear.out_features,
+                            bias=old_linear.bias is not None,
+                            dtype=self.dtype,
+                        )
+                    setattr(parent, parts[-1], new_linear)
+                    replaced_count += 1
+                except Exception as e:
+                    print(f"[qwen2.5] [warn] 替换 INT8 层 {module_path} 失败: {e}")
+            if skipped_paths:
+                print(f"[qwen2.5] [warn] 跳过 {len(skipped_paths)} 个不存在的 INT8 层路径（如视觉层在非首分片）")
+            print(f"[qwen2.5] 成功替换 {replaced_count} 个 INT8 量化层")
+
         weight_time = time.time() - weight_start
         print(f"[qwen2.5] 权重文件加载完成，共 {len(state_dict)} 个参数，耗时: {weight_time:.2f}s")
 
@@ -163,9 +205,18 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
         loaded_count = 0
         unmatched_params = []
         
+        int8_param_prefixes = tuple(p + "." for p in int8_module_paths)
+
         for name, param in self.model.named_parameters():
             if name in state_dict:
-                weight = state_dict[name].to(device=target_device, dtype=self.dtype)
+                if name.startswith(int8_param_prefixes):
+                    # INT8 量化层：weight 保持 int8，bias 转为目标 dtype
+                    if name.endswith(".weight"):
+                        weight = state_dict[name].to(device=target_device)
+                    else:
+                        weight = state_dict[name].to(device=target_device, dtype=self.dtype)
+                else:
+                    weight = state_dict[name].to(device=target_device, dtype=self.dtype)
                 parts = name.split('.')
                 obj = self.model
                 for part in parts[:-1]:
@@ -192,24 +243,33 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
         
         # 处理 meta device 上的 buffers
         for name, buffer in list(self.model.named_buffers()):
-            if buffer.device.type == "meta":
+            if name in state_dict:
+                # 直接从 state_dict 加载 buffer（如 INT8 量化层的 SCB）
+                value = state_dict[name].to(device=target_device)
+                parts = name.split('.')
+                obj = self.model
+                for part in parts[:-1]:
+                    obj = getattr(obj, part)
+                setattr(obj, parts[-1], value)
+            elif buffer.device.type == "meta":
                 parts = name.split('.')
                 obj = self.model
                 for part in parts[:-1]:
                     obj = getattr(obj, part)
                 if 'inv_freq' in name:
                     try:
-                        if hasattr(obj, 'dim') and hasattr(obj, 'theta') and not hasattr(getattr(type(obj), 'compute_default_rope_parameters', None), '__call__'):
+                        if hasattr(obj, 'dim') and hasattr(obj, 'theta'):
                             inv_freq = 1.0 / (obj.theta ** (torch.arange(0, obj.dim, 2, dtype=torch.float32, device=target_device) / obj.dim))
                             obj.register_buffer(parts[-1], inv_freq)
                         else:
                             from transformers.models.qwen2_5_vl.modeling_qwen2_5_vl import Qwen2_5_VLRotaryEmbedding
                             rope_config = obj.config if hasattr(obj, 'config') else self.config.text_config
-                            inv_freq, attention_scaling = Qwen2_5_VLRotaryEmbedding.compute_default_rope_parameters(
-                                rope_config, device=target_device
-                            )
-                            obj.register_buffer(parts[-1], inv_freq.clone())
-                            if parts[-1] == "inv_freq" and hasattr(obj, 'attention_scaling'):
+                            # transformers 5.x 中 Qwen2_5_VLRotaryEmbedding 在 __init__ 里计算 inv_freq
+                            temp_rope = Qwen2_5_VLRotaryEmbedding(rope_config, device=target_device)
+                            inv_freq = temp_rope.inv_freq.clone()
+                            attention_scaling = getattr(temp_rope, 'attention_scaling', 1.0)
+                            obj.register_buffer(parts[-1], inv_freq)
+                            if hasattr(obj, 'attention_scaling'):
                                 obj.attention_scaling = attention_scaling
                     except Exception as e:
                         print(f"[qwen2.5] 重新初始化 {name} 失败: {e}，使用空张量")
@@ -231,6 +291,48 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
 
         # 设置为评估模式
         self.model.eval()
+
+        # 视觉模型数值稳定性修复：Qwen2.5-VL 的视觉模型在 FP16 下
+        # 的 MLP 容易出现 inf，经 RMSNorm 后变成 NaN，导致图文输入生成乱码。
+        # 将视觉模型强制在 FP32 下运行可彻底避免该问题（视觉模型参数量小，
+        # 显存增加可接受）。
+        if hasattr(self.model, 'visual') and self.model.visual is not None:
+            self.model.visual = self.model.visual.float()
+            print("[qwen2.5] 视觉模型已强制使用 FP32 精度以避免数值溢出")
+
+        # FP16 数值稳定性补丁：Qwen2.5-VL 的 k_proj.bias 较大，
+        # 在 FP16 下 attention 的 Q@K^T 容易溢出到 inf。这里将 eager attention
+        # 的 matmul 强制在 FP32 下计算，再转回输入 dtype，与 BF16 训练的原始
+        # 模型保持等价的动态范围。
+        if self.dtype == torch.float16:
+            try:
+                from transformers.models.qwen2_5_vl.modeling_qwen2_5_vl import eager_attention_forward
+                import transformers.models.qwen2_5_vl.modeling_qwen2_5_vl as _qwen_module
+
+                if not hasattr(self, "_orig_eager_attention_forward"):
+                    self._orig_eager_attention_forward = eager_attention_forward
+
+                def _fp32_eager_attention_forward(
+                    module, query, key, value, attention_mask, scaling, dropout=0.0, **kwargs
+                ):
+                    key_states = _qwen_module.repeat_kv(key, module.num_key_value_groups)
+                    value_states = _qwen_module.repeat_kv(value, module.num_key_value_groups)
+                    # 关键：FP32 累加避免 FP16 溢出
+                    attn_weights = (
+                        torch.matmul(query.float(), key_states.transpose(2, 3).float()) * scaling
+                    )
+                    if attention_mask is not None:
+                        attn_weights = attn_weights + attention_mask
+                    attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query.dtype)
+                    attn_weights = nn.functional.dropout(attn_weights, p=dropout, training=module.training)
+                    attn_output = torch.matmul(attn_weights, value_states)
+                    attn_output = attn_output.transpose(1, 2).contiguous()
+                    return attn_output, attn_weights
+
+                _qwen_module.eager_attention_forward = _fp32_eager_attention_forward
+                print("[qwen2.5] 已应用 FP16 attention FP32 数值稳定补丁")
+            except Exception as e:
+                print(f"[qwen2.5] [warn] 应用 attention 数值稳定补丁失败: {e}")
         
         total_time = time.time() - load_start
         print(f"[qwen2.5] 模型加载完成！总耗时: {total_time:.2f}s (meta创建: {meta_time:.2f}s, 权重加载: {weight_time:.2f}s, 参数替换: {replace_time:.2f}s)")
@@ -276,13 +378,13 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
                     
                     if resolved_path.exists() and resolved_path.is_dir():
                         actual_path = str(resolved_path)
-                        print(f"[qwen2.5] ✅ 找到本地缓存路径: {actual_path}")
+                        print(f"[qwen2.5] [ok] 找到本地缓存路径: {actual_path}")
                     else:
                         print(f"[qwen2.5] 本地缓存不存在，使用 shard_downloader 获取路径...")
                         actual_path = str(await self.shard_downloader.ensure_shard(shard, self.__class__.__name__))
                         print(f"[qwen2.5] shard_downloader 返回路径: {actual_path}")
                 except Exception as e:
-                    print(f"[qwen2.5] ⚠️ 通过 shard_downloader 获取路径失败: {e}，尝试直接 from_pretrained")
+                    print(f"[qwen2.5] [warn] 通过 shard_downloader 获取路径失败: {e}，尝试直接 from_pretrained")
                     actual_path = path
         
         loop = asyncio.get_event_loop()
@@ -580,9 +682,10 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
             # 中间分片：返回 hidden_states 用于传递给下一个分片
             output_data = outputs['hidden_states']
             if isinstance(output_data, torch.Tensor):
-                # 数值稳定性处理：限制异常值范围
-                # Qwen2.5-VL的中间层输出范围很大，需要clip到合理范围
-                output_data = torch.clamp(output_data, min=-1000, max=1000)
+                # 数值稳定性处理：只处理 inf/nan，不强制裁剪正常值，
+                # 避免隐藏状态在分片间传递时丢失信息。
+                if not torch.isfinite(output_data).all():
+                    output_data = torch.nan_to_num(output_data, nan=0.0, posinf=0.0, neginf=0.0)
                 output_data = output_data.detach().cpu().numpy()
 
         return output_data, inference_state

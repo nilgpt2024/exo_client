@@ -37,8 +37,8 @@ class MockShardDownloader(ShardDownloader):
         if False:
             yield
 
-model_path = r"C:\Users\nil\.cache\exo\downloads\Qwen--Qwen2.5-VL-3B-Instruct"
-model_id = "qwen-2.5-vl-3b"
+model_path = r"C:\Users\nil\.cache\exo\downloads\microsoft--Fara-7B-INT8"
+model_id = "fara-7b"
 async def test_single_shard():
     print("="*60)
     print("    模型推理测试 - EXO引擎版")
@@ -230,7 +230,7 @@ async def test_sharded_inference():
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
  
-    n_layers = 36
+    n_layers = 28
     pp = n_layers // 2  # 14
 
     print(f"\n模型配置:")

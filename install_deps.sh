@@ -21,10 +21,53 @@ echo "[2/2] Installing dependencies..."
 echo "This may take several minutes..."
 echo ""
 
-if [ ! -d "$VENV_DIR" ]; then
+create_venv() {
+    local py="$1"
+    local venv_dir="$2"
+
+    # 如果已存在但可能损坏（没有可用的 pip/python），先删除重建
+    if [ -d "$venv_dir" ]; then
+        if [ -x "$venv_dir/bin/python" ] && [ -x "$venv_dir/bin/pip" ]; then
+            echo "[INFO] Virtual environment already exists."
+            return 0
+        fi
+        echo "[WARN] Existing virtual environment appears incomplete, recreating..."
+        rm -rf "$venv_dir"
+    fi
+
     echo "Creating virtual environment..."
-    $PYTHON_EXE -m venv "$VENV_DIR"
-fi
+
+    # 首次尝试标准 venv
+    if "$py" -m venv "$venv_dir" 2>/tmp/venv_error.log; then
+        return 0
+    fi
+
+    echo "[WARN] Standard venv creation failed, attempting to fix..."
+    cat /tmp/venv_error.log
+
+    # Debian/Ubuntu/Colab 环境通常缺少 python3-venv
+    if command -v apt-get &> /dev/null; then
+        echo "[INFO] Installing python3-venv and python3-pip..."
+        apt-get update -qq
+        apt-get install -y -qq python3-venv python3-pip || true
+    fi
+
+    # 再次尝试
+    if "$py" -m venv "$venv_dir" 2>/tmp/venv_error2.log; then
+        return 0
+    fi
+
+    echo "[WARN] venv still failing, falling back to --without-pip + get-pip.py..."
+    cat /tmp/venv_error2.log
+
+    # 降级方案：不带 pip 创建 venv，再手动安装 pip
+    "$py" -m venv "$venv_dir" --without-pip
+    curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+    "$venv_dir/bin/python" /tmp/get-pip.py
+    rm -f /tmp/get-pip.py
+}
+
+create_venv "$PYTHON_EXE" "$VENV_DIR"
 
 # 修复 venv 中脚本的 shebang 路径（解决虚拟环境移动/复制后路径失效的问题）
 echo "Fixing virtual environment paths..."
