@@ -7,7 +7,7 @@
 import traceback
 from os import PathLike
 from aiofiles import os as aios
-from typing import Union
+from typing import Union, Optional
 import traceback
 from transformers import AutoTokenizer, AutoProcessor
 import numpy as np
@@ -235,24 +235,34 @@ class DummyTokenizer:
 # 添加tokenizer缓存字典
 _tokenizer_cache = {}
 
-async def resolve_tokenizer(repo_id: Union[str, PathLike]):
+async def resolve_tokenizer(repo_id: Union[str, PathLike], inference_engine_classname: Optional[str] = None):
   """解析并加载分词器的异步函数
   
   尝试优先从本地路径加载分词器，如果本地路径不存在或加载失败，则通过_resolve_tokenizer函数加载。
   特别处理了"dummy"仓库ID的情况，直接返回虚拟分词器。
+
+  新增 inference_engine_classname 参数：当上层（如 chatgpt_api）已知引擎类名时，显式传入，
+  避免依赖调用栈检查（异步场景下调用栈检查不可靠）。
   
   Args:
     repo_id (Union[str, PathLike]): 模型仓库ID或路径
+    inference_engine_classname (Optional[str]): 当前推理引擎类名，如 DummyInferenceEngine
   
   Returns:
     加载的分词器对象或虚拟分词器
   """
+  # [FIX] repo_id 为空 / None 时，直接返回 DummyTokenizer，避免后续 str/replace 报错
+  if repo_id is None:
+    return DummyTokenizer()
+  repo_id_str = str(repo_id)
+  if not repo_id_str.strip():
+    return DummyTokenizer()
+
   # 特殊处理dummy仓库ID，直接返回虚拟分词器
-  if repo_id == "dummy":
+  if repo_id_str == "dummy":
     return DummyTokenizer()
   
   # 检查缓存中是否已存在该repo_id的tokenizer
-  repo_id_str = str(repo_id)
   if repo_id_str in _tokenizer_cache:
     if DEBUG >= 2: print(f"从缓存中获取tokenizer: {repo_id_str}")
     return _tokenizer_cache[repo_id_str]
@@ -267,7 +277,7 @@ async def resolve_tokenizer(repo_id: Union[str, PathLike]):
     # 检查本地路径是否存在，如果存在则尝试从本地加载
     if local_path and await aios.path.exists(local_path):
       if DEBUG >= 2: print(f"Resolving tokenizer for {repo_id=} from {local_path=}")
-      tokenizer = await _resolve_tokenizer(local_path)
+      tokenizer = await _resolve_tokenizer(local_path, engine_clsname=inference_engine_classname)
       # 存入缓存
       _tokenizer_cache[repo_id_str] = tokenizer
       return tokenizer
@@ -277,7 +287,8 @@ async def resolve_tokenizer(repo_id: Union[str, PathLike]):
     if DEBUG >= 5: traceback.print_exc()
   
   # 本地加载失败或路径不存在时，正常解析分词器
-  tokenizer = await _resolve_tokenizer(repo_id)
+  # [FIX] 透传 inference_engine_classname 给底层函数，确保 Dummy 场景能回退
+  tokenizer = await _resolve_tokenizer(repo_id, engine_clsname=inference_engine_classname)
   # 存入缓存
   _tokenizer_cache[repo_id_str] = tokenizer
   return tokenizer
@@ -289,7 +300,7 @@ def clear_tokenizer_cache():
   _tokenizer_cache = {}
 
 
-async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike]):
+async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike], engine_clsname: Optional[str] = None):
   """解析并加载分词器的核心异步函数
   
   这是加载分词器的核心函数，实现了多种加载策略：
@@ -598,6 +609,37 @@ async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike]):
       except Exception as e_inner:
         print(f"使用修改后的模型ID加载失败: {type(e_inner).__name__}: {str(e_inner)}")
 
-  # 3. 所有尝试都失败，抛出错误而不是使用错误的后备tokenizer
-  # 错误的tokenizer比没有tokenizer更糟糕，应该让错误正常传播
+  # 3. 所有尝试都失败：
+  #   (a) 真实环境下返回错误，避免用错分词器产生错位输出
+  #   (b) DummyInferenceEngine / 开发环境：返回 DummyTokenizer(自动推断model_type)
+  # [FIX] 优先使用显式传入的 engine_clsname，避免 inspect.currentframe() 在 asyncio + threadpool 下
+  #       找不到调用者（caller_engine_cls 为空），导致本该回退时抛 ValueError。
+  import inspect
+  frame = inspect.currentframe()
+  caller_engine_cls = engine_clsname
+  try:
+    depth = 0
+    while frame is not None and depth < 30 and caller_engine_cls is None:
+      local_self = frame.f_locals.get('self')
+      if local_self is not None and hasattr(local_self, '__class__'):
+        cn = local_self.__class__.__name__
+        if cn.endswith('InferenceEngine'):
+          caller_engine_cls = cn
+          break
+      frame = frame.f_back
+      depth += 1
+  except Exception:
+    caller_engine_cls = caller_engine_cls or None
+  finally:
+    del frame
+
+  if caller_engine_cls == 'DummyInferenceEngine' or str(original_repo_id).startswith('dummy'):
+    repo_id_for_model_type = str(original_repo_id).lower()
+    model_type = "default"
+    if "qwen" in repo_id_for_model_type: model_type = "qwen"
+    if "llama" in repo_id_for_model_type: model_type = "llama"
+    if "fara" in repo_id_for_model_type: model_type = "qwen"
+    print(f"[resolve_tokenizer] 所有分词器加载失败，返回 DummyTokenizer(model_type={model_type})（engine={caller_engine_cls}）")
+    return DummyTokenizer(model_type=model_type)
+
   raise ValueError(f"无法加载模型 {repo_id_or_local_path} 的分词器。所有加载尝试都失败。请确保模型文件完整且分词器配置正确。")

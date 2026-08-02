@@ -243,6 +243,9 @@ parser.add_argument("--interface-type-filter", type=str, default=None, help="Com
 parser.add_argument("--system-prompt", type=str, default=None, help="System prompt for the ChatGPT API")
 parser.add_argument("--manager", type=str, default=None, help="EXO Manager address (e.g., http://localhost:8080) to auto-register on startup")
 parser.add_argument("--auto-connect", action=argparse.BooleanOptionalAction, default=True, help="Enable/disable auto-connect to discovered peers (default: enabled)")
+parser.add_argument("--memory-limit", type=float, default=None, help="[NEW] 强制每节点显存上限 (GB, 可小数)。\n"
+                    "示例: --memory-limit 4 → 该节点仅使用4GB显存（覆盖真实GPU大小上报Manager + 真正限制CUDA分配）。\n"
+                    "设为 0 或不填 则按真实GPU大小。")
 args = parser.parse_args()
 print(f"Selected inference engine: {args.inference_engine}")
 
@@ -379,15 +382,21 @@ node = Node(
   default_sample_temperature=args.default_temp,
   manager_url=args.manager,
   chatgpt_api_port=args.chatgpt_api_port,
-  auto_connect=args.auto_connect
+  auto_connect=args.auto_connect,
+  memory_limit_gb=args.memory_limit,
 )
 # 创建GRPC服务器实例
 server = GRPCServer(node, args.node_host, args.node_port)
 node.server = server
 # 创建ChatGPT API实例
+# [FIX] 兼容 PyTorchInferenceEngine 统一入口：如果实际引擎是 PyTorchInferenceEngine，
+# 则 ChatGPTAPI 需要用同一个类名（会通过 get_repo 的回退逻辑匹配具体子引擎），
+# 而之前用 node.inference_engine.__class__.__name__ 已经能正确拿到它；
+# 这里显式写出以便日后维护。
+_inference_engine_classname = node.inference_engine.__class__.__name__
 api = ChatGPTAPI(
   node,
-  node.inference_engine.__class__.__name__,
+  _inference_engine_classname,
   response_timeout=args.chatgpt_api_response_timeout,
   on_chat_completion_request=lambda req_id, __, prompt: topology_viz.update_prompt(req_id, prompt) if topology_viz else None,
   default_model=args.default_model,
@@ -464,13 +473,19 @@ async def run_model_cli(node: Node, model_name: str, prompt: str):
   if not shard:
     print(f"Error: Unsupported model '{model_name}' for inference engine {inference_class}")
     return
-  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class))
+  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class), inference_engine_classname=inference_class)
+  if tokenizer is None:
+    print(f"Error: Failed to load tokenizer for model '{model_name}'")
+    return
   request_id = str(uuid.uuid4())
   callback_id = f"cli-wait-response-{request_id}"
   callback = node.on_token.register(callback_id)
   if topology_viz:
     topology_viz.update_prompt(request_id, prompt)
-  prompt = tokenizer.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True)
+  if hasattr(tokenizer, 'apply_chat_template'):
+    prompt = tokenizer.apply_chat_template([{"role": "user", "content": prompt}], tokenize=False, add_generation_prompt=True)
+  else:
+    prompt = f"User: {prompt}\nAssistant: "
 
   try:
     print(f"Processing prompt: {prompt}")
@@ -523,8 +538,12 @@ async def eval_model_cli(node: Node, model_name, dataloader, batch_size, num_bat
   if not shard:
     print(f"Error: Unsupported model '{model_name}' for inference engine {inference_class}")
     return
-  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class))
-  train, val, test = dataloader(tokenizer.encode)
+  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class), inference_engine_classname=inference_class)
+  if tokenizer is None:
+    print(f"Error: Failed to load tokenizer for model '{model_name}'")
+    return
+  encode_fn = tokenizer.encode if hasattr(tokenizer, 'encode') else (lambda s: [1] * max(1, len(str(s)) // 4))
+  train, val, test = dataloader(encode_fn)
   print(f"Evaluating {len(test)} examples with batch_size {batch_size}")
   loss, tokens = await run_iter(node, shard, False, test, batch_size)
   print(f"total | {loss=}, {tokens=}")
@@ -538,8 +557,12 @@ async def train_model_cli(node: Node, model_name, dataloader, batch_size, iters,
   if not shard:
     print(f"Error: Unsupported model '{model_name}' for inference engine {inference_class}")
     return
-  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class))
-  train, val, test = dataloader(tokenizer.encode)
+  tokenizer = await resolve_tokenizer(get_repo(shard.model_id, inference_class), inference_engine_classname=inference_class)
+  if tokenizer is None:
+    print(f"Error: Failed to load tokenizer for model '{model_name}'")
+    return
+  encode_fn = tokenizer.encode if hasattr(tokenizer, 'encode') else (lambda s: [1] * max(1, len(str(s)) // 4))
+  train, val, test = dataloader(encode_fn)
   print(f"Training on {len(train)} examples with batch_size {batch_size} for {iters} epochs")
   for i in tqdm(range(3)):
     await asyncio.sleep(1)

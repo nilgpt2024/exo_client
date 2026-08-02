@@ -82,7 +82,7 @@ class InferenceEngine(ABC):
     if inference_state and "enable_thinking" in inference_state:
         enable_thinking = inference_state["enable_thinking"]
         logging.info(f"从inference_state获取思考模式: {'启用' if enable_thinking else '禁用'}")
-    tokens = await self.encode(shard, prompt,enable_thinking)
+    tokens = await self.encode(shard, prompt, enable_thinking if enable_thinking is not None else False)
 
     # 针对不同模型类型处理tokens形状
     if shard.model_id == 'stable-diffusion-2-1-base':

@@ -1,0 +1,111 @@
+2026-08-01 10:34:14,822 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:34:14,822 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:34:14,827 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:34:14,828 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:34:14,828 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:34:14,828 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=[]
+2026-08-01 10:34:14,851 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:34:14,852 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-08-01 10:34:14,852 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-08-01 10:34:14,852 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-08-01 10:34:14,852 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-08-01 10:34:26,869 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node-local-1 -> ws://127.0.0.1:18080/ws/node/node-local-1
+2026-08-01 10:34:26,870 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-08-01 10:34:26,881 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://127.0.0.1:18080/ws/node/node-local-1 ...
+2026-08-01 10:34:26,972 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-08-01 10:34:27,056 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (101字节): {"type": "register_ack", "status": "success", "message": "Node node-local-1 registered successfully"}
+2026-08-01 10:34:27,056 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-08-01 10:34:27,536 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (281字节): {"type": "model_load", "task_id": "nv-community/LocateAnything-3B_0_-1_1785551667", "model_id": "nv-community/LocateAnything-3B", "model_path": "nv-community/LocateAnything-3B", "shard": {"start_layer
+2026-08-01 10:34:27,537 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: nv-community/LocateAnything-3B (实例: default)
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: nv-community/LocateAnything-3B (实例: default, 键: nv-community/LocateAnything-3B)
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 nv-community/LocateAnything-3B 总层数: 0
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node-local-1']
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: nv-community/LocateAnything-3B...
+2026-08-01 10:34:27,538 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='nv-community/LocateAnything-3B', start_layer=0, end_layer=-1, n_layers=0, repo_id='', tie_word_embeddings=True, instance_id='default') (引擎实例: default)
+2026-08-01 10:34:27,540 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node-local-1 上加载分片
+2026-08-01 10:34:27,541 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-08-01 10:34:27,541 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 nv-community/LocateAnything-3B 加载完成，状态: loaded
+2026-08-01 10:34:28,874 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (223字节): {"type": "model_load", "task_id": "qwen-3-4b_0_35_1785551668", "model_id": "qwen-3-4b", "model_path": "Qwen/Qwen3-4B", "shard": {"start_layer": 0, "end_layer": 35, "n_layers": 36}, "peer_list": [], "i
+2026-08-01 10:34:28,874 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-08-01 10:34:28,875 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-4b (实例: default)
+2026-08-01 10:34:28,875 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-4b (实例: default, 键: qwen-3-4b)
+2026-08-01 10:34:28,875 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 总层数: 36
+2026-08-01 10:34:28,875 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node-local-1']
+2026-08-01 10:34:28,875 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-4b...
+2026-08-01 10:34:28,876 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-4b', start_layer=0, end_layer=35, n_layers=36, repo_id='', tie_word_embeddings=True, instance_id='default') (引擎实例: default)
+2026-08-01 10:34:28,877 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node-local-1 上加载分片
+2026-08-01 10:34:28,878 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-08-01 10:34:28,878 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-4b 加载完成，状态: loaded
+2026-08-01 10:34:33,972 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (229字节): {"type": "model_load", "task_id": "qwen-3-0.6b_0_27_1785551673", "model_id": "qwen-3-0.6b", "model_path": "Qwen/Qwen3-0.6B", "shard": {"start_layer": 0, "end_layer": 27, "n_layers": 28}, "peer_list": 
+2026-08-01 10:34:33,972 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-08-01 10:34:33,972 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: qwen-3-0.6b (实例: default)
+2026-08-01 10:34:33,973 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: qwen-3-0.6b (实例: default, 键: qwen-3-0.6b)
+2026-08-01 10:34:33,973 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b 总层数: 28
+2026-08-01 10:34:33,973 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node-local-1']
+2026-08-01 10:34:33,973 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: qwen-3-0.6b...
+2026-08-01 10:34:33,973 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='qwen-3-0.6b', start_layer=0, end_layer=27, n_layers=28, repo_id='', tie_word_embeddings=True, instance_id='default') (引擎实例: default)
+2026-08-01 10:34:33,975 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 成功在 local 节点 node-local-1 上加载分片
+2026-08-01 10:34:33,975 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-08-01 10:34:33,976 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 qwen-3-0.6b 加载完成，状态: loaded
+2026-08-01 10:34:38,206 - root - INFO - [InferenceState] 进入推理模式 (active_requests=1)
+2026-08-01 10:34:38,206 - root - INFO - 从inference_state获取思考模式: 禁用
+2026-08-01 10:34:38,206 - root - INFO - [InferenceState] 退出推理模式 (active_requests=0)
+2026-08-01 10:34:44,850 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:34:44,850 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:34:44,856 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:34:44,856 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:34:44,856 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:34:44,857 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:34:44,857 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:34:44,857 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-01 10:34:58,193 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 0d2d7907-4a0
+2026-08-01 10:34:58,193 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 0290fd29-1b3
+2026-08-01 10:35:08,192 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 4040cfd3-87a
+2026-08-01 10:35:08,192 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 6180e489-b72
+2026-08-01 10:35:14,849 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:35:14,849 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:35:14,854 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:35:14,854 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:35:14,855 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:35:14,855 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:35:14,855 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:35:14,855 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-01 10:35:44,854 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:35:44,854 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:35:44,859 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:35:44,859 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:35:44,859 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:35:44,859 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:35:44,860 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:35:44,860 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-01 10:36:13,986 - root - INFO - [InferenceState] 进入推理模式 (active_requests=1)
+2026-08-01 10:36:13,987 - root - INFO - 从inference_state获取思考模式: 禁用
+2026-08-01 10:36:13,987 - root - INFO - [InferenceState] 退出推理模式 (active_requests=0)
+2026-08-01 10:36:14,011 - root - INFO - [InferenceState] 进入推理模式 (active_requests=1)
+2026-08-01 10:36:14,011 - root - INFO - 从inference_state获取思考模式: 禁用
+2026-08-01 10:36:14,012 - root - INFO - [InferenceState] 退出推理模式 (active_requests=0)
+2026-08-01 10:36:14,843 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:36:14,844 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:36:14,849 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:36:14,849 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:36:14,849 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:36:14,849 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:36:14,849 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:36:14,850 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-01 10:36:44,851 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:36:44,851 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:36:44,856 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:36:44,856 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:36:44,856 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:36:44,857 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:36:44,857 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:36:44,857 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-01 10:37:14,847 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-01 10:37:14,847 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-01 10:37:14,852 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-01 10:37:14,852 - root - INFO - [update_peers] Updated peers list: []
+2026-08-01 10:37:14,852 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-01 10:37:14,853 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node-local-1'], current_topology.nodes=['node-local-1']
+2026-08-01 10:37:14,853 - root - INFO - [collect_topology] Updated topology, nodes=['node-local-1']
+2026-08-01 10:37:14,853 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成

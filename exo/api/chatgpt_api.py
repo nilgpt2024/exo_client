@@ -458,7 +458,10 @@ class ChatGPTAPI:
       )
       if DEBUG >= 1: print(f"[ChatGPTAPI] 多实例推理: model={original_model}, base={base_model}, instance={instance_id}")
     messages = [parse_message(msg) for msg in data.get("messages", [])]
-    tokenizer = await resolve_tokenizer(get_repo(base_model, self.inference_engine_classname))
+    tokenizer = await resolve_tokenizer(
+      get_repo(base_model, self.inference_engine_classname),
+      inference_engine_classname=self.inference_engine_classname,
+    )
     if tokenizer is None:
       return web.json_response({"detail": f"Failed to load tokenizer for model {model}"}, status=500)
     prompt = build_prompt(tokenizer, messages, data.get("tools", None))
@@ -506,6 +509,14 @@ class ChatGPTAPI:
         chat_request.model = resolved
 
     if not chat_request.model or base_model not in model_cards:
+      # 若默认模型也不在当前引擎支持的列表中，静默回退会给出误导性错误（如 llama-3.2-1b）
+      default_info = model_cards.get(self.default_model, {})
+      if self.default_model not in model_cards or self.inference_engine_classname not in default_info.get("repo", {}):
+        supported_models = [model for model, info in model_cards.items() if self.inference_engine_classname in info.get("repo", {})]
+        return web.json_response(
+          {"detail": f"Model not registered: {base_model}. Check Manager connection or load the model first. Supported models for this engine: {supported_models}"},
+          status=400,
+        )
       if DEBUG >= 1: print(f"[ChatGPTAPI] Invalid model: {chat_request.model}. Supported: {list(model_cards.keys())}. Defaulting to {self.default_model}")
       chat_request.model = self.default_model
       base_model = chat_request.model
@@ -543,9 +554,10 @@ class ChatGPTAPI:
         status=400,
       )
 
-    tokenizer = await resolve_tokenizer(get_repo(base_model, self.inference_engine_classname))
-    if tokenizer is None:
-      return web.json_response({"detail": f"Failed to load tokenizer for model {chat_request.model}"}, status=500)
+    tokenizer = await resolve_tokenizer(
+      get_repo(base_model, self.inference_engine_classname),
+      inference_engine_classname=self.inference_engine_classname,
+    )
 
     # Add system prompt if set
     if self.system_prompt and not any(msg.role == "system" for msg in chat_request.messages):
@@ -620,12 +632,19 @@ class ChatGPTAPI:
             print(f"[ChatGPTAPI] Got token from queue: {request_id=} {tokens=} {is_finished=}")
 
             eos_token_id = None
-            if not eos_token_id and hasattr(tokenizer, "eos_token_id"): eos_token_id = tokenizer.eos_token_id
-            if not eos_token_id and hasattr(tokenizer, "_tokenizer"): eos_token_id = tokenizer.special_tokens_map.get("eos_token_id")
+            if not eos_token_id and hasattr(tokenizer, "eos_token_id") and tokenizer.eos_token_id is not None:
+                eos_token_id = tokenizer.eos_token_id
+            if not eos_token_id and hasattr(tokenizer, "special_tokens_map") and tokenizer.special_tokens_map is not None:
+                eos_token_id = tokenizer.special_tokens_map.get("eos_token_id")
+            if not eos_token_id and hasattr(tokenizer, "_tokenizer"):
+                _inner = tokenizer._tokenizer
+                _map = getattr(_inner, 'special_tokens_map', None) or getattr(_inner, 'added_tokens_decoder', None)
+                if isinstance(_map, dict):
+                    eos_token_id = _map.get("eos_token_id")
 
             finish_reason = None
             if is_finished:
-                if tokens and tokens[-1] == eos_token_id:
+                if tokens and eos_token_id is not None and tokens[-1] == eos_token_id:
                     finish_reason = "stop"
                 else:
                     finish_reason = "length"
@@ -736,10 +755,12 @@ class ChatGPTAPI:
             break
         finish_reason = "length"
         eos_token_id = None
-        if not eos_token_id and hasattr(tokenizer, "eos_token_id"): eos_token_id = tokenizer.eos_token_id
-        if not eos_token_id and hasattr(tokenizer, "_tokenizer"): eos_token_id = tokenizer.special_tokens_map.get("eos_token_id")
+        if not eos_token_id and hasattr(tokenizer, "eos_token_id") and tokenizer.eos_token_id is not None:
+          eos_token_id = tokenizer.eos_token_id
+        if not eos_token_id and hasattr(tokenizer, "special_tokens_map") and tokenizer.special_tokens_map is not None:
+          eos_token_id = tokenizer.special_tokens_map.get("eos_token_id")
         print(f"Checking if end of tokens result {tokens[-1]=} is {eos_token_id=}")
-        if tokens[-1] == eos_token_id:
+        if eos_token_id is not None and tokens[-1] == eos_token_id:
           finish_reason = "stop"
 
         return web.json_response(generate_completion(chat_request, tokenizer, prompt, request_id, tokens, stream, finish_reason, "chat.completion"))

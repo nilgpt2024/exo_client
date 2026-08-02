@@ -59,6 +59,7 @@ class Node:
     manager_url: Optional[str] = None,
     chatgpt_api_port: int = 52415,
     auto_connect: bool = True,
+    memory_limit_gb: Optional[float] = None,
   ):
     self.id = _id
     self.inference_engine = inference_engine
@@ -70,6 +71,10 @@ class Node:
     # 向 Manager 上报的 ChatGPT API 端口：FRP 模式下会被覆盖为映射后的远程端口
     self.chatgpt_api_public_port = chatgpt_api_port
     self.auto_connect = auto_connect
+    # ✨ 新增：每节点显存限制（单位 GB）。设置后：
+    # 1) device_capabilities.memory 会被强制覆盖为 该值×1024 MB
+    # 2) 调用 torch.cuda.set_per_process_memory_fraction 真正限制 CUDA 分配上限
+    self.memory_limit_gb = memory_limit_gb
 
     if manager_url:
       from exo.models import init_models
@@ -126,6 +131,72 @@ class Node:
     self.is_inferencing: bool = False
     self._inference_count: int = 0  # 当前活跃的推理请求数量
     self._topology_update_task: Optional[asyncio.Task] = None  # 当前运行的拓扑更新任务
+
+  def _apply_memory_limit(self, memory_limit_gb: float) -> None:
+    """
+    应用显存限制：
+      1) 覆盖 device_capabilities.memory = memory_limit_gb * 1024 MB（上报给 Manager）
+      2) 通过 PyTorch CUDA API 真正限制该进程的显存分配上限
+         若无 GPU 则仅覆盖上报值，不执行真实限制
+    """
+    limit_mb = int(float(memory_limit_gb) * 1024)
+    limit_bytes = limit_mb * (1024 ** 2)
+
+    # --- Step A: 覆盖 device_capabilities.memory（Manager 用它做分片分配）---
+    caps = self.device_capabilities
+    original_mb = getattr(caps, "memory", 0) or 0
+    try:
+      # dataclass / attrs / 普通对象三种风格都尝试设置
+      if hasattr(caps, "__dataclass_fields__"):
+        object.__setattr__(caps, "memory", limit_mb)
+      elif hasattr(caps, "memory"):
+        object.__setattr__(caps, "memory", limit_mb)
+      # 兼容 to_dict() 里也会读 memory，确保它能拿到新值
+      if isinstance(caps, dict):
+        caps["memory"] = limit_mb
+    except Exception as e:
+      # 失败不致命：至少强制替换引用
+      try:
+        new_caps_dict = caps.to_dict() if hasattr(caps, "to_dict") else {}
+        new_caps_dict["memory"] = limit_mb
+        print(f"[MemoryLimit] 覆盖 device_capabilities.memory 失败({e})，fallback 手动重建: {new_caps_dict}")
+      except Exception:
+        pass
+    print(f"[MemoryLimit] 上报给Manager的显存大小: {original_mb} MB → 强制 {limit_mb} MB ({memory_limit_gb:.2f} GB)")
+
+    # --- Step B: 真正限制 CUDA 分配（仅 NVIDIA GPU 场景）---
+    try:
+      import torch
+      if not torch.cuda.is_available():
+        print("[MemoryLimit] 无可用 CUDA 设备，跳过真实CUDA显存限制（仅覆盖上报值）")
+        return
+
+      device_idx = 0
+      total_bytes = torch.cuda.get_device_properties(device_idx).total_memory
+      # fraction = 限制 / 真实总显存
+      fraction = min(1.0, max(0.0, float(limit_bytes) / float(total_bytes)))
+      if fraction >= 0.99:
+        print(f"[MemoryLimit] 限制值({limit_mb} MB) 接近或超过实际显存({total_bytes//1048576} MB)，无需强制限制 fraction")
+        return
+
+      # 方案1：set_per_process_memory_fraction（官方推荐，PyTorch ≥ 1.10）
+      if hasattr(torch.cuda, "set_per_process_memory_fraction"):
+        torch.cuda.set_per_process_memory_fraction(fraction, device_idx)
+        print(f"[MemoryLimit] ✅ 真实CUDA显存已限制: {limit_mb} MB "
+              f"(实际 {total_bytes//1048576} MB × fraction={fraction:.4f})")
+      else:
+        # 方案2：通过环境变量 PYTORCH_CUDA_ALLOC_CONF
+        import os as _os
+        cur = _os.environ.get("PYTORCH_CUDA_ALLOC_CONF", "")
+        new_entry = f"max_bytes:{limit_bytes}"
+        if cur:
+          merged = f"{cur},{new_entry}" if new_entry not in cur else cur
+          _os.environ["PYTORCH_CUDA_ALLOC_CONF"] = merged
+        else:
+          _os.environ["PYTORCH_CUDA_ALLOC_CONF"] = new_entry
+        print(f"[MemoryLimit] 老版PyTorch，fallback: PYTORCH_CUDA_ALLOC_CONF={new_entry}")
+    except Exception as e:
+      print(f"[MemoryLimit] ⚠️ 真实CUDA显存限制失败(不影响Manager端分配): {e}")
 
   async def _enter_inference(self):
     """标记进入推理状态（支持嵌套调用）"""
@@ -222,6 +293,13 @@ class Node:
     # 只有在设备能力未被手动设置时才进行自动检测
     if self.device_capabilities == UNKNOWN_DEVICE_CAPABILITIES:
       self.device_capabilities = await device_capabilities()
+
+    # ✨ [MEMORY LIMIT] 启动早期应用显存限制：
+    # 1) 真正限制 CUDA 分配上限（避免模型加载时 OOM）
+    # 2) 覆盖上报的 device_capabilities.memory（Manager 按此值分配分片）
+    if self.memory_limit_gb and self.memory_limit_gb > 0:
+      self._apply_memory_limit(self.memory_limit_gb)
+
     if self.server is not None:
       await self.server.start()
     await self.discovery.start()
@@ -383,9 +461,13 @@ class Node:
     import requests as http_requests
     health_url = f"{self.manager_url.rstrip('/')}/api/nodes/{self.id}/health-check"
     
+    # 快速心跳触发器：模型加载/卸载后立即上报，避免 Manager 30s 延迟才感知
+    self._hb_urgent_event = asyncio.Event()
+    
     while True:
       try:
-        await asyncio.sleep(interval)
+        # 常规 30s 间隔，若 _hb_urgent_event 被 set，则 < 100ms 内立即发送一次心跳
+        await self._sleep_with_urgent_wakeup(interval)
         
         # [OK] 构建心跳 payload（携带节点状态 + 网络地址）
         # 注意: 地址信息用于 Manager 自动注册时构建正确的连接 URL
@@ -397,15 +479,14 @@ class Node:
           "chatgpt_api_port": self.chatgpt_api_public_port,
         }
         
-        # 添加已加载模型信息
-        if self.my_loaded_models:
-          heartbeat_payload["loaded_models"] = [
-            {
-              "model_id": model_id,
-              "shard": load_state.shard.to_dict() if hasattr(load_state.shard, 'to_dict') else {}
-            }
-            for model_id, load_state in self.my_loaded_models.items()
-          ]
+        # 即使 my_loaded_models 为空也要上报，让 Manager 立刻感知模型卸载
+        heartbeat_payload["loaded_models"] = [
+          {
+            "model_id": model_id,
+            "shard": load_state.shard.to_dict() if hasattr(load_state.shard, 'to_dict') else {}
+          }
+          for model_id, load_state in self.my_loaded_models.items()
+        ]
         
         # 添加 GPU 显存信息
         gpu_memory = self._get_realtime_gpu_memory()
@@ -465,6 +546,26 @@ class Node:
           logging.warning(f"[Node] [Manager] 心跳失败: HTTP {response.status_code}")
       except Exception as e:
         logging.debug(f"[Node] [Manager] 心跳异常: {e}")
+
+  async def _sleep_with_urgent_wakeup(self, interval: float):
+    """按 interval 睡眠，但若 _hb_urgent_event 触发则提前 < 100ms 唤醒"""
+    ev = getattr(self, '_hb_urgent_event', None)
+    if ev is None:
+      await asyncio.sleep(interval)
+      return
+    # 以 0.1s 粒度轮询事件标志；interval 上限兜底
+    steps = max(1, int(interval / 0.1))
+    for _ in range(steps):
+      if ev.is_set():
+        ev.clear()
+        return
+      await asyncio.sleep(0.1)
+
+  def _notify_manager_urgent(self):
+    """模型加载/卸载后立即触发一次心跳（约 100ms 内上报给 Manager）"""
+    ev = getattr(self, '_hb_urgent_event', None)
+    if ev is not None:
+      ev.set()
 
   async def _connect_to_manager_websocket(self, delay: float = 3.0):
     """
@@ -1067,11 +1168,14 @@ class Node:
         else:
           raise ValueError("缺少必需参数: model_path")
       
-      # 发送完成消息
+      # 判断加载是否真正成功
+      load_success = result and isinstance(result, dict) and result.get("success")
+
+      # 发送完成/失败消息
       if hasattr(self, 'ws_manager_v2') and self.ws_manager_v2.is_connected and MessagePriority:
         # 构建 loaded_models 列表（与 V1 格式一致）
         loaded = []
-        if result and isinstance(result, dict) and result.get("success"):
+        if load_success:
           base_model_id = model_id.split("::")[0] if "::" in model_id else model_id
           loaded.append({
             "model_id": model_id,
@@ -1087,12 +1191,17 @@ class Node:
           "type": "model_load_complete",
           "task_id": task_id,
           "node_id": self.id,
-          "success": True,
+          "success": load_success,
           "loaded_models": loaded,
           "result": result
         }, priority=MessagePriority.HIGH, require_ack=True)
-      
-      print(f"[NodeWS-V2] [OK] 模型加载完成: {task_id}")
+
+      if load_success:
+        print(f"[NodeWS-V2] [OK] 模型加载完成: {task_id}")
+      else:
+        error_msg = result.get("error", "未知错误") if isinstance(result, dict) else "加载失败"
+        print(f"[NodeWS-V2] [FAIL] 模型加载失败: {task_id}: {error_msg}")
+        raise RuntimeError(error_msg)
       
     except Exception as e:
       print(f"[NodeWS-V2] [FAIL] 模型加载失败: {task_id}: {e}")
@@ -1623,21 +1732,24 @@ class Node:
       if DEBUG >= 2: print(f"[Node] Discovery does not support get_current_node_shard, skipping shard broadcast")
 
   async def _periodic_broadcast_loaded_models(self, initial_delay: float = 3.0, interval: float = 10.0):
-    """定期广播已加载的模型，确保所有节点都能收到"""
+    """定期广播已加载的模型，确保所有节点都能收到
+    
+    注意：即使 my_loaded_models 为空，也会在最后一次模型状态变化后连续广播 3 次
+    （每次间隔 1s），确保对端/Manager 能感知卸载后的空状态。
+    """
     await asyncio.sleep(initial_delay)
     await self._broadcast_loaded_models()
     
     # 定期重播，确保新连接的节点也能收到
     while True:
       await asyncio.sleep(interval)
-      if self.my_loaded_models and len(self.peers) > 0:
-        await self._broadcast_loaded_models()
+      # 卸载场景兜底：空状态也广播，避免 peer 和 Manager 保留幽灵条目
+      await self._broadcast_loaded_models()
 
   async def _broadcast_loaded_models(self, gpu_memory=None):
     """广播自己已加载的模型给其他节点"""
-    if not self.my_loaded_models:
-      return
-    
+    # 注意：卸载模型时 my_loaded_models 为空，也需要发一条空消息通知对端清理
+    #       （旧实现 my_loaded_models 为空直接 return，导致卸载永远无法同步）
     print(f"[Node] Broadcasting loaded models for {self.id}: {list(self.my_loaded_models.keys())}")
     load_states = [state.to_dict() for state in self.my_loaded_models.values()]
     
@@ -1667,6 +1779,22 @@ class Node:
       })
       await self.broadcast_opaque_status("", shard_message)
       print(f"[Node] Also broadcasted shard config: {shard}")
+    
+    # 卸载/加载完成后，立即唤醒心跳线程主动推一次给 Manager（< 100ms）
+    self._notify_manager_urgent()
+    # 同时通过 Manager WS（如果已连接）发送 model_status_update 事件，
+    # 作为 WS 通道的即时更新（心跳 HTTP 是第二个兜底）
+    if hasattr(self, 'ws_manager_v2') and self.ws_manager_v2 and self.ws_manager_v2.is_connected:
+      try:
+        from exo.networking.websocket_optimized import MessagePriority
+        await self.ws_manager_v2.send({
+          "type": "model_status_update",
+          "node_id": self.id,
+          "loaded_models": load_states,
+          "gpu_memory": gpu_memory or self._get_realtime_gpu_memory() or {}
+        }, priority=MessagePriority.HIGH)
+      except Exception:
+        pass
 
   async def _request_loaded_models_from_peers(self):
     """新节点启动后，主动请求所有peers的已加载模型信息"""

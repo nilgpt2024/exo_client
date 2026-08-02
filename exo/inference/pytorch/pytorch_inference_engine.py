@@ -61,10 +61,10 @@ class PyTorchInferenceEngine(InferenceEngine):
         model_info = models.model_cards.get(safe_model_id, {})
         repo_config = model_info.get("repo", {})
 
-        # 动态检测 PyTorch 引擎
+        # 动态检测 PyTorch 引擎（跳过统一入口自身，避免递归选择）
         pytorch_engines = [
             k for k in repo_config.keys()
-            if k.startswith("PyTorch") and k.endswith("InferenceEngine")
+            if k.startswith("PyTorch") and k.endswith("InferenceEngine") and k != "PyTorchInferenceEngine"
         ]
 
         if not pytorch_engines:
@@ -73,7 +73,7 @@ class PyTorchInferenceEngine(InferenceEngine):
             for card_key, card_val in models.model_cards.items():
                 card_repo = card_val.get("repo", {})
                 for engine_name, repo_id in card_repo.items():
-                    if repo_id == safe_model_id and engine_name.startswith("PyTorch") and engine_name.endswith("InferenceEngine"):
+                    if repo_id == safe_model_id and engine_name.startswith("PyTorch") and engine_name.endswith("InferenceEngine") and engine_name != "PyTorchInferenceEngine":
                         pytorch_engines = [engine_name]
                         print(f"[PyTorchInferenceEngine] 反向匹配成功: {safe_model_id} -> {card_key} ({engine_name})")
                         break
@@ -229,6 +229,22 @@ class PyTorchInferenceEngine(InferenceEngine):
         """加载模型检查点（支持多模型）"""
         self._ensure_engine(shard)
         await self._engines[shard.model_id].load_checkpoint(shard, path)
+
+        # [FIX] Manager 不可达时 model_cards 可能为空，将实际加载的模型注册进去，
+        # 使 ChatGPT API 能正确解析 tokenizer 和分片。
+        try:
+            import exo.models as models
+            base_model_id = shard.base_model_id
+            if base_model_id not in models.model_cards and path:
+                engine_class_name = self._engines[shard.model_id].__class__.__name__
+                models.model_cards[base_model_id] = {
+                    "layers": shard.n_layers,
+                    "repo": {engine_class_name: path}
+                }
+                print(f"[PyTorchInferenceEngine] 注册模型到 model_cards: {base_model_id} -> {path} ({engine_class_name})")
+        except Exception as e:
+            print(f"[PyTorchInferenceEngine] 注册模型到 model_cards 失败: {e}")
+
         print(f"[PyTorchInferenceEngine] 模型 {shard.model_id} 加载完成，当前已加载模型: {list(self._engines.keys())}")
 
     async def ensure_shard(self, shard: Shard):

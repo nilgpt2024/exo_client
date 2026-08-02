@@ -15,7 +15,7 @@ class DummyInferenceEngine(InferenceEngine):
     self.num_generate_dummy_tokens = 10
     self.tokenizer = DummyTokenizer()
 
-  async def encode(self, shard: Shard, prompt: str) -> np.ndarray:
+  async def encode(self, shard: Shard, prompt: str, enable_thinking: bool = False) -> np.ndarray:
     return np.array(self.tokenizer.encode(prompt))
   
   async def sample(self, x: np.ndarray, temp: float = 0.0, top_p: float = 1.0, top_k: int = 50,

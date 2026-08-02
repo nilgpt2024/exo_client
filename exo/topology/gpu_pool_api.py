@@ -112,8 +112,10 @@ class GPUPoolAPI:
                 **kwargs
             )
             
+            has_warnings = bool(plan.warnings) if hasattr(plan, 'warnings') else False
+            # 只要存在警告（例如某些节点加载失败），就视为不完全成功
             result = {
-                "success": plan.success,
+                "success": plan.success and not has_warnings,
                 "model_id": model_id,
                 "message": plan.reason,
                 "allocations": {
@@ -128,10 +130,8 @@ class GPUPoolAPI:
 
             if not plan.success:
                 result["error"] = plan.reason or f"分配计划创建失败 (success={plan.success})"
-            elif plan.warnings:
+            elif has_warnings:
                 result["error"] = "; ".join(plan.warnings)
-                if result["success"]:
-                    logger.warning(f"[API] 模型加载完成但有警告: {plan.warnings}")
 
             return result
             

@@ -454,6 +454,46 @@ class GPUPoolManager:
                 state=ModelState.LOADING
             )
             self.pool_models[full_key] = pool_info  # 使用完整键存储
+
+            # [FIX] Manager 不可达时 model_cards 可能为空，导致 ChatGPT API 找不到已加载模型。
+            # 加载模型时将其注册到 model_cards，确保本地推理能正确解析 tokenizer 和分片。
+            # [FIX-2] 即使 base_model_id 已经存在（如从 Manager 下发），也需要把当前引擎的 repo 记录补充进去。
+            #   否则 get_repo("fara-7b", "DummyInferenceEngine") 在仅下发 PyTorchQwen2_5Vl 引擎时返回 None，
+            #   最终造成 resolve_tokenizer(None) 抛错。
+            if base_model_id and model_path:
+                try:
+                    from exo.models import model_cards as _model_cards
+                    engine_name = self.node.inference_engine.__class__.__name__
+                    existing = _model_cards.get(base_model_id)
+                    if existing is None:
+                        _model_cards[base_model_id] = {
+                            "layers": n_layers,
+                            "repo": {engine_name: model_path}
+                        }
+                        logger.info(f"[GPUPool] 注册模型到 model_cards: {base_model_id} -> {model_path} ({engine_name})")
+                    else:
+                        # 补齐 layers 和 当前引擎的 repo
+                        changed = False
+                        if not existing.get("layers"):
+                            existing["layers"] = n_layers
+                            changed = True
+                        repo = existing.setdefault("repo", {})
+                        if engine_name not in repo:
+                            repo[engine_name] = model_path
+                            changed = True
+                        # 对于 DummyInferenceEngine 启动场景，额外把当前节点用到的具体 PyTorch 子引擎名也挂到 repo 上，
+                        # 保证 resolve_tokenizer / build_base_shard 可以命中
+                        if engine_name == "DummyInferenceEngine":
+                            # 猜测可能对应的具体引擎名
+                            for fallback_engine in ("PyTorchQwen2_5VlInferenceEngine", "PyTorchQwen3InferenceEngine",
+                                                    "PyTorchLlama3InferenceEngine", "PyTorchInferenceEngine"):
+                                if fallback_engine not in repo:
+                                    repo[fallback_engine] = model_path
+                                    changed = True
+                        if changed:
+                            logger.info(f"[GPUPool] 更新 model_cards[{base_model_id}].repo = {repo}")
+                except Exception as e:
+                    logger.warning(f"[GPUPool] 注册模型到 model_cards 失败: {e}")
             
             try:
                 # 计算分配方案
@@ -499,7 +539,14 @@ class GPUPoolManager:
                 
                 # 执行分配（在各节点上加载对应的分片）
                 await self._execute_allocation(plan, model_path, base_model_id=base_model_id, **kwargs)
-                
+
+                # 如果有节点加载失败，整体应视为失败
+                if not plan.success:
+                    pool_info.state = ModelState.ERROR
+                    error_msg = "; ".join(plan.warnings) if plan.warnings else "分片加载失败（未知原因）"
+                    logger.error(f"[GPUPool] 模型 {full_key} 加载失败: {error_msg}")
+                    raise RuntimeError(error_msg)
+
                 # 更新状态
                 pool_info.state = ModelState.LOADED if pool_info.is_fully_covered() else ModelState.PARTIAL
                 pool_info.last_accessed = time.time()

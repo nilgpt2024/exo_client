@@ -87,13 +87,27 @@ def _load_remote_models():
     """加载模型配置：优先从 Manager 获取，回退到远程 URL"""
     global model_cards, pretty_name
     
-    # 先使用默认配置
-    model_cards = DEFAULT_MODEL_CARDS.copy()
-    pretty_name = DEFAULT_PRETTY_NAME.copy()
+    # 先使用默认配置（原地修改，避免 rebinding 导致已导入的引用失效）
+    model_cards.clear()
+    model_cards.update(DEFAULT_MODEL_CARDS)
+    pretty_name.clear()
+    pretty_name.update(DEFAULT_PRETTY_NAME)
     
     # 策略1: 尝试从 Manager 获取
     manager_cards, manager_names = _load_from_manager()
     if manager_cards:
+        # [FIX] Manager 下发的引擎名通常只带具体 PyTorch 子引擎（如 PyTorchQwen2_5VlInferenceEngine）。
+        # 当节点用 DummyInferenceEngine / PyTorchInferenceEngine（统一入口）启动时，get_repo 会查不到，
+        # 这里额外补两条兼容引擎，避免 "Unsupported model" 与 tokenizer 加载失败。
+        COMPAT_ENGINES = ("PyTorchInferenceEngine", "DummyInferenceEngine")
+        for mid, info in manager_cards.items():
+            repo = info.get("repo", {})
+            if not repo:
+                continue
+            any_repo = next(iter(repo.values()))
+            for ce in COMPAT_ENGINES:
+                if ce not in repo:
+                    repo[ce] = any_repo
         model_cards.update(manager_cards)
         if manager_names:
             pretty_name.update(manager_names)
@@ -122,13 +136,19 @@ def get_repo(model_id: str, inference_engine_classname: str) -> Optional[str]:
   
   # 如果直接找到了配置的引擎，直接返回
   if inference_engine_classname in repo_config:
-    return repo_config[inference_engine_classname]  
+    return repo_config[inference_engine_classname]
   # 如果是 PyTorchInferenceEngine（统一入口），返回第一个可用的 PyTorch 引擎配置
   if inference_engine_classname == "PyTorchInferenceEngine":
     pytorch_engines = _get_pytorch_engines(repo_config)
     if pytorch_engines:
       return repo_config[pytorch_engines[0]]
-  
+  # [FIX] 兼容 DummyInferenceEngine：测试/开发环境下，任何已配置的 PyTorch 引擎模型都应被视为支持
+  # （避免所有请求都落入 Unsupported model 错误）
+  if inference_engine_classname == "DummyInferenceEngine":
+    any_engine = next(iter(repo_config.values()), None)
+    if any_engine:
+      return any_engine
+
   return None
 
 def get_pretty_name(model_id: str) -> Optional[str]:
