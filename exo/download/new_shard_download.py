@@ -518,13 +518,13 @@ async def file_meta_modelscope(repo_id: str, revision: str, path: str) -> Tuple[
 # 从ModelScope下载单个文件
 async def _download_file_modelscope(repo_id: str, revision: str, path: str, target_dir: Path,
                                     on_progress: Callable[[int, int], None] = lambda _, __: None) -> Path:
-    """从ModelScope下载文件"""
-    # 首先确保目标目录存在
+    """从ModelScope下载文件（与 _download_file HF 版本保持一致的完整性校验）"""
+    # 1) 最终文件已存在 → 直接跳过（避免重复下载 / 100%→0% 重下）
     if await aios.path.exists(target_dir / path):
         return target_dir / path
     await aios.makedirs((target_dir / path).parent, exist_ok=True)
 
-    # 获取文件元数据
+    # 2) 获取文件元数据（size + ETag/hash）
     try:
         length, etag = await file_meta_modelscope(repo_id, revision, path)
     except Exception as e:
@@ -534,53 +534,103 @@ async def _download_file_modelscope(repo_id: str, revision: str, path: str, targ
     partial_path = target_dir / f"{path}.partial"
     resume_byte_pos = (await aios.stat(partial_path)).st_size if (await aios.path.exists(partial_path)) else None
 
-    # 尝试下载文件
-    endpoints_to_try = [
-        {
-            "url": f"{get_modelscope_endpoint()}/models/{repo_id}/repo",
-            "params": {"Revision": revision, "FilePath": path}
-        }
-    ]
+    # 3) 如果 partial 已经下到完整大小了 → 跳过下载，直接进入完整性校验
+    if resume_byte_pos is not None and resume_byte_pos >= length:
+        resume_byte_pos = length  # 标记为已下载完，不会进入下载分支
 
-    download_successful = False
-    for endpoint_config in endpoints_to_try:
-        url = endpoint_config["url"]
-        params = endpoint_config["params"]
+    need_download = resume_byte_pos is None or resume_byte_pos < length
 
+    # 4) 断点续传下载（与 HF 版完全一致的完整性保障：加 hash 校验 + size 校验
+    if need_download:
+        endpoints_to_try = [
+            {
+                "url": f"{get_modelscope_endpoint()}/models/{repo_id}/repo",
+                "params": {"Revision": revision, "FilePath": path}
+            }
+        ]
+
+        download_successful = False
+        last_err = None
+        for endpoint_config in endpoints_to_try:
+            url = endpoint_config["url"]
+            params = endpoint_config["params"]
+            try:
+                headers = await get_modelscope_auth_headers()
+                if resume_byte_pos and resume_byte_pos < length:
+                    headers['Range'] = f'bytes={resume_byte_pos}-'
+                n_read = resume_byte_pos or 0
+
+                async with aiohttp.ClientSession(
+                        timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800, sock_connect=60)) as session:
+                    async with session.get(url, headers=headers, params=params,
+                                           timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800,
+                                                                       sock_connect=60)) as r:
+                        if r.status == 404:
+                            continue
+                        elif r.status not in [200, 206]:
+                            last_err = f"HTTP {r.status}"
+                            continue
+
+                        mode = 'ab' if (resume_byte_pos and resume_byte_pos < length) else 'wb'
+                        async with aiofiles.open(partial_path, mode) as f:
+                            while True:
+                                chunk = await r.content.read(8 * 1024 * 1024)
+                                if not chunk:
+                                    break
+                                n_read += await f.write(chunk)
+                                # ⚠️ 进度上报最小 0，最大 length（防止 n_read 超过 length 显示 >100%）
+                                on_progress(min(n_read, length), length)
+
+                # 5) 下载完先做 size 快速校验（防止 chunked 编码截断导致不完整却被当成成功）
+                if await aios.path.exists(partial_path):
+                    actual_size = (await aios.stat(partial_path)).st_size
+                    if actual_size < length:
+                        # 不完整：删掉 partial 让下次重试从 0 开始（或者保留 partial 走 Range 续传）
+                        # 这里保留 partial 走续传，避免不必要的 0% 重下
+                        raise Exception(f"Partial file size {actual_size} < expected {length}, incomplete download (truncated response, keeping .partial for resume)")
+                    if actual_size > length:
+                        # 比预期还大：说明续传追加错了或文件被写坏 → 删 partial，下次从头来
+                        try:
+                            await aios.remove(partial_path)
+                        except Exception as e:
+                            print(f"[WARN] Error removing oversized partial {partial_path}: {e}")
+                        raise Exception(f"Partial file size {actual_size} > expected {length}, partial removed, will retry from 0%")
+                else:
+                    raise Exception(f"Partial file missing after download: {partial_path}")
+
+                download_successful = True
+                break
+            except Exception as e:
+                last_err = str(e)
+                if DEBUG >= 2:
+                    print(f"从 {url} 下载失败: {e}")
+                continue
+
+        if not download_successful:
+            raise FileNotFoundError(
+                f"File not found or cannot be downloaded: {repo_id}/{path}. Last error: {last_err}"
+            )
+
+    # 6) 完整性校验（与 HF 版一致：sha1/sha256 hash 比对 remote_hash）
+    #    防止 100% 显示完成但文件实际损坏 → 立即校验失败抛异常删除 partial → 让外层重试
+    if not (await aios.path.exists(partial_path)):
+        raise Exception(f"Partial file gone before integrity check: {partial_path}")
+
+    hash_type = "sha256" if len(remote_hash) == 64 else "sha1"
+    final_hash = await calc_hash(partial_path, type=hash_type)
+    integrity = final_hash == remote_hash
+    if not integrity:
         try:
-            headers = await get_modelscope_auth_headers()
-            if resume_byte_pos:
-                headers['Range'] = f'bytes={resume_byte_pos}-'
-            n_read = resume_byte_pos or 0
-
-            async with aiohttp.ClientSession(
-                    timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800, sock_connect=60)) as session:
-                async with session.get(url, headers=headers, params=params,
-                                       timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800,
-                                                                     sock_connect=60)) as r:
-                    if r.status == 404:
-                        continue
-                    elif r.status not in [200, 206]:
-                        continue
-
-                    async with aiofiles.open(partial_path, 'ab' if resume_byte_pos else 'wb') as f:
-                        while True:
-                            chunk = await r.content.read(8 * 1024 * 1024)
-                            if not chunk:
-                                break
-                            n_read += await f.write(chunk)
-                            on_progress(n_read, length)
-
-                    download_successful = True
-                    break
+            await aios.remove(partial_path)
         except Exception as e:
-            if DEBUG >= 2:
-                print(f"从 {url} 下载失败: {e}")
-            continue
+            print(f"Error removing corrupted partial file {partial_path}: {e}")
+        raise Exception(
+            f"Integrity check FAILED for {target_dir / path}: "
+            f"actual {hash_type}={final_hash} != remote={remote_hash} (size={length}). "
+            f"Partial removed, next retry will download from 0% (file corrupted)."
+        )
 
-    if not download_successful:
-        raise FileNotFoundError(f"File not found or cannot be downloaded: {repo_id}/{path}")
-
+    # 7) 校验通过才原子 rename → final（这一步之前任何失败都不会污染 final，下次不会误判「已存在」
     await aios.rename(partial_path, target_dir / path)
     return target_dir / path
 
@@ -724,17 +774,43 @@ async def _download_file(repo_id: str, revision: str, path: str, target_dir: Pat
     remote_hash = etag[:-5] if etag.endswith("-gzip") else etag
     partial_path = target_dir/f"{path}.partial"
     resume_byte_pos = (await aios.stat(partial_path)).st_size if (await aios.path.exists(partial_path)) else None
-    if resume_byte_pos != length:
+
+    need_download = resume_byte_pos is None or resume_byte_pos < length
+    if need_download:
         url = urljoin(f"{get_hf_endpoint()}/{repo_id}/resolve/{revision}/", path)
         headers = await get_auth_headers()
-        if resume_byte_pos: headers['Range'] = f'bytes={resume_byte_pos}-'
+        if resume_byte_pos and resume_byte_pos < length:
+            headers['Range'] = f'bytes={resume_byte_pos}-'
         n_read = resume_byte_pos or 0
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800, sock_connect=60)) as session:
             async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=1800, connect=60, sock_read=1800, sock_connect=60)) as r:
                 if r.status == 404: raise FileNotFoundError(f"File not found: {url}")
                 assert r.status in [200, 206], f"Failed to download {path} from {url}: {r.status}"
-                async with aiofiles.open(partial_path, 'ab' if resume_byte_pos else 'wb') as f:
-                    while chunk := await r.content.read(8 * 1024 * 1024): on_progress(n_read := n_read + await f.write(chunk), length)
+                mode = 'ab' if (resume_byte_pos and resume_byte_pos < length) else 'wb'
+                async with aiofiles.open(partial_path, mode) as f:
+                    while chunk := await r.content.read(8 * 1024 * 1024):
+                        n_read += await f.write(chunk)
+                        on_progress(min(n_read, length), length)
+
+        # 下载完做 size 快速校验：size < length 保留 partial 走续传（避免 0% 重下）；size > length 删除重来
+        if await aios.path.exists(partial_path):
+            actual_size = (await aios.stat(partial_path)).st_size
+            if actual_size < length:
+                raise Exception(
+                    f"Partial size {actual_size} < expected {length} for {path} (truncated response); "
+                    f"keeping .partial for next resume (will request Range={actual_size}-)"
+                )
+            if actual_size > length:
+                try:
+                    await aios.remove(partial_path)
+                except Exception as e:
+                    print(f"[WARN] Error removing oversized partial {partial_path}: {e}")
+                raise Exception(
+                    f"Partial size {actual_size} > expected {length} for {path} (corrupted append); "
+                    f"partial removed, next retry will start from 0%"
+                )
+        else:
+            raise Exception(f"Partial file missing after download: {partial_path}")
 
     final_hash = await calc_hash(partial_path, type="sha256" if len(remote_hash) == 64 else "sha1")
     integrity = final_hash == remote_hash

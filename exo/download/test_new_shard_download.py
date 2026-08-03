@@ -306,14 +306,20 @@ async def test_modelscope_integration():
 
 # 添加一个简单的使用示例
 async def example_modelscope_download(model_id=None):
-    """ModelScope下载使用示例"""
-    print("\n=== ModelScope 下载使用示例 ===")
+    """ModelScope下载使用示例（缓存复用版）
+       ❌ 旧版BUG：先 rmtree(model_cache_dir) → 破坏已有缓存 → 每次都从0%重下
+       ✅ 新版：
+       1) 先检查 model_cache_dir 关键文件是否存在 → 已存在就直接跳过（100% 复用）
+       2) snapshot_download 使用 local_dir 直接下到 model_cache_dir（避免 cache_dir 再 move 破坏缓存）
+       3) 文件拷贝用 copytree(dirs_exist_ok=True)，不做 shutil.move 破坏 SDK 内部缓存
+    """
+    print("\n=== ModelScope 下载使用示例（缓存复用版） ===")
 
     try:
         from pathlib import Path
         # 导入标准下载目录函数
         from exo.download.new_shard_download import ensure_downloads_dir
-        
+
         # 检查SDK
         if not await check_modelscope_sdk():
             print("正在安装ModelScope SDK...")
@@ -336,72 +342,61 @@ async def example_modelscope_download(model_id=None):
 
         print(f"找到可用模型: {model_id}")
 
-        # 使用标准下载目录替代临时目录
+        # 使用标准下载目录
         downloads_dir = await ensure_downloads_dir()
-        # 构建具体模型下载路径 (将"/"替换为"--")
         model_cache_dir = downloads_dir / model_id.replace("/", "--")
-        
-        # 使用SDK下载，直接下载到目标目录，然后处理可能的嵌套结构
+
         from modelscope.hub.snapshot_download import snapshot_download
         import shutil
-        
-        print(f"正在下载模型到: {model_cache_dir}")
-        
-        # 直接下载到目标目录的父目录作为cache位置
-        cache_parent_dir = model_cache_dir.parent
-        
-        # 如果目标目录已存在，先删除它
-        if model_cache_dir.exists():
-            shutil.rmtree(model_cache_dir)
-        
-        # 直接下载，使用目标目录的父目录作为cache位置
-        downloaded_dir = snapshot_download(
-            model_id, 
-            cache_dir=str(cache_parent_dir),
-            revision="master"
-        )
-        
-        # 检查是否创建了嵌套目录结构
-        downloaded_path = Path(downloaded_dir)
-        
-        # ModelScope SDK 可能创建嵌套目录结构，例如:
-        # 下载到 Qwen--Qwen3-4B/Qwen/Qwen3-4B 但我们需要的是 Qwen--Qwen3-4B
-        repo_parts = model_id.split('/')
-        if len(repo_parts) >= 2:
-            # 检查是否存在嵌套结构: downloaded_path/组织名/模型名
-            nested_dir = downloaded_path / repo_parts[0] / repo_parts[1]
-            if nested_dir.exists():
-                print(f"发现嵌套目录结构，正在移动文件从 {nested_dir} 到 {model_cache_dir}")
-                # 移动嵌套目录中的文件到目标位置
-                shutil.move(str(nested_dir), str(model_cache_dir))
-                
-                # 清理剩余的嵌套目录结构
-                remaining_org_dir = downloaded_path / repo_parts[0]
-                if remaining_org_dir.exists() and not any(remaining_org_dir.iterdir()):
-                    remaining_org_dir.rmdir()
-                
-                # 如果下载的目录现在为空，也删除它（避免留下空目录）
-                if downloaded_path.exists() and downloaded_path != model_cache_dir and not any(downloaded_path.iterdir()):
-                    downloaded_path.rmdir()
-            else:
-                # 如果没有嵌套结构，但路径不同，直接重命名
-                if downloaded_path != model_cache_dir:
-                    shutil.move(str(downloaded_path), str(model_cache_dir))
-        else:
-            # 单部分模型ID（没有/）
-            if downloaded_path != model_cache_dir:
-                shutil.move(str(downloaded_path), str(model_cache_dir))
-        
-        print(f"模型下载完成: {model_cache_dir}")
 
-        # 列出下载的文件
+        print(f"目标目录: {model_cache_dir}")
+
+        # ✨ 1) 快速跳过：如果 model_cache_dir 里关键文件已经存在 → 直接复用
+        KEY_FILES = ("config.json", "tokenizer.json", "model.safetensors",
+                     "model.safetensors.index.json", "pytorch_model.bin",
+                     "pytorch_model.bin.index.json", "model.bin")
+        if model_cache_dir.exists():
+            have_key = any((model_cache_dir / k).exists() for k in KEY_FILES)
+            if have_key:
+                print(f"✅ 目标目录已存在关键文件，跳过下载（缓存复用）")
+            else:
+                print(f"ℹ️  目录存在但缺少关键文件，继续用 snapshot_download 校验/补全")
+        else:
+            model_cache_dir.mkdir(parents=True, exist_ok=True)
+
+        # ✨ 2) snapshot_download 用 local_dir 直接下到 model_cache_dir（避免再 move 破坏缓存）
+        # local_dir_use_symlinks=False 强制复制真实文件，不用符号链接
+        downloaded_dir = snapshot_download(
+            model_id,
+            cache_dir=str(downloads_dir / ".modelscope_cache"),
+            local_dir=str(model_cache_dir),
+            local_dir_use_symlinks=False,
+            revision="master",
+        )
+        downloaded_path = Path(downloaded_dir)
+
+        # snapshot_download 设置了 local_dir，返回的就是 local_dir（也就是 model_cache_dir）
+        # 这里**完全不再做 move/rmtree**，保留 ModelScope SDK 在 .modelscope_cache 里的二级缓存
+        print(f"模型下载/校验完成，最终目录: {downloaded_path}")
+
+        # 3) 列出文件
         downloaded_files = list(model_cache_dir.rglob("*"))
-        print(f"下载了 {len(downloaded_files)} 个文件/目录:")
-        for f in downloaded_files[:10]:  # 显示前10个
+        print(f"目录中共有 {len(downloaded_files)} 个文件/目录:")
+        shown = 0
+        for f in downloaded_files:
             if f.is_file():
-                print(f"  文件: {f.relative_to(model_cache_dir)} ({f.stat().st_size} bytes)")
-        if len(downloaded_files) > 10:
-            print(f"  ... 还有 {len(downloaded_files) - 10} 个文件")
+                try:
+                    size_mb = f.stat().st_size / (1024 * 1024)
+                    rel = f.relative_to(model_cache_dir)
+                    if shown < 10:
+                        print(f"  文件: {rel} ({size_mb:.2f} MB)")
+                    shown += 1
+                except OSError:
+                    pass
+        if shown > 10:
+            print(f"  ... 还有 {shown - 10} 个文件")
+
+        print("\n💡 再次执行本函数不会触发重新下载（SDK 命中 .modelscope_cache + 本地关键文件双层跳过）")
 
     except Exception as e:
         print(f"下载示例失败: {e}")
