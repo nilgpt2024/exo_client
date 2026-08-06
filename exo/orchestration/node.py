@@ -2176,20 +2176,45 @@ class Node:
       else:
         base_model_id = model_id
         instance_id = "default"
-      
+
+      # [FIX] 如果 model_path 是简写（不含 '/'），从 model_cards 解析真实 repo/path
+      repo_id = ""
+      if not model_path or "/" not in model_path:
+        from exo.models import model_cards
+        if base_model_id in model_cards:
+          config = model_cards[base_model_id]
+          repo_info = config.get("repo", {})
+          target_repo = None
+          if isinstance(repo_info, dict):
+            engine_name = self.inference_engine.__class__.__name__
+            if engine_name in repo_info:
+              target_repo = repo_info[engine_name]
+            else:
+              for eng_name, repo in repo_info.items():
+                if 'PyTorch' in eng_name or 'Dummy' in eng_name:
+                  target_repo = repo
+                  break
+          elif isinstance(repo_info, str):
+            target_repo = repo_info
+          if target_repo:
+            repo_id = target_repo
+            model_path = target_repo
+            print(f"[Node] [Manager] 解析 model_path: {base_model_id} -> {model_path}")
+
       # 创建 Shard 时使用 base_model_id（用于文件系统操作）
       shard = Shard(
         model_id=base_model_id,
         start_layer=start_layer,
         end_layer=end_layer,
         n_layers=n_layers,
+        repo_id=repo_id,
         instance_id=instance_id
       )
-      
+
       print(f"[Node] [Manager] 配置分片: {shard} (完整ID: {model_id})")
-      
+
       self.node_shards[self.id] = shard
-      
+
       if not model_path:
         model_path = self._resolve_model_path(base_model_id)  # 使用 base_model_id 解析路径
         if model_path:
