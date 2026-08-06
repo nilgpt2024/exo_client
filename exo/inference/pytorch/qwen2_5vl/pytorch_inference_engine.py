@@ -430,6 +430,10 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
 
     def _ensure_processor_chat_template(self):
         """确保 processor 有 chat_template，优先从 tokenizer 同步，否则从 chat_template.jinja 加载"""
+        print(f"[qwen2.5] [diag] _ensure_processor_chat_template: processor={type(self.processor).__name__}, "
+              f"has_template={bool(getattr(self.processor, 'chat_template', None))}, "
+              f"tokenizer_has_template={bool(getattr(self.tokenizer, 'chat_template', None))}, "
+              f"model_path={getattr(self, 'model_path', None)}")
         if self.processor is None:
             return
         if getattr(self.processor, 'chat_template', None):
@@ -437,19 +441,21 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
         tokenizer_chat_template = getattr(self.tokenizer, 'chat_template', None)
         if tokenizer_chat_template:
             self.processor.chat_template = tokenizer_chat_template
+            print(f"[qwen2.5] [ok] 从 tokenizer 同步 chat_template 到 processor")
             return
         # 从本地模型目录的 chat_template.jinja 加载
         model_path = getattr(self, 'model_path', None)
         if model_path:
             import os
             jinja_path = os.path.join(model_path, "chat_template.jinja")
+            print(f"[qwen2.5] [diag] 尝试从 {jinja_path} 加载 chat_template.jinja, exists={os.path.isfile(jinja_path)}")
             if os.path.isfile(jinja_path):
                 try:
                     with open(jinja_path, "r", encoding="utf-8") as f:
                         self.processor.chat_template = f.read()
-                    print(f"[qwen2.5] [ok] 动态从 {jinja_path} 加载 chat_template 到 processor")
+                    print(f"[qwen2.5] [ok] 从 {jinja_path} 加载 chat_template 到 processor")
                 except Exception as ct_err:
-                    print(f"[qwen2.5] [warn] 动态加载 chat_template.jinja 失败: {ct_err}")
+                    print(f"[qwen2.5] [warn] 加载 chat_template.jinja 失败: {ct_err}")
 
     async def encode(self, shard: Shard, prompt: str, enable_thinking: bool = False) -> np.ndarray:
         """编码提示文本"""
