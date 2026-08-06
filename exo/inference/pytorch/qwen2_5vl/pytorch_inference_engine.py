@@ -87,6 +87,10 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
                 print(f"[qwen2.5] [warn] Tokenizer 加载失败: {tok_err}，继续使用 processor 作为 tokenizer")
                 self.tokenizer = self.processor  # 最后回退
 
+        # [FIX] 多模态 Processor 不继承 tokenizer 的 chat_template，手动同步
+        # 某些模型把 chat_template 放在单独的 chat_template.jinja 文件里，tokenizer_config.json 没引用，需要手动加载
+        self._ensure_processor_chat_template()
+
         # 步骤1: 使用 meta device 创建模型（不分配内存，不初始化参数）
         # 这比标准初始化快数百倍（0.几秒 vs 数分钟）
         original_dtype = torch.get_default_dtype()
@@ -424,8 +428,34 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
 
         return outputs
 
+    def _ensure_processor_chat_template(self):
+        """确保 processor 有 chat_template，优先从 tokenizer 同步，否则从 chat_template.jinja 加载"""
+        if self.processor is None:
+            return
+        if getattr(self.processor, 'chat_template', None):
+            return
+        tokenizer_chat_template = getattr(self.tokenizer, 'chat_template', None)
+        if tokenizer_chat_template:
+            self.processor.chat_template = tokenizer_chat_template
+            return
+        # 从本地模型目录的 chat_template.jinja 加载
+        model_path = getattr(self, 'model_path', None)
+        if model_path:
+            import os
+            jinja_path = os.path.join(model_path, "chat_template.jinja")
+            if os.path.isfile(jinja_path):
+                try:
+                    with open(jinja_path, "r", encoding="utf-8") as f:
+                        self.processor.chat_template = f.read()
+                    print(f"[qwen2.5] [ok] 动态从 {jinja_path} 加载 chat_template 到 processor")
+                except Exception as ct_err:
+                    print(f"[qwen2.5] [warn] 动态加载 chat_template.jinja 失败: {ct_err}")
+
     async def encode(self, shard: Shard, prompt: str, enable_thinking: bool = False) -> np.ndarray:
         """编码提示文本"""
+        # [FIX] 动态确保 processor 有 chat_template
+        self._ensure_processor_chat_template()
+
         if self.model is None or self.shard != shard:
             if self.shard_downloader is not None:
                 model_path = await self.shard_downloader.ensure_shard(shard, self.__class__.__name__)
@@ -489,6 +519,9 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
                            inference_state: Optional[dict] = None) -> tuple[np.ndarray, Optional[dict]]:
         if inference_state is None:
             inference_state = {}
+
+        # [FIX] 动态确保 processor 有 chat_template（兼容已加载的旧实例）
+        self._ensure_processor_chat_template()
 
         enable_thinking = inference_state.get("enable_thinking", False)
         image = inference_state.get("image", None)
