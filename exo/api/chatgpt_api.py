@@ -618,6 +618,21 @@ class ChatGPTAPI:
         # 立即开始从 token_queues 读取 token 并流式返回
         print(f"[ChatGPTAPI] Starting process_prompt as background task for streaming")
         process_task = asyncio.create_task(self.node.process_prompt(shard, prompt, request_id=request_id, inference_state=inference_state))
+
+        def _on_process_done(t):
+          try:
+            t.result()
+          except Exception as e:
+            print(f"[ChatGPTAPI] process_prompt background task failed: {e}")
+            import traceback
+            traceback.print_exc()
+            # 通知流式读取队列结束，避免客户端一直挂起
+            if request_id in self.token_queues:
+              try:
+                self.token_queues[request_id].put_nowait(([], True))
+              except Exception:
+                pass
+        process_task.add_done_callback(_on_process_done)
       else:
         # 非流式模式：等待 process_prompt 完成
         try:
