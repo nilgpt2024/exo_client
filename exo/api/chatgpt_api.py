@@ -196,10 +196,26 @@ def build_prompt(tokenizer, _messages: List[Message], tools: Optional[List[Dict]
     prompt = tokenizer.apply_chat_template(**chat_template_args)
     if DEBUG >= 3: print(f"!!! Prompt: {prompt}")
     return prompt
-  except UnicodeEncodeError:
+  except (UnicodeEncodeError, ValueError) as e:
+    if "chat template" in str(e).lower():
+      # 模型没有 chat template（多为 base 模型），使用简单 fallback 格式
+      parts = []
+      for m in messages:
+        content = m.content
+        if isinstance(content, list):
+          content = " ".join(
+            c.get("text", "") if isinstance(c, dict) else str(c)
+            for c in content
+          )
+        parts.append(f"{m.role}: {content}")
+      parts.append("assistant: ")
+      prompt = "\n".join(parts)
+      if DEBUG >= 3: print(f"!!! Prompt (no chat template fallback): {prompt}")
+      return prompt
+
     # Handle Unicode encoding by ensuring everything is UTF-8
     chat_template_args["conversation"] = [
-      {k: v.encode('utf-8').decode('utf-8') if isinstance(v, str) else v 
+      {k: v.encode('utf-8').decode('utf-8') if isinstance(v, str) else v
        for k, v in m.to_dict().items()}
       for m in messages
     ]

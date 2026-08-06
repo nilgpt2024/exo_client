@@ -1417,12 +1417,18 @@ class Node:
     # [STAR] 如果 model_path 为空，Node 自己根据 model_id 查找路径
     if not model_path and model_id:
       print(f"[NodeWS] [ROUTE-CHECK] model_path 为空，尝试从本地配置解析...")
-      
-      # 从 DEFAULT_MODEL_CARDS 中查找
-      if model_id in DEFAULT_MODEL_CARDS:
-        config = DEFAULT_MODEL_CARDS[model_id]
+
+      # 先刷新模型配置：Manager 可能在节点启动后新增/修改了自定义模型
+      if self.manager_url:
+        from exo.models import init_models
+        init_models(self.manager_url)
+      from exo.models import model_cards
+
+      # 从 model_cards 中查找（包含 Manager 下发的自定义模型）
+      if model_id in model_cards:
+        config = model_cards[model_id]
         repo_info = config.get("repo", {})
-        
+
         if isinstance(repo_info, dict):
           engine_name = self.inference_engine.__class__.__name__
           if engine_name in repo_info:
@@ -1434,11 +1440,11 @@ class Node:
                 model_path = repo
                 print(f"[NodeWS] [OK] 回退到引擎 {eng_name}: {model_path}")
                 break
-        
+
         if not model_path:
           print(f"[NodeWS] [WARN] 配置中未找到 {model_id} 的路径")
       else:
-        print(f"[NodeWS] [WARN] {model_id} 不在 DEFAULT_MODEL_CARDS 中")
+        print(f"[NodeWS] [WARN] {model_id} 不在 model_cards 中")
     
     # [STAR] Start heartbeat task (prevent WS disconnection during long model loading)
     heartbeat_task = None
@@ -2116,6 +2122,11 @@ class Node:
     """处理 Manager 发来的分片加载命令"""
     try:
       from exo.inference.shard import Shard
+
+      # 先刷新模型配置：Manager 可能在节点启动后新增/修改了自定义模型
+      if self.manager_url:
+        from exo.models import init_models
+        init_models(self.manager_url)
       
       # 提取 base_model_id 和 instance_id（避免文件系统路径污染）
       if "::" in model_id:

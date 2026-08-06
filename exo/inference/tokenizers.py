@@ -124,6 +124,9 @@ async def _resolve_tokenizer(repo_id_or_local_path: Union[str, PathLike], engine
       processor.encode = _tok.encode
     if not hasattr(processor, 'decode') and hasattr(_tok, 'decode'):
       processor.decode = _tok.decode
+    # 多模态 Processor 不继承 tokenizer 的 chat_template，手动同步
+    if (not getattr(processor, 'chat_template', None)) and getattr(_tok, 'chat_template', None):
+      processor.chat_template = _tok.chat_template
     return processor
   except Exception as e:
     if DEBUG >= 4: print(f"Failed to load processor for {repo_id_or_local_path}. Error: {e}")
