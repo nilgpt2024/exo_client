@@ -716,7 +716,8 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
             output_data = outputs['logits']
             if isinstance(output_data, torch.Tensor):
                 # 只取最后一个位置的logits用于生成
-                output_data = output_data[:, -1, :].detach().cpu().numpy()
+                # BFloat16 不支持直接转 numpy，先转 float32
+                output_data = output_data[:, -1, :].detach().cpu().to(torch.float32).numpy()
         else:
             # 中间分片：返回 hidden_states 用于传递给下一个分片
             output_data = outputs['hidden_states']
@@ -725,7 +726,8 @@ class PyTorchQwen2_5VlInferenceEngine(InferenceEngine):
                 # 避免隐藏状态在分片间传递时丢失信息。
                 if not torch.isfinite(output_data).all():
                     output_data = torch.nan_to_num(output_data, nan=0.0, posinf=0.0, neginf=0.0)
-                output_data = output_data.detach().cpu().numpy()
+                # BFloat16 不支持直接转 numpy，先转 float32
+                output_data = output_data.detach().cpu().to(torch.float32).numpy()
 
         return output_data, inference_state
 
