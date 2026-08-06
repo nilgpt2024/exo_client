@@ -1078,8 +1078,49 @@ class Node:
     shard = task_data.get("shard", {})            # 获取分片配置
     peer_list = task_data.get("peer_list", [])   # 获取 Peer 列表
     instance_id = task_data.get("instance_id", None)  # [OK] 获取实例ID
-    
-    print(f"[NodeWS-V2] [LOAD-START] 开始模型加载 (V2): {task_id}, model={model_id}, path={model_path}, instance={instance_id}")
+    repo_id = shard.get("repo_id", "") if isinstance(shard, dict) else ""
+
+    base_model_id = model_id.split("::")[0] if "::" in model_id else model_id
+
+    # [FIX] 刷新 model_cards，解析 Manager 自定义模型中的真实 repo/path
+    if self.manager_url:
+      from exo.models import init_models
+      init_models(self.manager_url)
+    from exo.models import model_cards
+
+    resolved_path = model_path
+    resolved_repo_id = repo_id
+    if base_model_id in model_cards:
+      config = model_cards[base_model_id]
+      repo_info = config.get("repo", {})
+      target_repo = None
+      if isinstance(repo_info, dict):
+        engine_name = self.inference_engine.__class__.__name__
+        if engine_name in repo_info:
+          target_repo = repo_info[engine_name]
+        else:
+          for eng_name, repo in repo_info.items():
+            if 'PyTorch' in eng_name or 'Dummy' in eng_name:
+              target_repo = repo
+              break
+      elif isinstance(repo_info, str):
+        target_repo = repo_info
+
+      if target_repo:
+        resolved_repo_id = target_repo
+        # 如果 model_path 是简写/空，或者不含 '/'（不是合法 HF repo ID），使用真实 repo
+        if not resolved_path or "/" not in resolved_path:
+          resolved_path = target_repo
+    elif not resolved_path:
+      resolved_path = base_model_id
+
+    model_path = resolved_path
+    if not repo_id and resolved_repo_id:
+      repo_id = resolved_repo_id
+      if isinstance(shard, dict):
+        shard["repo_id"] = repo_id
+
+    print(f"[NodeWS-V2] [LOAD-START] 开始模型加载 (V2): {task_id}, model={model_id}, path={model_path}, repo_id={repo_id}, instance={instance_id}")
     if instance_id is None:
       print(f"[NodeWS-V2] [ROUTE-CHECK] 收到的完整数据 keys: {list(task_data.keys())}")
     
@@ -1130,7 +1171,7 @@ class Node:
                 start_layer=int(shard["start_layer"]),
                 end_layer=int(shard["end_layer"]),
                 n_layers=int(shard.get("n_layers", 32)),
-                repo_id="",
+                repo_id=repo_id,
                 tie_word_embeddings=True,
                 instance_id=instance_id
               )
