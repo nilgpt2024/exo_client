@@ -331,22 +331,34 @@ class PyTorchQwen3VLInferenceEngine(InferenceEngine):
                 input_ids = self.tokenizer.encode(prompt, return_tensors="pt", add_special_tokens=False)
         elif self.processor is not None:
             # 优先使用 processor（如果可用），因为 processor 包含完整的预处理逻辑
-            messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
-            text = self.processor.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+            try:
+                messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+                text = self.processor.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True
+                )
+            except (ValueError, AttributeError) as e:
+                if "chat template" in str(e).lower():
+                    text = prompt
+                else:
+                    raise
             inputs = self.processor(text=text, return_tensors="pt")
             input_ids = inputs['input_ids']
         elif hasattr(self.tokenizer, 'chat_template') and self.tokenizer.chat_template:
             messages = [{"role": "user", "content": prompt}]
-            text = self.tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True,
-                enable_thinking=enable_thinking
-            )
+            try:
+                text = self.tokenizer.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                    enable_thinking=enable_thinking
+                )
+            except (ValueError, AttributeError) as e:
+                if "chat template" in str(e).lower():
+                    text = prompt
+                else:
+                    raise
             input_ids = self.tokenizer.encode(text, return_tensors="pt", add_special_tokens=True)
         else:
             text = prompt
@@ -412,7 +424,13 @@ class PyTorchQwen3VLInferenceEngine(InferenceEngine):
                         msg_copy["content"] = new_content
                     messages_with_image.append(msg_copy)
 
-                text = self.processor.apply_chat_template(messages_with_image, tokenize=False, add_generation_prompt=True)
+                try:
+                    text = self.processor.apply_chat_template(messages_with_image, tokenize=False, add_generation_prompt=True)
+                except (ValueError, AttributeError) as e:
+                    if "chat template" in str(e).lower():
+                        text = inference_state.get("original_prompt", str(messages_with_image))
+                    else:
+                        raise
                 inputs = self.processor(text=text, images=[image], return_tensors="pt")
             else:
                 # 回退：只使用单轮对话（兼容旧逻辑）
@@ -425,7 +443,13 @@ class PyTorchQwen3VLInferenceEngine(InferenceEngine):
                         ],
                     }
                 ]
-                text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                try:
+                    text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                except (ValueError, AttributeError) as e:
+                    if "chat template" in str(e).lower():
+                        text = inference_state.get("original_prompt", "描述图片")
+                    else:
+                        raise
                 inputs = self.processor(text=text, images=[image], return_tensors="pt")
             # 保持2D形状 (1, seq_len) 与 test_qwen3vl_sharded_inference.py 一致
             input_ids = inputs['input_ids']

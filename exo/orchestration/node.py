@@ -1606,14 +1606,21 @@ class Node:
     现在支持：
     - 优先走 GPU Pool（原生支持多实例 / unload_all_instances）
     - GPU Pool 未命中时回退到 inference_engine.unload_model
-    - websocket 为 None 时跳过回送消息（兼容 V2 调用方）
+    - 支持 v1 (websocket) 和 v2 (ws_manager_v2) 两种回送方式
     """
     print(f"[NodeWS] [DELETE] 开始卸载模型: {model_id} (all={unload_all_instances})")
 
     async def _send_ws(msg: dict):
+      # v1: 直接使用 websocket 对象
       if websocket is not None:
         try:
           await websocket.send(json.dumps(msg))
+        except Exception:
+          pass
+      # v2: 使用 ws_manager_v2 发送
+      elif hasattr(self, 'ws_manager_v2') and self.ws_manager_v2:
+        try:
+          await self.ws_manager_v2.send(msg)
         except Exception:
           pass
 
@@ -1631,6 +1638,20 @@ class Node:
           targets_to_unload = [base_id]
         else:
           targets_to_unload = [model_id]
+
+      # 模型不存在时直接报告失败
+      if not targets_to_unload:
+        print(f"[NodeWS] [WARN] 模型 {model_id} 不在已加载列表中，跳过卸载")
+        complete_msg = {
+          "type": "model_unload_complete",
+          "node_id": self.id,
+          "model_id": model_id,
+          "success": True,
+          "unloaded_model_ids": [],
+          "message": f"Model {model_id} not loaded, nothing to unload"
+        }
+        await _send_ws(complete_msg)
+        return
 
       success = False
 
