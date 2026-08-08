@@ -1,0 +1,6 @@
+2026-08-06 18:21:06,667 - root - INFO - 📂 [PeerCache] 从本地缓存恢复了 2 个 P2P 对端 (缓存年龄: 0.2 小时)
+2026-08-06 18:21:06,668 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:586>>
+2026-08-06 18:21:06,668 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-06 18:21:06,669 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-08-06 18:21:06,669 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 2 nodes, waiting for health check...
+2026-08-06 18:21:06,690 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...

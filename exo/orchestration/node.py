@@ -618,7 +618,8 @@ class Node:
           register_msg = {
             "type": "register",
             "node_id": self.id,
-            "chatgpt_api_port": self.chatgpt_api_public_port
+            "chatgpt_api_port": self.chatgpt_api_public_port,
+            "device_info": self.device_capabilities.to_dict() if hasattr(self.device_capabilities, 'to_dict') else {}
           }
           await websocket.send(json.dumps(register_msg))
           print(f"[NodeWS] [SEND] 已发送注册消息")
@@ -735,6 +736,7 @@ class Node:
       self.ws_manager_v2: EnhancedWebSocketManager = await create_ws_manager(
         node_id=self.id,
         manager_url=self.manager_url,
+        device_info=self.device_capabilities.to_dict() if hasattr(self.device_capabilities, 'to_dict') else {},
         max_queue_size=2000,           # 队列容量
         ping_interval=60.0,            # 心跳间隔（从20s增加到60s，减少频率）
         ping_timeout=120.0,            # 心跳超时（从40s增加到120s，容忍GPU计算延迟）

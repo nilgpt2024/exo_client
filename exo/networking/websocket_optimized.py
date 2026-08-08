@@ -293,7 +293,8 @@ class EnhancedWebSocketManager:
         reconnect_max_delay: float = 60.0,
         max_retries: int = 3,
         enable_compression: bool = True,
-        stats_callback: Optional[Callable[[ConnectionStats], None]] = None
+        stats_callback: Optional[Callable[[ConnectionStats], None]] = None,
+        device_info: Optional[Dict] = None
     ):
         """
         初始化 WebSocket 管理器
@@ -309,6 +310,7 @@ class EnhancedWebSocketManager:
             max_retries: 最大重试次数
             enable_compression: 是否启用压缩
             stats_callback: 统计信息回调
+            device_info: 节点设备信息（用于注册时上报）
         """
         self.node_id = node_id
         self.ws_url = ws_url
@@ -349,6 +351,9 @@ class EnhancedWebSocketManager:
         self.on_disconnect: Optional[Callable] = None
         self.on_message: Optional[Callable[[WSMessage], None]] = None
         self.on_error: Optional[Callable[[Exception], None]] = None
+        
+        # 设备信息（注册时上报给 Manager）
+        self.device_info = device_info or {}
         
         logger.info(f"✅ [WSManager] 初始化完成: {node_id} -> {ws_url}")
     
@@ -471,6 +476,8 @@ class EnhancedWebSocketManager:
             msg_type="register",
             payload={
                 "node_id": self.node_id,
+                "chatgpt_api_port": getattr(self, 'chatgpt_api_port', 52415),
+                "device_info": self.device_info,
                 "capabilities": {
                     "version": "2.0",
                     "features": [
@@ -825,6 +832,8 @@ class EnhancedWebSocketManager:
 async def create_ws_manager(
     node_id: str,
     manager_url: str,
+    *,
+    device_info: Optional[Dict] = None,
     **kwargs
 ) -> EnhancedWebSocketManager:
     """
@@ -833,6 +842,7 @@ async def create_ws_manager(
     Args:
         node_id: 节点ID
         manager_url: Manager URL (http://host:port)
+        device_info: 节点设备信息（注册时上报）
         **kwargs: 其他配置参数
         
     Returns:
@@ -851,6 +861,7 @@ async def create_ws_manager(
     manager = EnhancedWebSocketManager(
         node_id=node_id,
         ws_url=ws_endpoint,
+        device_info=device_info,
         **kwargs
     )
     

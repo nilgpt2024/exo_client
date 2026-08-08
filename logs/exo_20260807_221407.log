@@ -1,0 +1,242 @@
+2026-08-07 22:14:29,289 - root - INFO - 📂 [PeerCache] 从本地缓存恢复了 1 个 P2P 对端 (缓存年龄: 0.1 小时)
+2026-08-07 22:14:29,289 - root - INFO - [FRP start] Discovery loop task created: <Task pending name='Task-3' coro=<FRPDiscovery._discovery_loop() running at F:\exoProject\exo_client\exo\networking\frp\frp_discovery.py:586>>
+2026-08-07 22:14:29,292 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-07 22:14:29,292 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-08-07 22:14:29,292 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-08-07 22:14:29,309 - root - INFO - [FRP _discovery_loop] Starting automatic node discovery...
+2026-08-07 22:14:31,558 - root - INFO - [FRP add_known_node] Called with node_id=node_9bd5774e, address=ai.suipce.com:40300, self.node_id=node_9bd5774e_dl84r
+2026-08-07 22:14:31,559 - root - INFO - [FRP add_known_node] Node already known: node_9bd5774e
+2026-08-07 22:14:32,144 - root - INFO - [FRP add_known_node] Called with node_id=node_9bd5774e, address=ai.suipce.com:40300, self.node_id=node_9bd5774e_dl84r
+2026-08-07 22:14:32,144 - root - INFO - [FRP add_known_node] Node already known: node_9bd5774e
+2026-08-07 22:14:32,145 - root - INFO - [update_peers] Starting update_peers, current peers: []
+2026-08-07 22:14:32,145 - root - INFO - [FRP discover_peers] Called, known_peers=[]
+2026-08-07 22:14:32,146 - root - INFO - [FRP discover_peers] known_peers is empty but known_node_infos has 1 nodes, waiting for health check...
+2026-08-07 22:14:32,296 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:14:32,297 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:14:34,274 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:14:34,687 - root - INFO - [FRP discover_peers] Still waiting for health check... (5.1s)
+2026-08-07 22:14:34,688 - root - WARNING - [FRP discover_peers] Health check timeout after 5.0s, no peers found
+2026-08-07 22:14:34,689 - root - INFO - [FRP discover_peers] Returning 0 peers: []
+2026-08-07 22:14:34,690 - root - INFO - [update_peers] discover_peers returned: []
+2026-08-07 22:14:34,750 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:14:34,795 - root - INFO - [FRP discover_peers] Health check completed, found 1 peers
+2026-08-07 22:14:34,795 - root - INFO - [FRP discover_peers] Returning 1 peers: ['node_9bd5774e']
+2026-08-07 22:14:34,796 - root - INFO - [update_peers] discover_peers returned: ['node_9bd5774e']
+2026-08-07 22:14:35,229 - root - INFO - [update_peers] Final peers (UDP+Manager): []
+2026-08-07 22:14:35,231 - root - INFO - [update_peers] Updated peers list: []
+2026-08-07 22:14:35,232 - root - INFO - [collect_topology] Starting collection, self.peers=[], max_depth=4
+2026-08-07 22:14:35,232 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e_dl84r'], current_topology.nodes=[]
+2026-08-07 22:14:35,233 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e_dl84r']
+2026-08-07 22:14:35,235 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成（支持多实例模式）
+2026-08-07 22:14:35,237 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 正在初始化资源视图...
+2026-08-07 22:14:35,238 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 初始化完成: 1 个节点, 0 个模型
+2026-08-07 22:14:35,239 - exo.topology.gpu_pool_api - INFO - [GPUPoolAPI] 初始化完成
+2026-08-07 22:14:35,344 - root - INFO - [update_peers] Final peers (UDP+Manager): ['node_9bd5774e']
+2026-08-07 22:14:35,345 - root - INFO - [update_peers] Updated peers list: ['node_9bd5774e']
+2026-08-07 22:14:37,245 - root - INFO - [Node] [Manager] Address override for FRP P2P:
+   Original: 0.0.0.0:50051
+   FRP P2P:  ai.suipce.com:34316
+2026-08-07 22:14:37,246 - root - INFO - [Node] [Manager] ChatGPT API port override for FRP:
+   Original: 52415
+   FRP:      32636
+2026-08-07 22:14:38,218 - exo.networking.websocket_optimized - INFO - ✅ [WSManager] 初始化完成: node_9bd5774e_dl84r -> ws://ai.suipce.com/ws/node/node_9bd5774e_dl84r
+2026-08-07 22:14:38,541 - exo.networking.websocket_optimized - INFO - [ROCKET] [WSManager] Starting connection manager...
+2026-08-07 22:14:38,542 - exo.networking.websocket_optimized - INFO - [RETRY] [WSManager] 正在连接到 ws://ai.suipce.com/ws/node/node_9bd5774e_dl84r ...
+2026-08-07 22:14:39,052 - exo.networking.websocket_optimized - INFO - [OK] [WSManager] 已连接! (第1次)
+2026-08-07 22:14:39,376 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (108字节): {"type": "register_ack", "status": "success", "message": "Node node_9bd5774e_dl84r registered successfully"}
+2026-08-07 22:14:39,376 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=register_ack, payload_keys=['type', 'status', 'message']
+2026-08-07 22:14:39,753 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:14:39,754 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:14:40,205 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:14:41,105 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:14:46,104 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:14:46,104 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:14:46,459 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:14:47,331 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:14:52,316 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:14:52,317 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:14:52,682 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:14:53,713 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:14:58,695 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:14:58,695 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:14:59,872 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:00,359 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:03,705 - root - INFO - [FRP add_known_node] Called with node_id=node_9bd5774e, address=ai.suipce.com:40300, self.node_id=node_9bd5774e_dl84r
+2026-08-07 22:15:03,705 - root - INFO - [FRP add_known_node] Node already known: node_9bd5774e
+2026-08-07 22:15:03,705 - root - INFO - [update_peers] Starting update_peers, current peers: ['node_9bd5774e']
+2026-08-07 22:15:03,705 - root - INFO - [FRP discover_peers] Called, known_peers=['node_9bd5774e']
+2026-08-07 22:15:03,705 - root - INFO - [FRP discover_peers] Returning 1 peers: ['node_9bd5774e']
+2026-08-07 22:15:03,707 - root - INFO - [update_peers] discover_peers returned: ['node_9bd5774e']
+2026-08-07 22:15:05,226 - root - INFO - [update_peers] Starting update_peers, current peers: ['node_9bd5774e']
+2026-08-07 22:15:05,227 - root - INFO - [FRP discover_peers] Called, known_peers=['node_9bd5774e']
+2026-08-07 22:15:05,227 - root - INFO - [FRP discover_peers] Returning 1 peers: ['node_9bd5774e']
+2026-08-07 22:15:05,227 - root - INFO - [update_peers] discover_peers returned: ['node_9bd5774e']
+2026-08-07 22:15:05,346 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:05,346 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:05,619 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:05,669 - root - INFO - [update_peers] Final peers (UDP+Manager): ['node_9bd5774e']
+2026-08-07 22:15:05,669 - root - INFO - [update_peers] Updated peers list: ['node_9bd5774e']
+2026-08-07 22:15:05,670 - root - INFO - [collect_topology] Starting collection, self.peers=['node_9bd5774e'], max_depth=4
+2026-08-07 22:15:05,670 - root - INFO - [collect_topology] Processing peer: node_9bd5774e
+2026-08-07 22:15:05,671 - root - INFO - [collect_topology] Added peer node_9bd5774e to next_topology, nodes now: ['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:06,179 - root - INFO - [update_peers] Final peers (UDP+Manager): ['node_9bd5774e']
+2026-08-07 22:15:06,179 - root - INFO - [update_peers] Updated peers list: ['node_9bd5774e']
+2026-08-07 22:15:06,570 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:07,504 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e'], current_topology.nodes=['node_9bd5774e_dl84r']
+2026-08-07 22:15:07,504 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:07,504 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-07 22:15:11,562 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:11,563 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:11,844 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:12,157 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:17,144 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:17,144 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:17,407 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:18,181 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-RECV] 原始消息 (647字节): {"type": "model_load", "task_id": "fara-7b::worker-3_14_27_1786112117", "model_id": "fara-7b::worker-3", "model_path": "microsoft/Fara-7B", "shard": {"start_layer": 14, "end_layer": 27, "n_layers": 28
+2026-08-07 22:15:18,183 - exo.networking.websocket_optimized - INFO - 🔍 [WSManager-PARSE] msg_type=model_load, payload_keys=['type', 'task_id', 'model_id', 'model_path', 'shard', 'peer_list', 'instance_id']
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_api - INFO - [API] 加载模型: fara-7b::worker-3 (实例: worker-3)
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 开始加载模型: fara-7b (实例: worker-3, 键: fara-7b::worker-3)
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] [SYNC] 新增节点到资源池: node_9bd5774e
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] [SYNC] 资源同步完成: +1 -0 = 2 节点
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 模型 fara-7b 总层数: 28
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 使用自定义分片配置: ['node_9bd5774e_dl84r']
+2026-08-07 22:15:18,664 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 执行分配计划: fara-7b::worker-3...
+2026-08-07 22:15:18,667 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 在本节点加载分片: Shard(model_id='fara-7b', start_layer=14, end_layer=27, n_layers=28, repo_id='microsoft/Fara-7B', tie_word_embeddings=True, instance_id='worker-3') (引擎实例: worker-3)
+2026-08-07 22:15:18,773 - exo.networking.websocket_optimized - WARNING - ⏰ [WSManager] 消息确认超时: 41bce9ba-b54
+2026-08-07 22:15:18,775 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:23,764 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:23,764 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:24,089 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:24,390 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:29,390 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:29,390 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:30,704 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:31,037 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:34,022 - root - INFO - [FRP add_known_node] Called with node_id=node_9bd5774e, address=ai.suipce.com:40300, self.node_id=node_9bd5774e_dl84r
+2026-08-07 22:15:34,023 - root - INFO - [FRP add_known_node] Node already known: node_9bd5774e
+2026-08-07 22:15:34,024 - root - INFO - [update_peers] Starting update_peers, current peers: ['node_9bd5774e']
+2026-08-07 22:15:34,024 - root - INFO - [FRP discover_peers] Called, known_peers=['node_9bd5774e']
+2026-08-07 22:15:34,024 - root - INFO - [FRP discover_peers] Returning 1 peers: ['node_9bd5774e']
+2026-08-07 22:15:34,025 - root - INFO - [update_peers] discover_peers returned: ['node_9bd5774e']
+2026-08-07 22:15:35,223 - root - INFO - [update_peers] Starting update_peers, current peers: ['node_9bd5774e']
+2026-08-07 22:15:35,223 - root - INFO - [FRP discover_peers] Called, known_peers=['node_9bd5774e']
+2026-08-07 22:15:35,224 - root - INFO - [FRP discover_peers] Returning 1 peers: ['node_9bd5774e']
+2026-08-07 22:15:35,224 - root - INFO - [update_peers] discover_peers returned: ['node_9bd5774e']
+2026-08-07 22:15:35,689 - root - INFO - [update_peers] Final peers (UDP+Manager): ['node_9bd5774e']
+2026-08-07 22:15:35,990 - root - INFO - [update_peers] Updated peers list: ['node_9bd5774e']
+2026-08-07 22:15:36,007 - root - INFO - [collect_topology] Starting collection, self.peers=['node_9bd5774e'], max_depth=4
+2026-08-07 22:15:36,007 - root - INFO - [collect_topology] Processing peer: node_9bd5774e
+2026-08-07 22:15:36,007 - root - INFO - [collect_topology] Added peer node_9bd5774e to next_topology, nodes now: ['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:36,020 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:36,020 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:37,179 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:38,291 - root - INFO - [collect_topology] Collection complete, next_topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e'], current_topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:38,292 - root - INFO - [collect_topology] Updated topology, nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:38,292 - root - INFO - [TopologyUpdate] [OK] 拓扑更新完成
+2026-08-07 22:15:38,293 - root - INFO - [update_peers] Final peers (UDP+Manager): ['node_9bd5774e']
+2026-08-07 22:15:38,293 - root - INFO - [update_peers] Updated peers list: ['node_9bd5774e']
+2026-08-07 22:15:38,563 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:44,693 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:44,694 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:45,013 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:45,418 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:51,013 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:51,018 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:51,293 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:51,897 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:56,895 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:15:56,895 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:15:57,746 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:15:57,754 - root - INFO - [InferenceState] 进入推理模式 (active_requests=1)
+2026-08-07 22:15:57,755 - root - WARNING - [get_current_shard] [FAIL] 模型未加载: fara-7b (instance=worker-1)
+2026-08-07 22:15:57,755 - root - INFO - [get_current_shard] 已加载模型列表: []
+2026-08-07 22:15:57,756 - root - INFO - [get_partition_index] node_id=node_9bd5774e_dl84r, partitions=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:57,756 - root - INFO - [get_partition_index] current_partition_index=0, offset=0, result=0
+2026-08-07 22:15:57,757 - root - INFO - [get_current_shard] topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:57,757 - root - INFO - [get_current_shard] partitions count=2
+2026-08-07 22:15:57,757 - root - INFO - [get_current_shard] partition[0]: node_id=node_9bd5774e_dl84r, start=0, end=0.52352
+2026-08-07 22:15:57,758 - root - INFO - [get_current_shard] partition[1]: node_id=node_9bd5774e, start=0.52352, end=1.0
+2026-08-07 22:15:57,762 - root - INFO - [get_current_shard] node_id=node_9bd5774e_dl84r, index=0, num_shards=2
+2026-08-07 22:15:57,763 - root - INFO - [get_current_shard] shard[0]: start=0, end=13
+2026-08-07 22:15:57,764 - root - INFO - [get_current_shard] shard[1]: start=14, end=27
+2026-08-07 22:15:57,764 - root - INFO - [get_current_shard] returning shard[0]: start=0, end=13
+2026-08-07 22:15:57,985 - root - WARNING - [get_current_shard] [FAIL] 模型未加载: fara-7b (instance=worker-1)
+2026-08-07 22:15:57,985 - root - INFO - [get_current_shard] 已加载模型列表: []
+2026-08-07 22:15:59,121 - root - INFO - [get_partition_index] node_id=node_9bd5774e_dl84r, partitions=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:59,122 - root - INFO - [get_partition_index] current_partition_index=0, offset=0, result=0
+2026-08-07 22:15:59,122 - root - INFO - [get_current_shard] topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:59,123 - root - INFO - [get_current_shard] partitions count=2
+2026-08-07 22:15:59,123 - root - INFO - [get_current_shard] partition[0]: node_id=node_9bd5774e_dl84r, start=0, end=0.52352
+2026-08-07 22:15:59,123 - root - INFO - [get_current_shard] partition[1]: node_id=node_9bd5774e, start=0.52352, end=1.0
+2026-08-07 22:15:59,124 - root - INFO - [get_current_shard] node_id=node_9bd5774e_dl84r, index=0, num_shards=2
+2026-08-07 22:15:59,124 - root - INFO - [get_current_shard] shard[0]: start=0, end=13
+2026-08-07 22:15:59,124 - root - INFO - [get_current_shard] shard[1]: start=14, end=27
+2026-08-07 22:15:59,124 - root - INFO - [get_current_shard] returning shard[0]: start=0, end=13
+2026-08-07 22:15:59,127 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:15:59,128 - root - WARNING - [get_current_shard] [FAIL] 模型未加载: fara-7b (instance=worker-1)
+2026-08-07 22:15:59,128 - root - INFO - [get_current_shard] 已加载模型列表: []
+2026-08-07 22:15:59,129 - root - INFO - [get_partition_index] node_id=node_9bd5774e_dl84r, partitions=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:59,129 - root - INFO - [get_partition_index] current_partition_index=0, offset=0, result=0
+2026-08-07 22:15:59,129 - root - INFO - [get_current_shard] topology.nodes=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:15:59,130 - root - INFO - [get_current_shard] partitions count=2
+2026-08-07 22:15:59,130 - root - INFO - [get_current_shard] partition[0]: node_id=node_9bd5774e_dl84r, start=0, end=0.52352
+2026-08-07 22:15:59,130 - root - INFO - [get_current_shard] partition[1]: node_id=node_9bd5774e, start=0.52352, end=1.0
+2026-08-07 22:15:59,131 - root - INFO - [get_current_shard] node_id=node_9bd5774e_dl84r, index=0, num_shards=2
+2026-08-07 22:15:59,131 - root - INFO - [get_current_shard] shard[0]: start=0, end=13
+2026-08-07 22:15:59,162 - root - INFO - [get_current_shard] shard[1]: start=14, end=27
+2026-08-07 22:15:59,529 - root - INFO - [get_current_shard] returning shard[0]: start=0, end=13
+2026-08-07 22:16:04,125 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:04,127 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:04,455 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:04,961 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:05,220 - root - INFO - [TopologyUpdate] [SKIP] 跳过拓扑更新（推理进行中）- 已连续跳过1次
+2026-08-07 22:16:09,936 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:09,937 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:10,227 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:10,664 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:15,650 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:15,650 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:15,923 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:16,200 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:21,194 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:21,194 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:25,435 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:25,960 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:27,003 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 本节点加载分片失败 (实例: worker-3): CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 44.75 MiB is free. Of the allocated memory 15.19 GiB is allocated by PyTorch, and 392.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-08-07 22:16:27,008 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 已清理引擎内部状态
+2026-08-07 22:16:27,422 - exo.topology.gpu_pool_manager - INFO - [GPUPool] GPU 显存已清理，当前可用: 0.0 GB
+2026-08-07 22:16:27,423 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 在 local 节点 node_9bd5774e_dl84r 上加载分片失败: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 44.75 MiB is free. Of the allocated memory 15.19 GiB is allocated by PyTorch, and 392.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-08-07 22:16:27,424 - exo.topology.gpu_pool_manager - WARNING - [GPUPool] 分配计划执行完成但有 1 个节点失败
+2026-08-07 22:16:27,424 - exo.topology.gpu_pool_manager - INFO - [GPUPool] 无需通知其他节点（单节点模式）
+2026-08-07 22:16:27,425 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 模型 fara-7b::worker-3 加载失败: 节点 node_9bd5774e_dl84r 加载失败: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 44.75 MiB is free. Of the allocated memory 15.19 GiB is allocated by PyTorch, and 392.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-08-07 22:16:27,425 - exo.topology.gpu_pool_manager - ERROR - [GPUPool] 加载模型失败: 节点 node_9bd5774e_dl84r 加载失败: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 44.75 MiB is free. Of the allocated memory 15.19 GiB is allocated by PyTorch, and 392.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-08-07 22:16:27,426 - exo.topology.gpu_pool_api - ERROR - [API] 加载失败: 节点 node_9bd5774e_dl84r 加载失败: CUDA out of memory. Tried to allocate 130.00 MiB. GPU 0 has a total capacity of 15.91 GiB of which 44.75 MiB is free. Of the allocated memory 15.19 GiB is allocated by PyTorch, and 392.97 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2026-08-07 22:16:30,658 - root - INFO - [get_partition_index] node_id=node_9bd5774e_dl84r, partitions=['node_9bd5774e_dl84r', 'node_9bd5774e']
+2026-08-07 22:16:30,658 - root - INFO - [get_partition_index] current_partition_index=0, offset=1, result=1
+2026-08-07 22:16:30,659 - root - INFO - [forward_tensor] START: target_index=1, tensor.shape=(1, 20, 3584), request_id=869082da-7ae5-4e5c-b948-49fe538611ff
+2026-08-07 22:16:30,659 - root - INFO - [forward_tensor] partitions=['node_9bd5774e_dl84r', 'node_9bd5774e'], target_index=1
+2026-08-07 22:16:30,659 - root - INFO - [forward_tensor] target_id=node_9bd5774e, self.id=node_9bd5774e_dl84r
+2026-08-07 22:16:30,660 - root - INFO - [forward_tensor] next_shard=Shard(model_id='fara-7b', start_layer=0, end_layer=13, n_layers=28, repo_id='', tie_word_embeddings=True, instance_id='worker-1')
+2026-08-07 22:16:30,660 - root - INFO - [forward_tensor] Looking for peer: target_id=node_9bd5774e, available_peers=['node_9bd5774e']
+2026-08-07 22:16:30,660 - root - INFO - [forward_tensor] Sending tensor to peer: node_9bd5774e, shape=(1, 20, 3584), nbytes=286720
+2026-08-07 22:16:30,945 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:30,947 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:35,267 - root - INFO - [TopologyUpdate] [SKIP] 跳过拓扑更新（推理进行中）- 已连续跳过2次
+2026-08-07 22:16:36,571 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:36,987 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:41,087 - root - INFO - [process_prompt] Starting generation loop, initial_position=20, max_tokens=2048
+2026-08-07 22:16:41,088 - root - WARNING - [process_prompt] No valid result returned, stopping generation
+2026-08-07 22:16:41,088 - root - INFO - [process_prompt] Final result: tokens=0, finished=False
+2026-08-07 22:16:41,088 - root - INFO - [InferenceState] 退出推理模式 (active_requests=0)
+2026-08-07 22:16:41,970 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:41,971 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:43,145 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:43,928 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:48,921 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:48,921 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:49,196 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:49,480 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
+2026-08-07 22:16:54,472 - root - INFO - [FRP _discovery_loop] known_node_infos count: 1, nodes: ['node_9bd5774e']
+2026-08-07 22:16:54,472 - root - INFO - [FRP _check_and_update_node] Checking health for node_9bd5774e
+2026-08-07 22:16:54,839 - root - INFO - [FRP _check_and_update_node] Health check result for node_9bd5774e: True
+2026-08-07 22:16:55,018 - root - INFO - [FRP _discovery_loop] Health check results: 1 healthy peers
