@@ -33,7 +33,7 @@ sox
 onnxruntime
 
 # Qwen3-ASR official package
-qwen-asr>=0.0.5
+#qwen-asr>=0.0.5
 
 # Optional: faster attention for Qwen3-TTS
 # flash-attn
