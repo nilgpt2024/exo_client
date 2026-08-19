@@ -95,7 +95,8 @@ def load_model_shard(
         lazy: bool = False,
         model_config: dict = {},
         device: Optional[Union[str, torch.device]] = None,
-        use_bf16: bool = False
+        use_bf16: bool = False,
+        use_fp16: bool = False
 ) -> torch.nn.Module:
     """
     Load and initialize the model shard from a given path.
@@ -141,7 +142,12 @@ def load_model_shard(
 
     # 确定目标设备和精度
     target_device = device if device else "cpu"
-    target_dtype = torch.bfloat16 if use_bf16 else torch.float32
+    if use_bf16:
+        target_dtype = torch.bfloat16
+    elif use_fp16:
+        target_dtype = torch.float16
+    else:
+        target_dtype = torch.float32
     
     # 使用 meta device 创建模型（不分配内存，不初始化参数）
     # 这比标准初始化快 580 倍（0.3 秒 vs 177 秒）
@@ -175,6 +181,7 @@ async def load_shard(
         executor: Optional[ThreadPoolExecutor] = None,
         device: Optional[Union[str, torch.device]] = None,
         use_bf16: bool = False,
+        use_fp16: bool = False,
 ):
     """
     Load model shard and tokenizer asynchronously.
@@ -209,7 +216,8 @@ async def load_shard(
             lazy,
             model_config,
             device=device,
-            use_bf16=use_bf16
+            use_bf16=use_bf16,
+            use_fp16=use_fp16
         )
         
         if torch.cuda.is_available():
@@ -254,7 +262,7 @@ def load_model_weights(model: torch.nn.Module, model_path: Path, shard: Optional
     index_files = list(model_path.glob("*.index.json"))
     if index_files:
         logger.info(f"检测到.index.json文件，使用分片加载: {index_files[0]}")
-        _load_indexed_weights(model, index_files[0], shard, device)
+        _load_indexed_weights(model, index_files[0], shard, device, target_dtype)
         return
 
     # 回退到传统的文件扫描方式
@@ -262,13 +270,13 @@ def load_model_weights(model: torch.nn.Module, model_path: Path, shard: Optional
     pytorch_files = list(model_path.glob("*.bin"))
 
     if safetensor_files:
-        _load_safetensor_weights(model, safetensor_files, shard, device)
+        _load_safetensor_weights(model, safetensor_files, shard, device, target_dtype)
     elif pytorch_files:
-        _load_pytorch_weights(model, pytorch_files, shard, device)
+        _load_pytorch_weights(model, pytorch_files, shard, device, target_dtype)
     else:
         raise FileNotFoundError("未找到权重文件")
 
-def _load_indexed_weights(model: torch.nn.Module, index_file: Path, shard: Optional[Shard] = None, device: str = "cpu"):
+def _load_indexed_weights(model: torch.nn.Module, index_file: Path, shard: Optional[Shard] = None, device: str = "cpu", target_dtype: Optional[torch.dtype] = None):
     """通过.index.json文件加载分片权重 - 使用 load_file 高效加载"""
     try:
         from safetensors.torch import load_file
@@ -349,7 +357,7 @@ def _load_indexed_weights(model: torch.nn.Module, index_file: Path, shard: Optio
     if is_meta:
         # meta device 模型需要特殊处理：逐个替换参数
         logger.info(f"使用 meta device 加载方式，逐个替换参数到设备: {device}")
-        model = _load_weights_to_meta_model(model, state_dict, device)
+        model = _load_weights_to_meta_model(model, state_dict, device, target_dtype)
     else:
         missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
         if missing_keys:
@@ -363,7 +371,7 @@ def _load_indexed_weights(model: torch.nn.Module, index_file: Path, shard: Optio
     
     logger.info(f"成功加载分片权重到设备: {device}")
 
-def _load_weights_to_meta_model(model: torch.nn.Module, state_dict: Dict[str, torch.Tensor], device: str = "cpu") -> torch.nn.Module:
+def _load_weights_to_meta_model(model: torch.nn.Module, state_dict: Dict[str, torch.Tensor], device: str = "cpu", target_dtype: Optional[torch.dtype] = None) -> torch.nn.Module:
     """将权重加载到 meta device 模型 - 直接替换参数到目标设备（绕过 load_state_dict）"""
     import gc
     
@@ -374,7 +382,7 @@ def _load_weights_to_meta_model(model: torch.nn.Module, state_dict: Dict[str, to
     # 直接替换参数 - 比 load_state_dict 快 2500 倍
     for name, param in model.named_parameters():
         if name in state_dict:
-            weight = state_dict[name].to(device=target_device)
+            weight = state_dict[name].to(device=target_device, dtype=target_dtype or state_dict[name].dtype)
             parts = name.split('.')
             obj = model
             for part in parts[:-1]:
@@ -537,7 +545,7 @@ def _load_partial_pytorch_weights(file_path: Path, required_keys: List[str], dev
         logger.error(f"加载PyTorch文件 {file_path} 失败: {e}")
         return {}
 
-def _load_safetensor_weights(model: torch.nn.Module, files: List[Path], shard: Optional[Shard] = None, device: str = "cpu"):
+def _load_safetensor_weights(model: torch.nn.Module, files: List[Path], shard: Optional[Shard] = None, device: str = "cpu", target_dtype: Optional[torch.dtype] = None):
     """加载Safetensor格式权重 - 使用 load_file 高效加载"""
     is_meta = any(p.device.type == "meta" for p in model.parameters())
     
@@ -595,7 +603,7 @@ def _load_safetensor_weights(model: torch.nn.Module, files: List[Path], shard: O
     # 加载权重到模型
     if is_meta:
         logger.info(f"使用 meta device 加载方式，逐个替换参数到设备: {device}")
-        model = _load_weights_to_meta_model(model, state_dict, device)
+        model = _load_weights_to_meta_model(model, state_dict, device, target_dtype)
     else:
         result = model.load_state_dict(state_dict, strict=False)
         if result is None:
@@ -613,7 +621,7 @@ def _load_safetensor_weights(model: torch.nn.Module, files: List[Path], shard: O
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
-def _load_pytorch_weights(model: torch.nn.Module, files: List[Path], shard: Optional[Shard] = None, device: str = "cpu"):
+def _load_pytorch_weights(model: torch.nn.Module, files: List[Path], shard: Optional[Shard] = None, device: str = "cpu", target_dtype: Optional[torch.dtype] = None):
     """加载PyTorch格式权重 - 支持分片过滤和 meta device"""
     is_meta = any(p.device.type == "meta" for p in model.parameters())
     state_dict = {}
@@ -664,7 +672,7 @@ def _load_pytorch_weights(model: torch.nn.Module, files: List[Path], shard: Opti
     # 加载权重到模型
     if is_meta:
         logger.info(f"使用 meta device 加载方式，逐个替换参数到设备: {device}")
-        model = _load_weights_to_meta_model(model, state_dict, device)
+        model = _load_weights_to_meta_model(model, state_dict, device, target_dtype)
     else:
         missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
         if missing_keys:

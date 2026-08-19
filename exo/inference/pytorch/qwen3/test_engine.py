@@ -44,9 +44,8 @@ async def test_single_shard():
     print("    模型推理测试 - EXO引擎版")
     print("="*60)
 
-    # 使用EXO的下载器获取模型路径
-    
-    shard_downloader = new_shard_downloader()
+    # 使用本地模型路径
+    shard_downloader = MockShardDownloader(model_path)
 
     # 创建分片对象 - 使用完整模型范围
     shard = Shard(model_id=model_id, start_layer=0, end_layer=35, n_layers=36)

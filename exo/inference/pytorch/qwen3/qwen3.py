@@ -45,9 +45,9 @@ class ModelArgs(Qwen3Config):
         else:
             raise TypeError(f"Expected shard to be a Shard instance or a dict, got {type(self.shard)} instead")
 
-        # 确保注意力实现相关属性存在
+        # 确保注意力实现相关属性存在 - 默认使用 SDPA 加速
         if not hasattr(self, '_attn_implementation_internal'):
-            self._attn_implementation_internal = getattr(self, '_attn_implementation', 'eager') or 'eager'
+            self._attn_implementation_internal = getattr(self, '_attn_implementation', 'sdpa') or 'sdpa'
 
     @classmethod
     def from_dict(cls, config_dict: Dict[str, Any]):
@@ -90,9 +90,11 @@ class ModelArgs(Qwen3Config):
         if not hasattr(instance, 'shard'):
             instance.shard = Shard("", 0, 0, 0)
 
-        # 确保注意力实现相关属性存在
+        # 确保注意力实现相关属性存在 - 默认使用 SDPA 加速
         if not hasattr(instance, '_attn_implementation_internal'):
-            instance._attn_implementation_internal = getattr(instance, '_attn_implementation', 'eager') or 'eager'
+            instance._attn_implementation_internal = getattr(instance, '_attn_implementation', 'sdpa') or 'sdpa'
+        # 同步设置 _attn_implementation，确保 Qwen3DecoderLayer 使用 SDPA
+        instance._attn_implementation = 'sdpa'
 
         # 确保输出配置属性存在
         if not hasattr(instance, 'output_attentions'):

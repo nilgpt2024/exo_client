@@ -80,9 +80,9 @@ class ShardedQwen2_5VlTextModel(nn.Module):
         self.config = config
         self.shard = shard
 
-        # 确保config有_attn_implementation属性
+        # 确保config有_attn_implementation属性 - 默认使用 SDPA 加速
         if not hasattr(self.config, '_attn_implementation') or self.config._attn_implementation is None:
-            self.config._attn_implementation = "eager"
+            self.config._attn_implementation = "sdpa"
 
         self.padding_idx = getattr(config, 'pad_token_id', 151643)
         self.vocab_size = getattr(config, 'vocab_size', 152064)

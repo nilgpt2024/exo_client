@@ -94,7 +94,8 @@ def load_model_shard(
         lazy: bool = False,
         model_config: dict = {},
         device: Optional[Union[str, torch.device]] = None,
-        use_bf16: bool = False
+        use_bf16: bool = False,
+        use_fp16: bool = False
 ) -> torch.nn.Module:
     """
     Load and initialize the model shard from a given path.
@@ -140,7 +141,12 @@ def load_model_shard(
 
     # 确定目标设备和精度
     target_device = device if device else "cpu"
-    target_dtype = torch.bfloat16 if use_bf16 else torch.float32
+    if use_bf16:
+        target_dtype = torch.bfloat16
+    elif use_fp16:
+        target_dtype = torch.float16
+    else:
+        target_dtype = torch.float32
     
     # 使用目标 dtype 创建模型，先在 CPU 上创建和加载权重，避免显存占用翻倍
     original_dtype = torch.get_default_dtype()
@@ -180,6 +186,7 @@ async def load_shard(
         executor: Optional[ThreadPoolExecutor] = None,
         device: Optional[Union[str, torch.device]] = None,
         use_bf16: bool = False,
+        use_fp16: bool = False,
 ):
     """
     Load model shard and tokenizer asynchronously.
@@ -220,7 +227,8 @@ async def load_shard(
             lazy,
             model_config,
             device=device,
-            use_bf16=use_bf16
+            use_bf16=use_bf16,
+            use_fp16=use_fp16
         )
         
         # 在线程池中执行设备移动和精度转换，避免阻塞主线程

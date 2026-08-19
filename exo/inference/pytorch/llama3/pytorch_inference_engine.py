@@ -41,12 +41,20 @@ class PyTorchLlama3InferenceEngine(InferenceEngine):
         # 状态管理 - 使用ModelState模式
         self.states = OrderedDict()  # 存储ModelState对象
 
-        # BF16优化支持
-        self.use_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
-        if self.use_bf16:
-            logger.info("✅ 检测到BF16支持，启用BF16优化推理")
+        # 精度优化支持 - P100等老卡不支持BF16，回退到FP16
+        if torch.cuda.is_available():
+            if torch.cuda.is_bf16_supported():
+                self.use_bf16 = True
+                self.dtype = torch.bfloat16
+                logger.info("[OK] BF16 detected, enabling BF16 optimized inference")
+            else:
+                self.use_bf16 = False
+                self.dtype = torch.float16
+                logger.info("[OK] BF16 not supported, falling back to FP16")
         else:
-            logger.info("ℹ️ 未检测到BF16支持，使用默认精度")
+            self.use_bf16 = False
+            self.dtype = torch.float32
+            logger.info("ℹ️ CUDA not available, using FP32")
 
         # 模型路径
         self.model_path = None
@@ -99,7 +107,8 @@ class PyTorchLlama3InferenceEngine(InferenceEngine):
                     lazy=False,
                     executor=None,
                     device=self.device,
-                    use_bf16=self.use_bf16
+                    use_bf16=self.use_bf16,
+                    use_fp16=not self.use_bf16 and torch.cuda.is_available()
                 )
 
                 # 设置分词器并处理特殊token的回退

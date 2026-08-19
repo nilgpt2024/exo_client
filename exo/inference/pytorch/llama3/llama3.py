@@ -34,13 +34,16 @@ class ModelArgs(LlamaConfig):
 
     def _init_internal_attrs(self):
         """初始化transformers需要的内部属性"""
-        # 初始化注意力实现相关属性
+        # 初始化注意力实现相关属性 - 默认使用 SDPA 加速
         if not hasattr(self, '_attn_implementation_internal'):
             # 从attn_implementation或默认值获取
             attn_impl = getattr(self, 'attn_implementation', None)
             if attn_impl is None:
-                attn_impl = 'eager'  # 默认使用eager实现
+                attn_impl = 'sdpa'  # 默认使用 SDPA 加速
             object.__setattr__(self, '_attn_implementation_internal', attn_impl)
+        # 同步设置 _attn_implementation，确保 DecoderLayer 使用 SDPA
+        if not hasattr(self, '_attn_implementation') or getattr(self, '_attn_implementation', None) != 'sdpa':
+            object.__setattr__(self, '_attn_implementation', 'sdpa')
 
     @classmethod
     def from_dict(cls, config_dict: Dict[str, Any]):
@@ -80,6 +83,10 @@ class ModelArgs(LlamaConfig):
         # 确保 shard 有默认值
         if not hasattr(instance, 'shard'):
             instance.shard = Shard("", 0, 0, 0)
+        
+        # 确保注意力实现使用 SDPA 加速
+        if not hasattr(instance, '_attn_implementation'):
+            instance._attn_implementation = 'sdpa'
         
         return instance
 
