@@ -264,20 +264,13 @@ class PyTorchInferenceEngine(InferenceEngine):
         current_task = asyncio.current_task()
         task_name = current_task.get_name() if current_task else "no-task"
 
-        # [GLOBAL-INTERCEPTOR] Detect default engine being called with non-default shard!
+        # [GLOBAL-INTERCEPTOR] Log instance mismatch but allow loading to proceed
         is_default_engine = (self._instance_id == "default" or not hasattr(self, '_instance_id'))
         shard_instance_id = getattr(shard, 'instance_id', None)
         is_misrouted = (is_default_engine and shard_instance_id and shard_instance_id != "default")
         
         if is_misrouted:
-            print(f"\n{'='*60}")
-            print(f"[BLOCKED] Default engine blocked non-default shard!")
-            print(f"  Engine: {self._instance_id} (id={id(self)})")
-            print(f"  Shard: model={shard.model_id}, instance={shard_instance_id}")
-            print(f"  Cache: {list(self._engines.keys())}")
-            print(f"  Task: {task_name}")
-            print(f"{'='*60}\n")
-            return
+            print(f"[PyTorchInferenceEngine] [WARN] Instance mismatch: engine={self._instance_id}, shard_instance={shard_instance_id}, allowing load to proceed")
 
         print(f"[PyTorchInferenceEngine] [CHECK] ensure_shard entry (instance={self._instance_id}, "
               f"model={shard.model_id}, instance_id={getattr(shard, 'instance_id', '?')}, "
